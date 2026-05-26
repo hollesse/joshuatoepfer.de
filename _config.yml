@@ -11,6 +11,10 @@ author:
 markdown: kramdown
 permalink: /posts/:year/:month/:day/:title/
 
+# Sass / SCSS
+sass:
+  style: compressed
+
 # Plugins
 plugins:
   - jekyll-feed

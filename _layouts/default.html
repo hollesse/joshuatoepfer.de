@@ -4,25 +4,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if page.title %}{{ page.title }} — {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
   {% seo %}
 </head>
-<body>
-  <header>
-    <nav>
-      <a href="{{ '/' | relative_url }}">{{ site.title }}</a>
-      &nbsp;|&nbsp;
-      <a href="{{ '/posts/' | relative_url }}">Posts</a>
-      &nbsp;|&nbsp;
-      <a href="{{ '/talks/' | relative_url }}">Talks</a>
+<body class="site-wrapper">
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="{{ '/' | relative_url }}" class="site-nav__home">{{ site.title }}</a>
+      <ul class="site-nav__links">
+        <li><a href="{{ '/posts/' | relative_url }}" class="site-nav__link">Posts</a></li>
+        <li><a href="{{ '/talks/' | relative_url }}" class="site-nav__link">Talks</a></li>
+      </ul>
     </nav>
   </header>
 
-  <main>
+  <main class="site-main">
     {{ content }}
   </main>
 
-  <footer>
-    <p>&copy; {{ site.time | date: '%Y' }} {{ site.author.name }}</p>
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span>&copy; {{ site.time | date: '%Y' }} {{ site.author.name }}</span>
+    </div>
   </footer>
 </body>
 </html>

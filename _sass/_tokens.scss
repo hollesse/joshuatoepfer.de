@@ -1,0 +1,69 @@
+// =============================================================================
+// TOKENS
+// CSS custom properties for color palette and typography scale.
+// Dark mode is the primary mode; light mode is a fallback.
+// =============================================================================
+
+:root {
+  // Accent — warm amber
+  --color-accent:          #d4a853;
+  --color-accent-muted:    #a8823f;
+
+  // Dark mode (default)
+  --color-bg:              #111111;
+  --color-bg-subtle:       #1a1a1a;
+  --color-border:          #2a2a2a;
+  --color-text:            #e8e8e8;
+  --color-text-muted:      #9a9a9a;
+  --color-text-inverse:    #111111;
+
+  // Typography scale
+  --font-body:             system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono:             ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --text-xs:               0.75rem;    // 12px
+  --text-sm:               0.875rem;   // 14px
+  --text-base:             1rem;       // 16px
+  --text-lg:               1.125rem;   // 18px
+  --text-xl:               1.25rem;    // 20px
+  --text-2xl:              1.5rem;     // 24px
+  --text-3xl:              1.875rem;   // 30px
+  --text-4xl:              2.25rem;    // 36px
+  --text-5xl:              3rem;       // 48px
+
+  --leading-tight:         1.25;
+  --leading-snug:          1.375;
+  --leading-normal:        1.6;
+  --leading-relaxed:       1.75;
+
+  --weight-normal:         400;
+  --weight-medium:         500;
+  --weight-semibold:       600;
+
+  // Spacing
+  --space-1:               0.25rem;
+  --space-2:               0.5rem;
+  --space-3:               0.75rem;
+  --space-4:               1rem;
+  --space-6:               1.5rem;
+  --space-8:               2rem;
+  --space-12:              3rem;
+  --space-16:              4rem;
+  --space-24:              6rem;
+
+  // Layout
+  --max-width-content:     42rem;      // ~672px — prose width
+  --max-width-site:        64rem;      // ~1024px — site cap
+}
+
+// Light mode fallback
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg:              #fafafa;
+    --color-bg-subtle:       #f0f0f0;
+    --color-border:          #ddd;
+    --color-text:            #1a1a1a;
+    --color-text-muted:      #5a5a5a;
+    --color-text-inverse:    #fafafa;
+  }
+}
