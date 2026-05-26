@@ -1,0 +1,55 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Jekyll build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version-file: .ruby-version
+          bundler-cache: true   # runs `bundle install` and caches gems automatically
+
+      - name: Build site
+        env:
+          JEKYLL_ENV: production
+        run: bundle exec jekyll build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site
+          retention-days: 1
+
+  # Netlify handles production deploys via its GitHub integration.
+  # This job exists for CI visibility (build validation on every push).
+  # To enable Netlify CLI deploys from Actions instead, add the
+  # NETLIFY_AUTH_TOKEN and NETLIFY_SITE_ID secrets and uncomment below.
+  #
+  # deploy:
+  #   name: Netlify deploy
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/download-artifact@v4
+  #       with:
+  #         name: site
+  #         path: _site
+  #     - uses: netlify/actions/cli@master
+  #       with:
+  #         args: deploy --dir=_site --prod
+  #       env:
+  #         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+  #         NETLIFY_SITE_ID:    ${{ secrets.NETLIFY_SITE_ID }}
