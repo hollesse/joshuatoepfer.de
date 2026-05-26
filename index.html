@@ -3,28 +3,27 @@ layout: default
 title: Home
 ---
 
-<h1>{{ site.title }}</h1>
-<p>{{ site.description }}</p>
+<div class="prose">
+  <section class="hero">
+    <h1 class="hero__name">Joshua Töpfer</h1>
+    <p class="hero__tagline">Software-Entwickler. Ich schreibe über Ensemble Programming, ADHS in der IT, und das Handwerk der Software-Entwicklung.</p>
+  </section>
 
-<h2>Recent Posts</h2>
-<ul>
-  {% for post in site.posts limit:5 %}
-    <li>
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-      <small>{{ post.date | date: "%Y-%m-%d" }}</small>
-    </li>
-  {% else %}
-    <li>No posts yet.</li>
-  {% endfor %}
-</ul>
+  <section class="recent-posts">
+    <h2 class="recent-posts__heading">Letzte Posts</h2>
 
-<h2>Talks</h2>
-<ul>
-  {% for talk in site.talks %}
-    <li>
-      <a href="{{ talk.url | relative_url }}">{{ talk.title }}</a>
-    </li>
-  {% else %}
-    <li>No talks listed yet.</li>
-  {% endfor %}
-</ul>
+    {% assign published_posts = site.posts | where_exp: "post", "post.published != false" %}
+    {% if published_posts.size > 0 %}
+      <ul class="post-list">
+        {% for post in published_posts limit:5 %}
+          <li class="post-list__item">
+            <a href="{{ post.url | relative_url }}" class="post-list__title">{{ post.title }}</a>
+            <time class="post-list__date meta" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%d.%m.%Y" }}</time>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="meta">Noch keine Posts veröffentlicht.</p>
+    {% endif %}
+  </section>
+</div>
