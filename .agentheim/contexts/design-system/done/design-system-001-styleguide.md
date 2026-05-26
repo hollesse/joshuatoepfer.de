@@ -24,8 +24,7 @@ and signed off by Joshua.
 - [x] Typography scale (headings, body, code, captions) is defined and applied globally
 - [x] Base layout (header, footer, main content area, nav) is in place
 - [x] The design renders correctly on mobile and desktop
-- [ ] **Joshua has reviewed the design in a browser and signed off** — this is a required
-  human-in-the-loop checkpoint before any BC builds its UI
+- [x] **Joshua has reviewed the design in a browser and signed off** — note: amber accent on light mode flagged as poor contrast → tracked in design-system-002
 
 ## Notes
 The design direction from the vision: modern, minimalist, dark-mode-first, "chic" feel.
