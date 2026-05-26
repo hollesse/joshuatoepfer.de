@@ -11,7 +11,7 @@ Newest entries on top.
 **Task:** website-002 - Blog listing page /posts/
 **Summary:** Created /posts/ listing page, _layouts/post.html, canonical link include, and _sass/_posts.scss with mobile-first flex layout; posts filtered by published: true, syndicated posts labelled innoq.com.
 **Verification:** PASS (iteration 3)
-**Commit:** (pending)
+**Commit:** 97a0d51
 **Files changed:** 8
 **ADRs written:** none
 
