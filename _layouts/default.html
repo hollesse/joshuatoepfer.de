@@ -6,6 +6,7 @@
   <title>{% if page.title %}{{ page.title }} — {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
   {% seo %}
+  {% include head-canonical.html %}
 </head>
 <body class="site-wrapper">
   <header class="site-header">

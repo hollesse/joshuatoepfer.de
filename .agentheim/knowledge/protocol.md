@@ -5,6 +5,37 @@ Newest entries on top.
 
 ---
 
+## 2026-05-26 15:30 -- Task verified and completed: website-002 - Blog listing page /posts/
+
+**Type:** Work / Task completion
+**Task:** website-002 - Blog listing page /posts/
+**Summary:** Created /posts/ listing page, _layouts/post.html, canonical link include, and _sass/_posts.scss with mobile-first flex layout; posts filtered by published: true, syndicated posts labelled innoq.com.
+**Verification:** PASS (iteration 3)
+**Commit:** (pending)
+**Files changed:** 8
+**ADRs written:** none
+
+---
+
+## 2026-05-26 15:05 -- Batch started: [website-001, website-002]
+
+**Type:** Work / Batch start
+**Tasks:** website-001 - Homepage with hero section, website-002 - Blog listing page /posts/
+**Parallel:** yes (2 workers)
+
+---
+
+## 2026-05-26 15:00 -- Model / Captured: website-001, website-002
+
+**Type:** Model / Capture
+**BC:** website
+**Filed to:** todo
+**Summary:** Two homepage features captured based on design reference (neureif.com):
+hero section with name + tagline (website-001) and text-only blog listing at /posts/
+including individual post layout (website-002). No images anywhere — typography carries the weight.
+
+---
+
 ## 2026-05-26 14:35 -- Work session ended
 
 **Type:** Work / Session end

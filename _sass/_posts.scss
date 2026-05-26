@@ -1,0 +1,94 @@
+// =============================================================================
+// POSTS
+// Styles for the /posts/ listing page and individual post layout.
+// =============================================================================
+
+// ---- Post listing ----
+
+.posts-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.posts-list__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-4) 0;
+
+  &:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 36rem) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-4);
+  }
+}
+
+.posts-list__title {
+  color: var(--color-text);
+  font-size: var(--text-base);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+}
+
+.posts-list__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.posts-list__date {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.posts-list__source {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+// ---- Individual post ----
+
+.post {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+}
+
+.post__header {
+  margin-bottom: var(--space-8);
+}
+
+.post__title {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  margin-bottom: var(--space-2);
+  color: var(--color-text);
+}
+
+// ---- Page header (used on /posts/ listing) ----
+
+.page-header {
+  margin-bottom: var(--space-8);
+}
+
+.page-header__title {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+}

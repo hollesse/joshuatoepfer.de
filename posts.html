@@ -1,0 +1,24 @@
+---
+layout: default
+title: Posts
+permalink: /posts/
+---
+<div class="page-header">
+  <h1 class="page-header__title">Posts</h1>
+</div>
+
+<ul class="posts-list">
+  {% for post in site.posts %}
+    {% unless post.published == false %}
+    <li class="posts-list__item">
+      <a href="{{ post.url | relative_url }}" class="posts-list__title">{{ post.title }}</a>
+      <span class="posts-list__meta">
+        <time class="posts-list__date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d.%m.%Y" }}</time>
+        {% if post.source == "innoq" %}
+        <span class="posts-list__source">innoq.com</span>
+        {% endif %}
+      </span>
+    </li>
+    {% endunless %}
+  {% endfor %}
+</ul>
