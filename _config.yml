@@ -1,0 +1,37 @@
+title: "Joshua Töpfer"
+description: "Software developer. Ensemble programming, ADHS in IT, software craftsmanship."
+url: "https://joshuatoepfer.de"
+baseurl: ""
+
+author:
+  name: "Joshua Töpfer"
+  email: "joshua.toepfer@innoq.com"
+
+# Jekyll settings
+markdown: kramdown
+permalink: /posts/:year/:month/:day/:title/
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Collections
+collections:
+  talks:
+    output: true
+    permalink: /talks/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "talks"
+    values:
+      layout: "default"
