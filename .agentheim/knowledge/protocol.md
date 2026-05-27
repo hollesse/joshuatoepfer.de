@@ -5,6 +5,23 @@ Newest entries on top.
 
 ---
 
+## 2026-05-27 17:35 -- Batch started: [design-system-003]
+
+**Type:** Work / Batch start
+**Tasks:** design-system-003 - Document redesigned visual system (Geist + oklch + multi-accent + container queries)
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-05-27 17:30 -- Model / Captured: design-system-003, website-003
+
+**Type:** Model / Capture
+**BC:** design-system, website
+**Filed to:** todo
+**Summary:** Two documentation backfill tasks for a redesign delivered by Claude Design (handoff in `design_handoff_jekyll/`) that was already implemented in `_layouts/`, `_includes/`, `_sass/`, `_data/`, `assets/`. design-system-003 documents the new visual system (Geist + oklch tokens + multi-accent palette + container queries + theme toggle + accent-mark) and supersedes ADR-0003 with a new ADR-0004; also re-evaluates design-system-002 (light-mode accent contrast bug) against the new oklch light variants. website-003 documents the implemented pages (talks, ueber-mich, impressum, datenschutz) and the richer homepage/blog/post layouts, plus the new `_data/` sources, with amendments appended to the existing done tasks website-001 and website-002. The handoff folder is treated as temporary scaffolding; BC docs become the lasting reference. Joshua flagged a future direction: a live `/design-system/` page on the site — not in scope here.
+
+---
+
 ## 2026-05-26 15:30 -- Task verified and completed: website-002 - Blog listing page /posts/
 
 **Type:** Work / Task completion

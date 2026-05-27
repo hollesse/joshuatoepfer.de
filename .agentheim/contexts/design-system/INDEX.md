@@ -13,7 +13,7 @@ research touching this BC, and concept synthesis pages.
 - **Backlog:** 1
 - **Todo:** 0
 - **Doing:** 0
-- **Done:** 1
+- **Done:** 2
 <!-- task-counts:end -->
 
 ### Todo
@@ -26,6 +26,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **design-system-003** — Document redesigned visual system (Geist + oklch + multi-accent + container queries) — 2026-05-27 — `done/design-system-003-document-redesign.md`
 - **design-system-001** — Styleguide: visual identity, dark mode, typography — 2026-05-26 — `done/design-system-001-styleguide.md`
 <!-- done-list:end -->
 
@@ -37,7 +38,8 @@ research touching this BC, and concept synthesis pages.
 ## ADRs scoped to this BC
 
 <!-- adr-local:start -->
-- **0003** — Build design system from scratch rather than forking Minima — 2026-05-26 — `../../knowledge/decisions/0003-design-system-scratch-theme.md`
+- **0005** — Redesigned visual system: Geist, oklch tokens, multi-accent palette, container queries — 2026-05-27 — `../../knowledge/decisions/0005-redesigned-visual-system.md`
+- **0003** — Build design system from scratch rather than forking Minima (superseded by 0005) — 2026-05-26 — `../../knowledge/decisions/0003-design-system-scratch-theme.md`
 <!-- adr-local:end -->
 
 ## Research touching this BC

@@ -2,10 +2,10 @@
 id: "0003"
 title: "Build design system from scratch rather than forking Minima"
 scope: design-system
-status: accepted
+status: superseded
 date: 2026-05-26
 supersedes: []
-superseded_by: []
+superseded_by: ["0005"]
 related_tasks: [design-system-001]
 related_research: []
 ---
