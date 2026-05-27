@@ -65,3 +65,36 @@ ITERATION_HINT: likely-fixable
 
 ## Iteration 3 fix
 Applied mobile-first `flex-direction: column` base to `.posts-list__item` with `@media (min-width: 36rem)` breakpoint for the row layout. Build verified clean.
+
+## Amendment 2026-05-27
+
+The simple `/posts/` listing and basic `_layouts/post.html` shipped here have been
+replaced by the redesign documented in ADR-0005 and inventoried by website-003.
+Current state:
+
+- The blog listing now lives at **`/blog/`** (source `blog/index.html`,
+  `_layouts/blog.html`); the legacy `/posts/` page was removed in commit `4d4fb3e`.
+  `posts.html` no longer exists.
+- The listing is grouped by year via `.blog-year` sections, each headed by a large
+  **`.blog-year-divider`** (year + post count).
+- Topic filtering is now interactive: **`.filter-chip[data-topic="all|ensemble|adhs|softdev"]`**
+  buttons drive client-side row toggling via `assets/js/blog-filter.js` (loaded
+  conditionally by `_layouts/default.html` when `page.layout == "blog"`).
+- Post rows use `.blog-post-row` with date / source / title / subtitle / topic-tag.
+- **`_layouts/post.html`** is now substantially richer:
+  - A `.post-hero` banner with back-link, eyebrow (topic · date), accent-marked title,
+    optional subtitle, and a `.meta-line` (reading time + syndication note)
+  - A `.post-body-layout` with a sticky `.post-toc` aside (rebuilt by
+    `theme-toggle.js` from the post's h2s)
+  - A `.post-pager` (prev/next, derived from `site.posts`)
+  - A `.related-posts` block — up to 3 other posts sharing the same `topic`,
+    rendered via `_includes/post-card.html` (style `related`)
+- `_includes/head-canonical.html` (introduced here) is still used for syndicated
+  posts and now lives in `_layouts/default.html`.
+- The `_sass/_posts.scss` styles introduced here have been superseded by the
+  `.post-hero` / `.post-body-layout` / `.post-pager` / `.related-posts` styles in
+  `_sass/_layout.scss` that came in with ADR-0005.
+
+For the canonical current state see the `/blog/` and `/blog/:slug/` rows in the
+Pages inventory in `contexts/website/README.md` and ADR-0005
+(`.agentheim/knowledge/decisions/0005-redesigned-visual-system.md`).

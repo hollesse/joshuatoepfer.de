@@ -5,6 +5,26 @@ Newest entries on top.
 
 ---
 
+## 2026-05-27 17:56 -- Batch started: [website-003]
+
+**Type:** Work / Batch start
+**Tasks:** website-003 - Document implemented pages and data sources (talks, ueber-mich, impressum, datenschutz, post layout)
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-05-27 17:55 -- Task verified and completed: design-system-003 - Document redesigned visual system
+
+**Type:** Work / Task completion
+**Task:** design-system-003 - Document redesigned visual system (Geist + oklch + multi-accent + container queries)
+**Summary:** Documented the new visual system via ADR-0005 (filed as 0005 because 0004 was already taken by github-pages-initial-deployment), marked ADR-0003 superseded, rewrote the design-system BC README, and refined design-system-002 (light-mode contrast) with measured WCAG ratios — amber/coral/lime FAIL body-text 4.5:1 against `#f7f7f5` (~3.3-3.7:1), only blue passes (~6.5:1); bug stays in backlog with concrete fix options.
+**Verification:** PASS (iteration 1)
+**Commit:** 9174503
+**Files changed:** 9
+**ADRs written:** 0005-redesigned-visual-system.md (plus frontmatter-only edit to 0003)
+
+---
+
 ## 2026-05-27 17:35 -- Batch started: [design-system-003]
 
 **Type:** Work / Batch start

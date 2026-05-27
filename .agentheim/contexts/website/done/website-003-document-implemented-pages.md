@@ -1,16 +1,16 @@
 ---
 id: website-003
 title: "Document implemented pages and data sources (talks, ueber-mich, impressum, datenschutz, post layout)"
-status: todo
+status: done
 type: chore
 context: website
 created: 2026-05-27
-completed:
+completed: 2026-05-27
 commit:
 depends_on: [design-system-003]
 blocks: []
 tags: [documentation, pages, data-sources, layouts]
-related_adrs: []
+related_adrs: [0005]
 related_research: []
 prior_art: [website-001, website-002]
 ---
@@ -94,3 +94,49 @@ Liquid, or YAML changes — the implementation is the source of truth.
   shapes for these pages — read them rather than describing schemas from scratch.
 - Consider whether `pages.md` (a small new file in `contexts/website/`) reads
   better than a long README section — either is fine.
+
+## Outcome
+
+Brought website BC documentation in line with the implemented state. No
+implementation files were touched (HTML, Liquid, YAML, SCSS, JS all left as-is).
+
+**Decision on structure:** folded the pages inventory into
+`contexts/website/README.md` rather than creating a sibling `pages.md`. The README
+was previously short (~52 lines); the inventory is substantial but keeps the BC
+documentation in a single self-contained file that future readers will already be
+opening.
+
+**Changes:**
+
+- **`contexts/website/README.md`** — extended ubiquitous language (split into
+  *Content* and *Layout vocabulary* subsections) covering topic, focus area,
+  quick fact, post hero, TOC, prev/next pager, related-posts block, year-divider,
+  filter-chip, speaker profile, legal page; tightened the **Talk** entry to match
+  the actual `_data/talks.yml` shape (`what` / `where` / `status` / `type` /
+  `duration` / `slides` / `video`); closed the *Über mich* and topic-landing open
+  questions, kept the booking-contact one open with a note on the current
+  `/talks/` speaker-profile + `/ueber-mich/` contact-CTA arrangement; added a
+  **Pages inventory** section with one row per route (route, layout, data
+  sources, includes, component vocabulary referencing ADR-0005 §7) plus a
+  trailing **Data file shapes** subsection for `_data/talks.yml`, `_data/focus.yml`,
+  `_data/about.yml`.
+- **`done/website-001-homepage-hero.md`** — appended an *Amendment 2026-05-27*
+  section recording that the original `.hero` / `.recent-posts` / `.post-list`
+  homepage is now built from `_layouts/home.html` with the duotone portrait, the
+  three-card focus section, and the upcoming-talks list. References ADR-0005 and
+  the README pages inventory.
+- **`done/website-002-blog-listing.md`** — appended an *Amendment 2026-05-27*
+  section recording the move from `/posts/` to `/blog/` (and the removal of
+  `posts.html` in commit `4d4fb3e`), the year-divider grouping, the JS-driven
+  filter chips, and the now-much-richer post layout (post hero, sticky TOC,
+  prev/next pager, related-posts block). References ADR-0005 and the README
+  pages inventory.
+
+**Verification:** `bundle exec jekyll build` passed (sanity check — this task
+changes no Jekyll-built files but the doc edits sit alongside the site).
+
+**Note on `/posts/`:** the legacy `/posts/` listing no longer exists; the file
+was already deleted in commit `4d4fb3e`. The Amendment to website-002 and the
+"Note on legacy `/posts/`" subsection in the README record this. The topnav
+still defensively matches `/posts/` URLs to highlight the Blog tab — no follow-up
+needed.

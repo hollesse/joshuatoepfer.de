@@ -11,14 +11,13 @@ research touching this BC, and concept synthesis pages.
 
 <!-- task-counts:start -->
 - **Backlog:** 0
-- **Todo:** 1
+- **Todo:** 0
 - **Doing:** 0
-- **Done:** 2
+- **Done:** 3
 <!-- task-counts:end -->
 
 ### Todo
 <!-- todo-list:start -->
-- **website-003** — Document implemented pages and data sources (talks, ueber-mich, impressum, datenschutz, post layout) — `todo/website-003-document-implemented-pages.md`
 <!-- todo-list:end -->
 
 ### Doing
@@ -27,6 +26,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **website-003** — Document implemented pages and data sources (talks, ueber-mich, impressum, datenschutz, post layout) — 2026-05-27 — `done/website-003-document-implemented-pages.md`
 - **website-002** — Blog listing page /posts/ — 2026-05-26 — `done/website-002-blog-listing.md`
 - **website-001** — Homepage with hero section — 2026-05-26 — `done/website-001-homepage-hero.md`
 <!-- done-list:end -->

@@ -50,3 +50,27 @@ Replaced `index.html` with a hero + recent-posts homepage. Key files:
   Post list items are flex-row on wider screens (title left, date right), stacked on mobile.
 
 `bundle exec jekyll build` passed with no errors.
+
+## Amendment 2026-05-27
+
+The homepage delivered by website-001 ("hero + Letzte Posts in `.prose`") has since
+been replaced by the redesign documented in ADR-0005 and inventoried by website-003.
+The current homepage is built from `_layouts/home.html` (not the plain `index.html`
+shipped here) and contains substantially more:
+
+- A two-column **`.v1-hero`** — typographic name + tagline on the left, a duotone
+  **`.v1-portrait`** (or `.v1-portrait--placeholder`) on the right
+- A **"Neueste Beiträge"** row (still post-card based, but now via the shared
+  `_includes/post-card.html` with style `compact`, not bespoke `.post-list` markup)
+- A **"Meine Schwerpunkte"** section — three **`.focus-card`** tiles driven by
+  `_data/focus.yml`, each linking to `/blog/?topic=<key>` so the blog's filter
+  chips activate that topic
+- A **"Kommende Talks"** section using `_includes/talk-card.html` (variant `home`),
+  populated from `site.data.talks` where `status: upcoming`
+
+The original `.hero__name` / `.hero__tagline` / `.recent-posts` / `.post-list` CSS in
+`_sass/_layout.scss` from this task has been superseded by the `.v1-*`, `.focus-card`,
+`.v1-talk`, and shared post-card / talk-card styles that came in with ADR-0005.
+
+For the canonical current state see the homepage row in the Pages inventory in
+`contexts/website/README.md` and ADR-0005 (`.agentheim/knowledge/decisions/0005-redesigned-visual-system.md`).

@@ -6,7 +6,7 @@ status: accepted
 date: 2026-05-27
 supersedes: ["0003"]
 superseded_by: []
-related_tasks: [design-system-003]
+related_tasks: [design-system-003, website-003]
 related_research: []
 ---
 
