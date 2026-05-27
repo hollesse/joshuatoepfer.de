@@ -5,6 +5,45 @@ Newest entries on top.
 
 ---
 
+## 2026-05-27 18:40 -- Task verified and completed: website-004 - Replace placeholder posts with Hello-Welt
+
+**Type:** Work / Task completion
+**Task:** website-004 - Replace placeholder posts with a single Hello-World post
+**Summary:** Deleted the 6 placeholder posts under `_posts/` and replaced them with a single `_posts/2026-05-27-hello-welt.md` (short German "Hallo, Welt." greeting mentioning the three topic areas, signed "— Joshua"). `bundle exec jekyll build` completes cleanly; post renders at `/posts/2026/05/27/hello-welt/` (per `_config.yml`'s permalink scheme — task spec wrongly predicted `/blog/hello-welt/`; verifier flagged the spec inconsistency but the worker correctly preferred the explicit "don't touch `_config.yml`" constraint).
+**Verification:** PASS (iteration 1)
+**Commit:** (pending)
+**Files changed:** 7 (1 new post + 6 deletions)
+**ADRs written:** none
+
+---
+
+## 2026-05-27 18:35 -- Research / Filed: innoq-staff-feed
+
+**Type:** Research / Report filed
+**BC:** infrastructure
+**Related task:** infra-004
+**Report:** `.agentheim/knowledge/research/innoq-staff-feed-2026-05-27.md`
+**Summary:** Investigated INNOQ's staff page structure and per-author feed availability for Joshua Töpfer's INNOQ author sync pipeline (`infra-004`). Key findings: (1) No per-author feed exists — every probed URL pattern returned 404/406, and the staff page body links only to the global feed. (2) Only feed available is global rolling Atom 1.0 at `/{de,en}/feed.atom`, ~20–25 entries, oldest seen 2026-02-26 — Joshua's content not currently in either feed's window. (3) Feed has high-quality author metadata (`<author><name/email/uri>`) but NO `<category>` element — content type must be inferred from URL path segment (`/talks/`, `/articles/`, `/podcast/`, `/blog/`). (4) Staff page is canonical complete listing but has no JSON-LD/microdata. Sitemap.xml is collection-level only. (5) Recommendation: hybrid — scrape staff page for backfill, poll global `/de/feed.atom` filtered by `email = joshua.toepfer@innoq.com` for incremental sync. Constraint "German articles only" is enforceable via `<content xml:lang="de">` or `/de/` URL prefix. Open questions: raw `<head>` inspection (curl-grep), staff-page pagination URL pattern, JSON content negotiation. Filed to infrastructure INDEX.
+
+---
+
+## 2026-05-27 18:18 -- Batch started: [website-004]
+
+**Type:** Work / Batch start
+**Tasks:** website-004 - Replace placeholder posts with a single Hello-World post
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-05-27 18:15 -- Model / Captured: website-004, infra-004
+
+**Type:** Model / Capture
+**BC:** website, infrastructure
+**Filed to:** todo (website-004), backlog (infra-004)
+**Summary:** Joshua flagged the existing `_posts/` content as placeholder and wants it replaced with a single Hello-Welt post before real INNOQ articles arrive — captured as `website-004` (ready-to-work in todo, lists exact files to delete + the new file's frontmatter). The bigger ask is implementing the INNOQ author sync pipeline ADR-0002 already designed, with an explicit new constraint: German articles only (English filtered out). Author profile: https://www.innoq.com/de/staff/joshua-toepfer/. Captured as `infra-004` in backlog with 8 open questions (RSS-vs-scrape discovery, language indicator, first-run flood handling, body content, PR tooling, script language, topic mapping, failure observability). Next step on infra-004: spawn the `research` skill on INNOQ's staff-page structure and per-author feed format before REFINE.
+
+---
+
 ## 2026-05-27 18:06 -- Work session ended
 
 **Type:** Work / Session end

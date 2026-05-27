@@ -10,7 +10,7 @@ research touching this BC, and concept synthesis pages.
 ## Tasks by status
 
 <!-- task-counts:start -->
-- **Backlog:** 0
+- **Backlog:** 1
 - **Todo:** 0
 - **Doing:** 0
 - **Done:** 3
@@ -33,6 +33,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Backlog
 <!-- backlog-list:start -->
+- **infra-004** — INNOQ author sync pipeline (German articles only) — `backlog/infra-004-innoq-author-sync-pipeline.md`
 <!-- backlog-list:end -->
 
 ## ADRs scoped to this BC
@@ -45,6 +46,7 @@ research touching this BC, and concept synthesis pages.
 ## Research touching this BC
 
 <!-- research-local:start -->
+- **innoq-staff-feed** — INNOQ staff page structure and per-author feed availability (no per-author feed; global rolling feed; recommend hybrid backfill+poll) — 2026-05-27 — `../../knowledge/research/innoq-staff-feed-2026-05-27.md`
 <!-- research-local:end -->
 
 ## Concepts (opt-in synthesis pages)
