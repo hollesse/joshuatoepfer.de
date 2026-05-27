@@ -1,0 +1,17 @@
+{%- comment -%}
+Topnav: wordmark + nav + theme-toggle.
+Sets is-current via page.url against each nav target.
+{%- endcomment -%}
+{%- assign url = page.url -%}
+<div class="topnav">
+  <a href="{{ '/' | relative_url }}" class="brand">
+    Joshua Töpfer<span class="accent-mark">.</span>
+  </a>
+  <nav aria-label="Hauptnavigation">
+    <a href="{{ '/' | relative_url }}"{% if url == "/" %} class="is-current" aria-current="page"{% endif %}>Index</a>
+    <a href="{{ '/blog/' | relative_url }}"{% if url contains "/blog" or url contains "/posts/" %} class="is-current" aria-current="page"{% endif %}>Blog</a>
+    <a href="{{ '/talks/' | relative_url }}"{% if url contains "/talks" %} class="is-current" aria-current="page"{% endif %}>Talks</a>
+    <a href="{{ '/ueber-mich/' | relative_url }}"{% if url contains "/ueber-mich" %} class="is-current" aria-current="page"{% endif %}>Über mich</a>
+    {% include theme-toggle.html %}
+  </nav>
+</div>

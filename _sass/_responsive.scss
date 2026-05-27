@@ -1,0 +1,218 @@
+// =============================================================================
+// RESPONSIVE
+// Container queries — fire when the .jt container is narrower than 720px.
+// Mirrors the @container jt block from design_handoff_jekyll/styles.css.
+// =============================================================================
+
+@container jt (max-width: 720px) {
+  .jt .topnav {
+    padding: 18px 22px !important;
+    flex-wrap: wrap !important;
+    gap: 16px !important;
+  }
+  .jt .topnav .brand { font-size: 20px !important; }
+  .jt .topnav nav {
+    gap: 16px !important;
+    flex-wrap: wrap !important;
+  }
+  .jt .topnav nav a {
+    font-size: 10px !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  .jt section { padding: 56px 22px !important; }
+  .jt section.hero { padding: 64px 22px 48px !important; }
+  .jt section.tight { padding: 40px 22px !important; }
+
+  // Home hero (V1)
+  .jt .v1-hero {
+    display: block !important;
+  }
+  .jt .v1-hero h1 {
+    font-size: 56px !important;
+    letter-spacing: -0.035em !important;
+  }
+  .jt .v1-hero p { font-size: 18px !important; }
+  .jt .v1-portrait {
+    display: block !important;
+    width: 100% !important;
+    height: 360px !important;
+    margin-top: 36px !important;
+  }
+
+  // Section mono-heading rows
+  .jt .v1-section-head {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    margin-bottom: 24px !important;
+  }
+
+  // Post rows
+  .jt .row {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+    padding: 18px 0 !important;
+  }
+  .jt .row .arrow { display: none !important; }
+  .jt .row .title { font-size: 18px !important; }
+  .jt .row .excerpt {
+    font-size: 14px !important;
+    max-width: 100% !important;
+  }
+
+  // Schwerpunkte 3 → 1 col
+  .jt .v1-focus {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+  .jt .v1-focus h3 { font-size: 24px !important; }
+
+  // Home talks row
+  .jt .v1-talk {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+  .jt .v1-talk .v1-talk__meta { order: 1; }
+  .jt .v1-talk .v1-talk__title {
+    order: 2;
+    font-size: 21px !important;
+  }
+
+  // Footer
+  .jt footer { padding: 48px 22px 40px !important; }
+  .jt footer .cols {
+    grid-template-columns: 1fr !important;
+    gap: 36px !important;
+    margin-bottom: 40px !important;
+  }
+  .jt footer .baseline {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  // Blog page
+  .jt .blog-hero { padding: 56px 22px 24px !important; }
+  .jt .blog-hero h1 {
+    font-size: 44px !important;
+    letter-spacing: -0.03em !important;
+  }
+  .jt .blog-hero p { font-size: 16px !important; }
+  .jt .blog-filters { padding: 16px 22px 32px !important; }
+  .jt .blog-year { padding: 0 22px 56px !important; }
+  .jt .blog-year-divider {
+    padding-top: 22px !important;
+    margin-bottom: 12px !important;
+  }
+  .jt .blog-year-divider h2 {
+    font-size: 48px !important;
+    letter-spacing: -0.03em !important;
+  }
+  .jt .blog-post-row {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    padding: 24px 0 !important;
+  }
+  .jt .blog-post-row .topic-tag { display: none !important; }
+  .jt .blog-post-row h3 { font-size: 22px !important; }
+  .jt .blog-post-row p { font-size: 14px !important; }
+
+  // Post page
+  .jt .post-hero { padding: 80px 22px 56px !important; }
+  .jt .post-hero .back-link { left: 22px !important; }
+  .jt .post-hero h1 {
+    font-size: 56px !important;
+    letter-spacing: -0.04em !important;
+  }
+  .jt .post-hero .subtitle { font-size: 18px !important; }
+  .jt .post-body-layout {
+    padding: 56px 22px !important;
+    grid-template-columns: 1fr !important;
+    gap: 36px !important;
+  }
+  .jt .post-toc { position: static !important; }
+  .jt .post-pager {
+    padding: 40px 22px !important;
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  .jt .post-pager a:nth-child(2) { text-align: left !important; }
+  .jt .related-posts { padding: 56px 22px 0 !important; }
+  .jt .related-post-row {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+  }
+  .jt .related-post-row .arrow { display: none !important; }
+  .jt .related-post-row .title { font-size: 20px !important; }
+  .jt .post-body { font-size: 17px !important; }
+  .jt .post-body h2 { font-size: 26px !important; }
+
+  // Talks page
+  .jt .talks-hero { padding: 56px 22px 24px !important; }
+  .jt .talks-hero h1 {
+    font-size: 44px !important;
+    letter-spacing: -0.03em !important;
+  }
+  .jt .talks-hero p { font-size: 16px !important; }
+  .jt .talks-section { padding: 32px 22px 56px !important; }
+  .jt .talks-row {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    padding: 24px 0 !important;
+  }
+  .jt .talks-row .extras {
+    text-align: left !important;
+    display: flex !important;
+    gap: 14px !important;
+    align-items: baseline !important;
+    margin-top: 4px !important;
+  }
+  .jt .talks-row h3 { font-size: 22px !important; }
+  .jt .speaker-section { padding: 56px 22px 64px !important; }
+  .jt .speaker-block {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+  .jt .speaker-block h2 {
+    font-size: 36px !important;
+    letter-spacing: -0.022em !important;
+  }
+
+  // About page
+  .jt .about-hero {
+    padding: 56px 22px 32px !important;
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .jt .about-hero h1 {
+    font-size: 48px !important;
+    letter-spacing: -0.03em !important;
+  }
+  .jt .about-hero p { font-size: 18px !important; }
+  .jt .about-portrait {
+    display: block !important;
+    width: 100% !important;
+    height: 360px !important;
+  }
+  .jt .about-body-layout { padding: 32px 22px 56px !important; }
+  .jt .about-body-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+  .jt .about-body-grid aside { position: static !important; }
+  .jt .contact-cta { padding: 56px 22px !important; }
+  .jt .contact-cta h2 {
+    font-size: 36px !important;
+    letter-spacing: -0.022em !important;
+  }
+  .jt .contact-cta a { font-size: 18px !important; }
+
+  // Legal page
+  .jt .legal-hero { padding: 56px 22px 0 !important; }
+  .jt .legal-hero h1 {
+    font-size: 48px !important;
+    letter-spacing: -0.03em !important;
+  }
+  .jt .legal-hero p { font-size: 16px !important; }
+  .jt .legal-body { padding: 32px 22px 56px !important; }
+}

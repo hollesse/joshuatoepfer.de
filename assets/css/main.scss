@@ -2,7 +2,8 @@
 ---
 // =============================================================================
 // MAIN STYLESHEET
-// Entry point — uses @use to import partials in dependency order.
+// Entry point — imports partials in dependency order.
+// Geist + Geist Mono are loaded via <link> in _layouts/default.html.
 // =============================================================================
 
 @use "tokens";
@@ -10,3 +11,4 @@
 @use "typography";
 @use "layout";
 @use "posts";
+@use "responsive";

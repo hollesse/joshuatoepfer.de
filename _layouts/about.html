@@ -1,0 +1,47 @@
+---
+layout: default
+---
+{%- assign facts = site.data.about.quick_facts -%}
+
+<section class="hero about-hero">
+  <div>
+    <div class="label-eyebrow" style="margin-bottom: 28px;">
+      {{ page.eyebrow | default: "Über mich" }}
+    </div>
+    <h1>{{ page.headline | default: "Hallo, ich bin Joshua" }}<span class="accent-mark">.</span></h1>
+    <p>
+      {{ page.lead | default: "Senior Consultant bei INNOQ, Ensemble-Programmer, ADHS-Brain. Schreibt offen über Software, Teams und Neurodivergenz." }}
+    </p>
+  </div>
+  {% if site.portrait_image %}
+    <div class="about-portrait" role="img" aria-label="Porträt Joshua Töpfer" style="background-image: url('{{ site.portrait_image | relative_url }}');"></div>
+  {% else %}
+    <div class="about-portrait v1-portrait--placeholder" aria-label="Porträt-Platzhalter">
+      Porträt · 3:4 Hochformat
+    </div>
+  {% endif %}
+</section>
+
+<section class="about-body-layout">
+  <div class="about-body-grid">
+    <div class="post-body">
+      {{ content }}
+    </div>
+    <aside aria-label="Quick-Facts">
+      <div class="label mono">Auf einen Blick</div>
+      <dl class="quick-facts">
+        {% for fact in facts %}
+          <div>
+            <dt class="mono">{{ fact.key }}</dt>
+            <dd>{{ fact.value }}</dd>
+          </div>
+        {% endfor %}
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="contact-cta">
+  <h2>Lust auf Ensemble, einen Talk oder einfach Hallo<span class="accent-mark">?</span></h2>
+  <a href="mailto:hallo@joshuatoepfer.de" class="link">hallo@joshuatoepfer.de →</a>
+</section>

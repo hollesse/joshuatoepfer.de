@@ -1,0 +1,42 @@
+{%- assign year = site.time | date: '%Y' -%}
+<footer>
+  <div class="cols">
+    <div>
+      <h4>Kontakt</h4>
+      <p style="margin: 0; color: var(--fg); font-size: 16px; line-height: 1.5; max-width: 360px;">
+        Ensemble-Coaching, Talks, oder einfach Hallo sagen — die schnellste Route ist die E-Mail.
+      </p>
+      <a href="mailto:hallo@joshuatoepfer.de" class="link" style="display: inline-block; margin-top: 16px; color: var(--accent); font-size: 16px;">
+        hallo@joshuatoepfer.de →
+      </a>
+    </div>
+    <div>
+      <h4>Anderswo</h4>
+      <ul>
+        <li><a href="https://github.com/joshuatoepfer" class="link" rel="me noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/joshuatoepfer/" class="link" rel="me noopener">LinkedIn</a></li>
+        <li><a href="{{ '/feed.xml' | relative_url }}" class="link">RSS-Feed</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Site</h4>
+      <ul>
+        <li><a href="{{ '/blog/' | relative_url }}" class="link">Blog</a></li>
+        <li><a href="{{ '/talks/' | relative_url }}" class="link">Talks</a></li>
+        <li><a href="{{ '/ueber-mich/' | relative_url }}" class="link">Über mich</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Rechtliches</h4>
+      <ul>
+        <li><a href="{{ '/impressum/' | relative_url }}" class="link">Impressum</a></li>
+        <li><a href="{{ '/datenschutz/' | relative_url }}" class="link">Datenschutz</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="baseline">
+    <span>© {{ year }} Joshua Töpfer</span>
+    <span>RSS · GitHub · LinkedIn</span>
+    <span>Built with Jekyll</span>
+  </div>
+</footer>

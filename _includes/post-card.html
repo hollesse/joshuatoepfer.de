@@ -1,0 +1,40 @@
+{%- comment -%}
+Compact post row (used on home + related-posts).
+Params:
+  include.post  — the post object
+  include.style — "compact" (home) | "related" (related-posts section)
+{%- endcomment -%}
+{%- assign post = include.post -%}
+{%- assign style = include.style | default: "compact" -%}
+{%- assign months = "Jan,Feb,Mär,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez" | split: "," -%}
+{%- assign m_idx = post.date | date: "%-m" | plus: -1 -%}
+{%- assign day = post.date | date: "%d" -%}
+{%- assign year = post.date | date: "%Y" -%}
+{%- assign short_date = day | append: " " | append: months[m_idx] | append: " " | append: year -%}
+
+{%- if style == "related" -%}
+  <a href="{{ post.url | relative_url }}" class="related-post-row">
+    <div class="date mono">{{ short_date }}</div>
+    <div>
+      <div class="title">{{ post.title }}</div>
+      {% if post.subtitle or post.excerpt %}
+        <div class="excerpt">{{ post.subtitle | default: post.excerpt | strip_html | truncate: 200 }}</div>
+      {% endif %}
+    </div>
+    <div class="arrow mono">→</div>
+  </a>
+{%- else -%}
+  <a href="{{ post.url | relative_url }}" class="row">
+    <div class="date mono">{{ short_date }}</div>
+    <div>
+      <div class="title">
+        {{ post.title }}
+        {% if post.source %}<span class="src">↗ {{ post.source }}</span>{% endif %}
+      </div>
+      {% if post.subtitle or post.excerpt %}
+        <div class="excerpt">{{ post.subtitle | default: post.excerpt | strip_html | truncate: 220 }}</div>
+      {% endif %}
+    </div>
+    <div class="arrow">→</div>
+  </a>
+{%- endif -%}

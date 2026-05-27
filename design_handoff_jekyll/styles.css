@@ -1,0 +1,551 @@
+/* ─────────────────────────────────────────────────────────────
+   joshuatoepfer.de — design tokens & base
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  /* Mode-dependent (overridden by [data-mode="light"]) */
+  --bg:        #0d0d0d;
+  --bg-elev:  #141414;
+  --fg:        #ededed;
+  --fg-dim:   #9a9a9a;
+  --fg-faint: #5a5a5a;
+  --rule:     rgba(255,255,255,0.10);
+  --rule-strong: rgba(255,255,255,0.22);
+
+  /* Accent — Amber default (warm), tuned for dark */
+  --accent:        oklch(0.78 0.13 78);
+  --accent-soft:   oklch(0.78 0.13 78 / 0.18);
+  --accent-fg:     #0d0d0d; /* text on accent fills */
+}
+
+:root[data-mode="light"] {
+  --bg:        #f7f7f5;
+  --bg-elev:  #ffffff;
+  --fg:        #141414;
+  --fg-dim:   #5e5e5e;
+  --fg-faint: #a3a3a3;
+  --rule:     rgba(0,0,0,0.10);
+  --rule-strong: rgba(0,0,0,0.22);
+}
+
+/* Accent palette options — each defines dark + light versions. */
+:root[data-accent="amber"]            { --accent: oklch(0.80 0.14 78);  --accent-soft: oklch(0.80 0.14 78 / 0.18); --accent-fg: #0d0d0d; }
+:root[data-accent="amber"][data-mode="light"] { --accent: oklch(0.58 0.14 60);  --accent-soft: oklch(0.58 0.14 60 / 0.14); --accent-fg: #fafafa; }
+
+:root[data-accent="coral"]            { --accent: oklch(0.74 0.17 32);  --accent-soft: oklch(0.74 0.17 32 / 0.18); --accent-fg: #0d0d0d; }
+:root[data-accent="coral"][data-mode="light"] { --accent: oklch(0.58 0.18 32);  --accent-soft: oklch(0.58 0.18 32 / 0.14); --accent-fg: #fafafa; }
+
+:root[data-accent="blue"]             { --accent: oklch(0.78 0.13 240); --accent-soft: oklch(0.78 0.13 240 / 0.18); --accent-fg: #0d0d0d; }
+:root[data-accent="blue"][data-mode="light"]  { --accent: oklch(0.50 0.18 250); --accent-soft: oklch(0.50 0.18 250 / 0.14); --accent-fg: #fafafa; }
+
+:root[data-accent="lime"]             { --accent: oklch(0.86 0.18 130); --accent-soft: oklch(0.86 0.18 130 / 0.18); --accent-fg: #0d0d0d; }
+:root[data-accent="lime"][data-mode="light"]  { --accent: oklch(0.55 0.16 145); --accent-soft: oklch(0.55 0.16 145 / 0.14); --accent-fg: #fafafa; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   Typography — Geist Variable + Geist Mono
+   ───────────────────────────────────────────────────────────── */
+.jt {
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  font-optical-sizing: auto;
+  color: var(--fg);
+  background: var(--bg);
+  letter-spacing: -0.005em;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  /* Container queries so artboards in the design canvas respond to their
+     own width, not the surrounding viewport. */
+  container-type: inline-size;
+  container-name: jt;
+}
+.jt .mono { font-family: "Geist Mono", ui-monospace, monospace; letter-spacing: 0; }
+
+
+/* Common micro-elements */
+.jt a { color: inherit; text-decoration: none; }
+.jt hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
+.jt .label-eyebrow {
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+/* Subtle scroll-fade — applied via IntersectionObserver.
+   Gated on body.jt-fade-ready so content stays visible if the observer
+   never runs (e.g. inside transformed design-canvas subtree). */
+.jt [data-fade] {
+  transition: opacity 700ms ease, transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+body.jt-fade-ready .jt [data-fade]:not(.in) {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.jt [data-fade].in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Photo slot */
+.jt image-slot {
+  --is-bg: color-mix(in oklab, var(--fg) 6%, transparent);
+  --is-fg: var(--fg-dim);
+  --is-border: var(--rule);
+}
+
+/* Status dot */
+@keyframes jt-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+.jt .status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  animation: jt-pulse 2.4s ease-in-out infinite;
+  vertical-align: 1px;
+  margin-right: 8px;
+}
+
+/* Underline on hover for inline links */
+.jt .link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 300ms ease;
+  padding-bottom: 1px;
+}
+.jt .link:hover { background-size: 100% 1px; }
+
+/* Cells / rows */
+.jt .row {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  gap: 24px;
+  padding: 22px 0;
+  border-top: 1px solid var(--rule);
+  align-items: baseline;
+}
+.jt .row:last-child { border-bottom: 1px solid var(--rule); }
+.jt .row .date { color: var(--fg-dim); font-size: 13px; }
+.jt .row .arrow { color: var(--fg-faint); font-family: "Geist Mono", monospace; }
+.jt .row:hover .arrow { color: var(--accent); }
+.jt .row .title { font-size: 22px; font-weight: 480; letter-spacing: -0.01em; }
+.jt .row .excerpt {
+  color: var(--fg-dim);
+  font-size: 15px;
+  line-height: 1.5;
+  margin-top: 8px;
+  max-width: 64ch;
+  letter-spacing: -0.003em;
+}
+.jt .row:hover .title { color: var(--accent); transition: color 200ms ease; }
+.jt .row .src { color: var(--fg-faint); font-size: 11px; font-family: "Geist Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; margin-left: 10px; }
+
+
+/* Marquee */
+@keyframes jt-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.jt .marquee {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 18px 0;
+}
+.jt .marquee-track {
+  display: inline-flex;
+  gap: 48px;
+  animation: jt-marquee 38s linear infinite;
+  flex-shrink: 0;
+  align-items: center;
+}
+.jt .marquee-track .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 999px;
+  display: inline-block;
+}
+.jt .marquee-track span {
+  font-family: "Geist", sans-serif;
+  font-weight: 380;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.jt .marquee-track span em {
+  font-style: normal;
+  color: var(--fg-dim);
+}
+
+/* Section spacing tokens */
+.jt section { padding: 88px 80px; }
+.jt section.tight { padding: 56px 80px; }
+.jt section.hero  { padding: 140px 80px 100px; }
+
+/* Cursor for V4 hero */
+@keyframes jt-blink { 50% { opacity: 0; } }
+.jt .caret {
+  display: inline-block;
+  width: 0.6ch;
+  height: 1em;
+  background: var(--accent);
+  vertical-align: -0.12em;
+  animation: jt-blink 1.05s steps(1) infinite;
+  margin-left: 0.1ch;
+}
+
+/* Tag chips */
+.jt .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: "Geist Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+.jt .chip::before {
+  content: "";
+  width: 6px; height: 6px; border-radius: 999px;
+  background: var(--accent);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Article body — typography for blog post pages
+   ───────────────────────────────────────────────────────────── */
+.jt .post-body {
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--fg);
+  letter-spacing: -0.003em;
+  max-width: 72ch;
+}
+.jt .post-body p {
+  margin: 0 0 24px;
+}
+.jt .post-body h2 {
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 480;
+  margin: 56px 0 18px;
+  color: var(--fg);
+}
+.jt .post-body h3 {
+  font-size: 21px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  margin: 40px 0 12px;
+  color: var(--fg);
+}
+.jt .post-body blockquote {
+  margin: 36px 0 36px;
+  padding: 4px 0 4px 28px;
+  border-left: 2px solid var(--accent);
+  font-size: 22px;
+  line-height: 1.4;
+  letter-spacing: -0.012em;
+  color: var(--fg);
+  font-weight: 380;
+  font-style: italic;
+}
+.jt .post-body a {
+  color: var(--accent);
+  border-bottom: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
+  transition: border-color 200ms ease;
+}
+.jt .post-body a:hover {
+  border-bottom-color: var(--accent);
+}
+.jt .post-body code {
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 0.92em;
+  background: color-mix(in oklab, var(--fg) 8%, transparent);
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0;
+}
+.jt .post-body ul, .jt .post-body ol {
+  margin: 0 0 24px;
+  padding-left: 22px;
+}
+.jt .post-body li {
+  margin: 0 0 10px;
+}
+.jt footer {
+  padding: 64px 80px 56px;
+  border-top: 1px solid var(--rule);
+  color: var(--fg-dim);
+  font-size: 13px;
+}
+.jt footer .cols {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 56px;
+}
+.jt footer h4 {
+  font-family: "Geist Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  font-weight: 500;
+  margin: 0 0 14px;
+}
+.jt footer ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.jt footer a:hover { color: var(--fg); }
+.jt footer .baseline {
+  display: flex;
+  justify-content: space-between;
+  font-family: "Geist Mono", monospace;
+  font-size: 11px;
+  color: var(--fg-faint);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Responsive — container queries fire when an artboard
+   (or real viewport) is narrower than ~720px. Tagged elements
+   carry a `v1-*` class so we know exactly what to override.
+   ───────────────────────────────────────────────────────────── */
+@container jt (max-width: 720px) {
+  .jt .topnav { padding: 18px 22px !important; flex-wrap: wrap !important; gap: 16px !important; }
+  .jt .topnav .brand { font-size: 20px !important; }
+  .jt .topnav nav { gap: 16px !important; flex-wrap: wrap !important; }
+  .jt .topnav nav a { font-size: 10px !important; letter-spacing: 0.04em !important; }
+
+  .jt section { padding: 56px 22px !important; }
+  .jt section.hero { padding: 64px 22px 48px !important; }
+  .jt section.tight { padding: 40px 22px !important; }
+
+  /* Hero (V1) */
+  .jt .v1-hero { display: block !important; }
+  .jt .v1-hero h1 { font-size: 56px !important; letter-spacing: -0.035em !important; }
+  .jt .v1-hero p { font-size: 18px !important; }
+  .jt .v1-hero image-slot {
+    display: block !important;
+    width: 100% !important;
+    height: 360px !important;
+    margin-top: 36px !important;
+  }
+
+  /* Section mono-heading rows: keep their layout but tone down */
+  .jt .v1-section-head { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; margin-bottom: 24px !important; }
+
+  /* Post rows */
+  .jt .row { grid-template-columns: 1fr !important; gap: 6px !important; padding: 18px 0 !important; }
+  .jt .row .arrow { display: none !important; }
+  .jt .row .title { font-size: 18px !important; }
+  .jt .row .excerpt { font-size: 14px !important; max-width: 100% !important; }
+
+  /* Schwerpunkte 3-col → 1-col */
+  .jt .v1-focus { grid-template-columns: 1fr !important; gap: 28px !important; }
+  .jt .v1-focus h3 { font-size: 24px !important; }
+
+  /* Talks row */
+  .jt .v1-talk { grid-template-columns: 1fr !important; gap: 8px !important; }
+  .jt .v1-talk .v1-talk__meta { order: 1; }
+  .jt .v1-talk .v1-talk__title { order: 2; font-size: 21px !important; }
+
+  /* Footer 4-col → 1-col */
+  .jt footer { padding: 48px 22px 40px !important; }
+  .jt footer .cols { grid-template-columns: 1fr !important; gap: 36px !important; margin-bottom: 40px !important; }
+  .jt footer .baseline { flex-direction: column !important; gap: 8px !important; }
+
+  /* ── Blog page ─────────────────────────────────────────── */
+  .jt .blog-hero { padding: 56px 22px 24px !important; }
+  .jt .blog-hero h1 { font-size: 44px !important; letter-spacing: -0.03em !important; }
+  .jt .blog-hero p { font-size: 16px !important; }
+  .jt .blog-year-divider { padding-top: 22px !important; margin-bottom: 12px !important; }
+  .jt .blog-year-divider h2 { font-size: 48px !important; letter-spacing: -0.03em !important; }
+  .jt .blog-post-row {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    padding: 24px 0 !important;
+  }
+  .jt .blog-post-row > div:last-child { display: none !important; }
+  .jt .blog-post-row h3 { font-size: 22px !important; }
+  .jt .blog-post-row p { font-size: 14px !important; }
+
+  /* ── Post page ─────────────────────────────────────────── */
+  .jt .post-hero { padding: 80px 22px 56px !important; }
+  .jt .post-hero h1 { font-size: 56px !important; letter-spacing: -0.04em !important; }
+  .jt .post-hero p { font-size: 18px !important; }
+  .jt .post-body-layout {
+    padding: 56px 22px !important;
+    grid-template-columns: 1fr !important;
+    gap: 36px !important;
+  }
+  .jt .post-body-layout aside { position: static !important; }
+  .jt .post-pager { padding: 40px 22px !important; grid-template-columns: 1fr !important; gap: 24px !important; }
+  .jt .post-pager a:nth-child(2) { text-align: left !important; }
+  .jt .related-post-row { grid-template-columns: 1fr !important; gap: 6px !important; }
+  .jt .related-post-row > div:last-child { display: none !important; }
+  .jt .related-post-row > div:nth-child(2) > div:first-child { font-size: 20px !important; }
+  .jt .post-body { font-size: 17px !important; }
+  .jt .post-body h2 { font-size: 26px !important; }
+
+  /* ── Talks page ────────────────────────────────────────── */
+  .jt .talks-hero { padding: 56px 22px 24px !important; }
+  .jt .talks-hero h1 { font-size: 44px !important; letter-spacing: -0.03em !important; }
+  .jt .talks-hero p { font-size: 16px !important; }
+  .jt .talks-row {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    padding: 24px 0 !important;
+  }
+  .jt .talks-row > div:last-child {
+    text-align: left !important;
+    display: flex !important;
+    gap: 14px !important;
+    align-items: baseline !important;
+    margin-top: 4px !important;
+  }
+  .jt .talks-row h3 { font-size: 22px !important; }
+  .jt .speaker-block { grid-template-columns: 1fr !important; gap: 40px !important; }
+  .jt .speaker-block h2 { font-size: 36px !important; letter-spacing: -0.022em !important; }
+
+  /* ── About page ────────────────────────────────────────── */
+  .jt .about-hero { padding: 56px 22px 32px !important; grid-template-columns: 1fr !important; gap: 32px !important; }
+  .jt .about-hero h1 { font-size: 48px !important; letter-spacing: -0.03em !important; }
+  .jt .about-hero p { font-size: 18px !important; }
+  .jt .about-hero image-slot {
+    display: block !important;
+    width: 100% !important;
+    height: 360px !important;
+  }
+  .jt .about-body-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+  .jt .about-body-grid aside { position: static !important; }
+  .jt .contact-cta { padding: 56px 22px !important; }
+  .jt .contact-cta h2 { font-size: 36px !important; letter-spacing: -0.022em !important; }
+
+  /* ── Legal page ────────────────────────────────────────── */
+  .jt .legal-hero { padding: 56px 22px 0 !important; }
+  .jt .legal-hero h1 { font-size: 48px !important; letter-spacing: -0.03em !important; }
+  .jt .legal-hero p { font-size: 16px !important; }
+}
+
+/* Nav */
+.jt .topnav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 80px;
+  border-bottom: 1px solid var(--rule);
+}
+.jt .topnav .brand {
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  font-weight: 500;
+  color: var(--fg);
+}
+.jt .topnav .brand .accent-mark { color: var(--accent); }
+.jt .topnav nav {
+  display: flex;
+  gap: 28px;
+  font-family: "Geist Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.jt .topnav nav a {
+  color: var(--fg-dim);
+  position: relative;
+  padding-bottom: 6px;
+}
+.jt .topnav nav a:hover { color: var(--fg); }
+.jt .topnav nav a.is-current {
+  color: var(--fg);
+}
+.jt .topnav nav a.is-current::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 18px;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* Theme toggle — sun/moon button in topnav. Optically aligned with the
+   menu-item caps (which have padding-bottom: 6px for the underline). */
+.jt .theme-toggle {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0 6px;
+  margin: 0 0 0 4px;
+  cursor: pointer;
+  color: var(--fg-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 200ms ease;
+}
+.jt .theme-toggle:hover {
+  color: var(--accent);
+}
+.jt .theme-toggle svg {
+  display: block;
+  transform: translateY(-4px);
+}
+.jt .theme-toggle:hover {
+  color: var(--accent);
+}
+
+/* Big numerals for V3 */
+.jt .numeral {
+  font-family: "Geist Mono", monospace;
+  font-size: 11px;
+  color: var(--fg-faint);
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* Talks row */
+.jt .talk {
+  display: grid;
+  grid-template-columns: 130px 1fr 1fr auto;
+  gap: 24px;
+  padding: 22px 0;
+  border-top: 1px solid var(--rule);
+  align-items: baseline;
+}
+.jt .talk:last-child { border-bottom: 1px solid var(--rule); }
+.jt .talk .when { color: var(--fg-dim); font-family: "Geist Mono", monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+.jt .talk .what { font-size: 19px; font-weight: 480; letter-spacing: -0.01em; }
+.jt .talk .where { color: var(--fg-dim); font-size: 14px; }
+.jt .talk .status {
+  font-family: "Geist Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 3px 8px;
+  border: 1px solid color-mix(in oklab, var(--accent) 35%, transparent);
+  border-radius: 999px;
+}
+.jt .talk .status.past { color: var(--fg-faint); border-color: var(--rule); }

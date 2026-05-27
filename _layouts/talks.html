@@ -1,0 +1,89 @@
+---
+layout: default
+---
+{%- assign all_talks = site.data.talks -%}
+{%- assign upcoming = all_talks | where: "status", "upcoming" | sort: "date" -%}
+{%- assign past = all_talks | where: "status", "past" | sort: "date" | reverse -%}
+
+<section class="talks-hero">
+  <div class="label-eyebrow" style="margin-bottom: 18px;">
+    Talks · {{ upcoming.size }} geplant · {{ all_talks.size }} insgesamt
+  </div>
+  <h1>Auf der Bühne<span class="accent-mark">.</span></h1>
+  <p>
+    Vorträge, Workshops und Keynotes zu Ensemble Programming, ADHS in der
+    IT und allem dazwischen. Wenn du mich für eine Konferenz oder ein
+    internes Format buchen willst, schreib mir.
+  </p>
+</section>
+
+{% if upcoming.size > 0 %}
+<section class="talks-section talks-section--upcoming">
+  <div class="talks-section-head">
+    <h2 class="mono"><span class="em-prefix">—</span>&nbsp;&nbsp;KOMMENDE</h2>
+    <div class="count mono">{{ upcoming.size }} geplant</div>
+  </div>
+  <div>
+    {% for t in upcoming %}
+      {% include talk-card.html talk=t variant="upcoming" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if past.size > 0 %}
+<section class="talks-section talks-section--past">
+  <div class="talks-section-head">
+    <h2 class="mono"><span class="em-prefix">—</span>&nbsp;&nbsp;VERGANGENE</h2>
+    <div class="count mono">{{ past.size }} gehalten</div>
+  </div>
+  <div>
+    {% for t in past %}
+      {% include talk-card.html talk=t variant="past" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="speaker-section">
+  <div class="speaker-block">
+    <div>
+      <div class="eyebrow mono">Speaker-Profil</div>
+      <h2>Auf eurer Konferenz oder im Team<span class="accent-mark">.</span></h2>
+      <p class="lead">
+        Ich halte gerne Vorträge, mache Workshops und moderiere
+        Ensemble-Sessions. Auf öffentlichen Konferenzen genauso wie
+        firmenintern. Format ist verhandelbar, der Anspruch nicht: ehrlich,
+        praxisnah und ohne Slide-Folien voller Buzzwords.
+      </p>
+      <p class="tail">
+        Wenn das nach etwas klingt, das zu eurem Event passt:&nbsp;
+        <a href="mailto:hallo@joshuatoepfer.de" class="link" style="color: var(--accent);">hallo@joshuatoepfer.de</a>.
+      </p>
+    </div>
+
+    <div class="right-column">
+      <div>
+        <div class="topics-label mono">Themen, über die ich spreche</div>
+        <div class="topic-chips">
+          <span class="chip">Ensemble Programming</span>
+          <span class="chip">ADHS in der IT</span>
+          <span class="chip">Software Crafting</span>
+          <span class="chip">Pair Programming</span>
+          <span class="chip">Refactoring</span>
+          <span class="chip">Teamarbeit</span>
+        </div>
+      </div>
+
+      <div class="formats">
+        <div class="formats-label mono">Formate</div>
+        <p>Vortrag 30–60 min · Workshop · Coaching · Inhouse-Formate</p>
+      </div>
+
+      <div class="downloads">
+        <a href="#" class="link mono">↗ Bio &amp; Pressefoto (.zip)</a>
+        <a href="https://sessionize.com/" class="link mono" rel="noopener">↗ Sessionize-Profil</a>
+      </div>
+    </div>
+  </div>
+</section>

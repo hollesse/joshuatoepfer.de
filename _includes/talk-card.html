@@ -1,0 +1,65 @@
+{%- comment -%}
+Talk row.
+Params:
+  include.talk    — the talk object (from _data/talks.yml)
+  include.variant — "home" | "upcoming" | "past"
+{%- endcomment -%}
+{%- assign t = include.talk -%}
+{%- assign variant = include.variant | default: "upcoming" -%}
+{%- assign months = "Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember" | split: "," -%}
+{%- assign m_idx = t.date | date: "%-m" | plus: -1 -%}
+{%- assign d_part = t.date | date: "%-d." -%}
+{%- assign y_part = t.date | date: "%Y" -%}
+{%- assign full_date = d_part | append: " " | append: months[m_idx] | append: " " | append: y_part -%}
+
+{%- if variant == "home" -%}
+  <div class="v1-talk">
+    <div class="v1-talk__meta">
+      <div class="when mono">{{ full_date }}</div>
+      <div class="where mono">
+        {{ t.where }} <span class="sep">·</span> {{ t.city }}
+      </div>
+    </div>
+    <h3 class="v1-talk__title">{{ t.what }}</h3>
+  </div>
+{%- elsif variant == "past" -%}
+  <div class="talks-row talks-row--past">
+    <div class="meta">
+      <div class="when mono">{{ full_date }}</div>
+      <div class="where mono">
+        {{ t.where }} <span class="sep">·</span> {{ t.city }}
+      </div>
+    </div>
+    <div>
+      <h3>{{ t.what }}</h3>
+      {% if t.abstract %}<p>{{ t.abstract }}</p>{% endif %}
+      {% if t.slides or t.video %}
+        <div class="links">
+          {% if t.slides %}<a href="{{ t.slides }}" class="link mono" rel="noopener">↗ Slides</a>{% endif %}
+          {% if t.video %}<a href="{{ t.video }}" class="link mono" rel="noopener">↗ Aufzeichnung</a>{% endif %}
+        </div>
+      {% endif %}
+    </div>
+    <div class="extras">
+      <span class="type-pill">{{ t.type | default: "talk" | replace: "talk", "Vortrag" | replace: "workshop", "Workshop" | replace: "keynote", "Keynote" }}</span>
+      {% if t.duration %}<div class="duration mono">{{ t.duration }} min</div>{% endif %}
+    </div>
+  </div>
+{%- else -%}
+  <div class="talks-row">
+    <div class="meta">
+      <div class="when upcoming mono">{{ full_date }}</div>
+      <div class="where mono">
+        {{ t.where }} <span class="sep">·</span> {{ t.city }}
+      </div>
+    </div>
+    <div>
+      <h3>{{ t.what }}</h3>
+      {% if t.abstract %}<p>{{ t.abstract }}</p>{% endif %}
+    </div>
+    <div class="extras">
+      <span class="type-pill type-pill--accent">{{ t.type | default: "talk" | replace: "talk", "Vortrag" | replace: "workshop", "Workshop" | replace: "keynote", "Keynote" }}</span>
+      {% if t.duration %}<div class="duration mono">{{ t.duration }} min</div>{% endif %}
+    </div>
+  </div>
+{%- endif -%}

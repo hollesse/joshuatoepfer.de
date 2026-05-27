@@ -1,0 +1,77 @@
+---
+layout: default
+---
+{%- assign published_posts = site.posts | where_exp: "p", "p.published != false" -%}
+{%- assign total = published_posts.size -%}
+
+{%- comment -%} Topic counts {%- endcomment -%}
+{%- assign ensemble_count = 0 -%}
+{%- assign adhs_count = 0 -%}
+{%- assign softdev_count = 0 -%}
+{%- for p in published_posts -%}
+  {%- case p.topic -%}
+    {%- when "ensemble" -%}{%- assign ensemble_count = ensemble_count | plus: 1 -%}
+    {%- when "adhs" -%}{%- assign adhs_count = adhs_count | plus: 1 -%}
+    {%- when "softdev" -%}{%- assign softdev_count = softdev_count | plus: 1 -%}
+  {%- endcase -%}
+{%- endfor -%}
+
+<section class="blog-hero">
+  <div class="label-eyebrow" style="margin-bottom: 18px;">
+    Blog · {{ total }} {% if total == 1 %}Beitrag{% else %}Beiträge{% endif %} · seit 2019
+  </div>
+  <h1>Notizen aus der Praxis<span class="accent-mark">.</span></h1>
+  <p>
+    Was beim Pairen passiert, was ADHS damit zu tun hat, und warum
+    Refactoring keine Strafe sein muss. Manches gibt's nur hier, anderes
+    habe ich drüben auf <a href="https://innoq.com" class="link" style="color: var(--fg);" rel="noopener">innoq.com</a> geschrieben.
+  </p>
+</section>
+
+<section class="blog-filters" aria-label="Themen-Filter">
+  <button type="button" class="filter-chip mono is-active" data-topic="all">Alle <span class="count">{{ total }}</span></button>
+  <button type="button" class="filter-chip mono" data-topic="ensemble">Ensemble <span class="count">{{ ensemble_count }}</span></button>
+  <button type="button" class="filter-chip mono" data-topic="adhs">ADHS <span class="count">{{ adhs_count }}</span></button>
+  <button type="button" class="filter-chip mono" data-topic="softdev">Software Development <span class="count">{{ softdev_count }}</span></button>
+</section>
+
+{%- assign months_full = "Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember" | split: "," -%}
+{%- assign topic_labels = "ensemble:Ensemble,adhs:ADHS,softdev:Software Dev" | split: "," -%}
+
+{%- assign by_year = published_posts | group_by_exp: "p", "p.date | date: '%Y'" -%}
+{% for year_group in by_year %}
+  <section class="blog-year" data-year="{{ year_group.name }}">
+    <div class="blog-year-divider">
+      <h2>{{ year_group.name }}</h2>
+      <div class="count mono">
+        {{ year_group.items.size }} {% if year_group.items.size == 1 %}Beitrag{% else %}Beiträge{% endif %}
+      </div>
+    </div>
+    {% for post in year_group.items %}
+      {%- assign m_idx = post.date | date: "%-m" | plus: -1 -%}
+      {%- assign d_part = post.date | date: "%-d." -%}
+      {%- assign y_part = post.date | date: "%Y" -%}
+      {%- assign full_date = d_part | append: " " | append: months_full[m_idx] | append: " " | append: y_part -%}
+      {%- assign topic_label = post.topic -%}
+      {%- if post.topic == "ensemble" -%}{%- assign topic_label = "Ensemble" -%}{%- endif -%}
+      {%- if post.topic == "adhs" -%}{%- assign topic_label = "ADHS" -%}{%- endif -%}
+      {%- if post.topic == "softdev" -%}{%- assign topic_label = "Software Dev" -%}{%- endif -%}
+
+      <a href="{{ post.url | relative_url }}" class="blog-post-row" data-topic="{{ post.topic | default: 'softdev' }}">
+        <div>
+          <div class="date mono">{{ full_date }}</div>
+          {% if post.source %}<div class="src mono">↗ via {{ post.source }}</div>{% endif %}
+        </div>
+        <div>
+          <h3>{{ post.title }}</h3>
+          {% if post.subtitle or post.excerpt %}
+            <p>{{ post.subtitle | default: post.excerpt | strip_html | truncate: 240 }}</p>
+          {% endif %}
+        </div>
+        <div class="topic-tag">
+          <span class="mono">{{ topic_label }}</span>
+        </div>
+      </a>
+    {% endfor %}
+  </section>
+{% endfor %}

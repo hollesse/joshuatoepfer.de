@@ -1,5 +1,5 @@
 title: "Joshua Töpfer"
-description: "Software developer. Ensemble programming, ADHS in IT, software craftsmanship."
+description: "Software-Entwickler. Ensemble Programming, ADHS in der IT, Software Craftsmanship."
 url: "https://joshuatoepfer.de"
 baseurl: ""
 
@@ -21,12 +21,6 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
-# Collections
-collections:
-  talks:
-    output: true
-    permalink: /talks/:name/
-
 # Defaults
 defaults:
   - scope:
@@ -34,8 +28,12 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-  - scope:
-      path: ""
-      type: "talks"
-    values:
-      layout: "default"
+
+# Exclude design handoff & build/tooling artefacts from the generated site
+exclude:
+  - design_handoff_jekyll
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - netlify.toml
+  - .ruby-version

@@ -1,18 +1,119 @@
 ---
 layout: default
 ---
-<article class="post">
-  <header class="post__header">
-    <h1 class="post__title">{{ page.title }}</h1>
-    <div class="meta">
-      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d.%m.%Y" }}</time>
-      {% if page.canonical_url %}
-      <span>— Ursprünglich auf <a href="{{ page.canonical_url }}" rel="noopener noreferrer">innoq.com</a></span>
+{%- assign months_full = "Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember" | split: "," -%}
+{%- assign m_idx = page.date | date: "%-m" | plus: -1 -%}
+{%- assign d_part = page.date | date: "%-d." -%}
+{%- assign y_part = page.date | date: "%Y" -%}
+{%- assign full_date = d_part | append: " " | append: months_full[m_idx] | append: " " | append: y_part -%}
+{%- assign topic_label = page.topic -%}
+{%- if page.topic == "ensemble" -%}{%- assign topic_label = "Ensemble" -%}{%- endif -%}
+{%- if page.topic == "adhs" -%}{%- assign topic_label = "ADHS" -%}{%- endif -%}
+{%- if page.topic == "softdev" -%}{%- assign topic_label = "Software Dev" -%}{%- endif -%}
+
+{%- assign title_parts = page.title | split: " — " -%}
+{%- assign hero_title = title_parts[0] -%}
+
+<article>
+  <section class="post-hero">
+    <a href="{{ '/blog/' | relative_url }}" class="back-link mono link">← Zurück zum Blog</a>
+
+    <div class="eyebrow">
+      {% if topic_label %}<span>{{ topic_label }}</span><span class="sep">·</span>{% endif %}
+      <span class="date">{{ full_date }}</span>
+    </div>
+
+    <h1>{{ hero_title }}<span class="accent-mark">.</span></h1>
+
+    {% if page.subtitle %}
+      <p class="subtitle">{{ page.subtitle }}</p>
+    {% endif %}
+
+    <div class="meta-line mono">
+      {% if page.reading_time %}
+        <span>{{ page.reading_time }} min Lesezeit</span>
+      {% else %}
+        {%- assign words = content | strip_html | number_of_words -%}
+        {%- assign minutes = words | divided_by: 200 -%}
+        {%- if minutes < 1 -%}{%- assign minutes = 1 -%}{%- endif -%}
+        <span>{{ minutes }} min Lesezeit</span>
+      {% endif %}
+      {% if page.source %}
+        <span>·</span>
+        <span>↗ Erscheint auch auf {{ page.source }}.com</span>
       {% endif %}
     </div>
-  </header>
+  </section>
 
-  <div class="prose">
-    {{ content }}
-  </div>
+  <section class="post-body-layout">
+    <aside class="post-toc" aria-label="Inhaltsverzeichnis">
+      <div class="label mono">Inhalt</div>
+      <ol id="post-toc-list">
+        {%- comment -%}
+          Static TOC fallback; theme-toggle.js scans h2s and rebuilds the list.
+        {%- endcomment -%}
+        <li><a href="#main" class="link">Zum Anfang</a></li>
+      </ol>
+    </aside>
+
+    <div class="post-body">
+      {{ content }}
+    </div>
+  </section>
+
+  {%- assign published_posts = site.posts | where_exp: "p", "p.published != false" -%}
+  {%- assign next_post = nil -%}
+  {%- assign prev_post = nil -%}
+  {%- for p in published_posts -%}
+    {%- if p.url == page.url -%}
+      {%- unless forloop.first -%}
+        {%- assign prev_index = forloop.index0 | minus: 1 -%}
+        {%- assign next_post = published_posts[prev_index] -%}
+      {%- endunless -%}
+      {%- unless forloop.last -%}
+        {%- assign prev_post = published_posts[forloop.index] -%}
+      {%- endunless -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {% if prev_post or next_post %}
+    <section class="post-pager">
+      {% if prev_post %}
+        <a href="{{ prev_post.url | relative_url }}">
+          <div class="label mono">← Älterer Beitrag</div>
+          <div class="title">{{ prev_post.title }}</div>
+        </a>
+      {% else %}<span></span>{% endif %}
+      {% if next_post %}
+        <a href="{{ next_post.url | relative_url }}">
+          <div class="label mono">Neuerer Beitrag →</div>
+          <div class="title">{{ next_post.title }}</div>
+        </a>
+      {% else %}<span></span>{% endif %}
+    </section>
+  {% endif %}
+
+  {%- if page.topic -%}
+    {%- assign related = published_posts | where: "topic", page.topic -%}
+    {%- assign related_filtered = "" | split: "," -%}
+    {%- for p in related -%}
+      {%- if p.url != page.url -%}
+        {%- assign related_filtered = related_filtered | push: p -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- assign related_filtered = related_filtered | slice: 0, 3 -%}
+
+    {% if related_filtered.size > 0 %}
+      <section class="related-posts">
+        <h2 class="mono">
+          <span class="em-prefix">—</span>&nbsp;&nbsp;MEHR ZUM THEMA {{ topic_label | upcase }}
+        </h2>
+        <div>
+          {% for p in related_filtered %}
+            {% include post-card.html post=p style="related" %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  {%- endif -%}
 </article>

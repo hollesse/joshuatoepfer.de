@@ -1,0 +1,69 @@
+---
+layout: default
+---
+{%- assign published_posts = site.posts | where_exp: "p", "p.published != false" -%}
+{%- assign latest_posts = published_posts | slice: 0, 5 -%}
+{%- assign upcoming_talks = site.data.talks | where: "status", "upcoming" | sort: "date" -%}
+{%- assign focus = site.data.focus -%}
+
+<section class="hero v1-hero">
+  <div>
+    <h1>Joshua<br>Töpfer<span class="accent-mark">.</span></h1>
+    <p>
+      Senior Consultant bei <span class="accent-mark">INNOQ</span>.
+      Schreibt Code im Ensemble, denkt laut über Teams und lebt mit ADHS.
+      Was sich, wie sich rausstellt, ganz gut ergänzt.
+    </p>
+  </div>
+  {% if site.portrait_image %}
+    <div class="v1-portrait" role="img" aria-label="Porträt Joshua Töpfer" style="background-image: url('{{ site.portrait_image | relative_url }}');"></div>
+  {% else %}
+    <div class="v1-portrait v1-portrait--placeholder" aria-label="Porträt-Platzhalter">
+      Porträt · 3:4 Hochformat
+    </div>
+  {% endif %}
+</section>
+
+<hr class="rule">
+
+<section>
+  <div class="v1-section-head">
+    <h2 class="mono"><span class="em-prefix">—</span>&nbsp;&nbsp;NEUESTE BEITRÄGE</h2>
+    <a href="{{ '/blog/' | relative_url }}" class="link mono more-link">Alle ansehen →</a>
+  </div>
+  <div>
+    {% for post in latest_posts %}
+      {% include post-card.html post=post style="compact" %}
+    {% endfor %}
+  </div>
+</section>
+
+<section>
+  <h2 class="mono" style="font-size: 14px; font-weight: 500; margin: 0 0 48px; color: var(--fg-dim);">
+    <span style="color: var(--fg);">—</span>&nbsp;&nbsp;MEINE SCHWERPUNKTE
+  </h2>
+  <div class="v1-focus">
+    {% for f in focus %}
+      <div class="focus-card">
+        <div class="count mono">{{ f.count }} BEITRÄGE</div>
+        <h3>{{ f.label }}</h3>
+        <p>{{ f.blurb }}</p>
+        <a href="{{ '/blog/?topic=' | append: f.key | relative_url }}" class="focus-link link">Posts lesen →</a>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% if upcoming_talks.size > 0 %}
+<section>
+  <div class="v1-section-head">
+    <h2 class="mono"><span class="em-prefix">—</span>&nbsp;&nbsp;KOMMENDE TALKS</h2>
+    <a href="{{ '/talks/' | relative_url }}" class="link mono more-link">Speaker-Profil →</a>
+  </div>
+  <div>
+    {% for t in upcoming_talks %}
+      {% include talk-card.html talk=t variant="home" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}

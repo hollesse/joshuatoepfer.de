@@ -1,0 +1,19 @@
+---
+layout: default
+---
+<section class="legal-hero">
+  <a href="{{ '/' | relative_url }}" class="back-link mono link">← Zurück zur Startseite</a>
+  <h1>{{ page.title }}<span class="accent-mark">.</span></h1>
+  {% if page.subtitle %}
+    <p>{{ page.subtitle }}</p>
+  {% endif %}
+  {% if page.last_updated %}
+    <div class="updated mono">Zuletzt aktualisiert · {{ page.last_updated }}</div>
+  {% endif %}
+</section>
+
+<section class="legal-body">
+  <div class="post-body">
+    {{ content }}
+  </div>
+</section>

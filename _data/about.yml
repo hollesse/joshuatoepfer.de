@@ -1,0 +1,20 @@
+# Quick-Facts auf der /ueber-mich/-Seite.
+# Each entry: key (label), value (display string).
+
+quick_facts:
+  - key: "Lebt in"
+    value: "Hadamar"
+  - key: "Arbeitet bei"
+    value: "INNOQ"
+  - key: "Rolle"
+    value: "Senior Consultant"
+  - key: "Spricht"
+    value: "Deutsch · Englisch"
+  - key: "Liest gerade"
+    value: "Das Pegasus-Prinzip"
+  - key: "Hört gerade"
+    value: "Computer World"
+  - key: "Mit Hund seit"
+    value: "2019"
+  - key: "Schreibt seit"
+    value: "2019"

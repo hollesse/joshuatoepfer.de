@@ -1,29 +1,5 @@
 ---
-layout: default
+layout: home
 title: Home
+permalink: /
 ---
-
-<div class="prose">
-  <section class="hero">
-    <h1 class="hero__name">Joshua Töpfer</h1>
-    <p class="hero__tagline">Software-Entwickler. Ich schreibe über Ensemble Programming, ADHS in der IT, und das Handwerk der Software-Entwicklung.</p>
-  </section>
-
-  <section class="recent-posts">
-    <h2 class="recent-posts__heading">Letzte Posts</h2>
-
-    {% assign published_posts = site.posts | where_exp: "post", "post.published != false" %}
-    {% if published_posts.size > 0 %}
-      <ul class="post-list">
-        {% for post in published_posts limit:5 %}
-          <li class="post-list__item">
-            <a href="{{ post.url | relative_url }}" class="post-list__title">{{ post.title }}</a>
-            <time class="post-list__date meta" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%d.%m.%Y" }}</time>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p class="meta">Noch keine Posts veröffentlicht.</p>
-    {% endif %}
-  </section>
-</div>
