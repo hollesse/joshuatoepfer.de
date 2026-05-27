@@ -5,6 +5,65 @@ Newest entries on top.
 
 ---
 
+## 2026-05-27 19:35 -- Task verified and completed: infra-004 - INNOQ author sync pipeline (incremental)
+
+**Type:** Work / Task completion
+**Task:** infra-004 - INNOQ author sync pipeline — incremental, feed-based (German articles only)
+**Summary:** Delivered the incremental INNOQ sync pipeline — `.github/workflows/sync-innoq.yml` (cron + workflow_dispatch with `force_resync` and `feed_url_override` inputs; matrix shape for one-PR-per-article) plus `sync_innoq.py` and the shared `innoq_common.py` module that `infra-005` will import. Enforces the four-step filter chain (author email, xml:lang=de, /de/ path, /articles/ segment), two-step PR-history dedup (`_posts/` canonical_url + `gh pr list --state all --head sync/innoq/<slug>`), force-resync that preserves `topic`/`published` on a timestamped branch, and fail-loud observability. 22 unit tests passing. ADR-0006 records the dual-workflow + full-body + PR-history-dedup + force-resync + Python + blank-topic decisions; infrastructure README has the new Sync workflow section including the smoke-test procedure for Joshua's first deploy. Orchestrator added `__pycache__/` and `*.py[cod]` to `.gitignore` as a small follow-up cleanup so Python toolchain artifacts don't accumulate.
+**Verification:** PASS (iteration 1)
+**Commit:** (pending)
+**Files changed:** 6 worker files + 3 task/index/protocol updates + .gitignore
+**Tests added:** 22
+**ADRs written:** 0006-innoq-sync-architecture.md
+
+---
+
+## 2026-05-27 19:20 -- Batch started: [infra-004]
+
+**Type:** Work / Batch start
+**Tasks:** infra-004 - INNOQ author sync pipeline — incremental, feed-based (German articles only)
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-05-27 19:15 -- Model / Promoted: infra-004
+
+**Type:** Model / Promote
+**BC:** infrastructure
+**From → To:** backlog → todo
+
+---
+
+## 2026-05-27 19:10 -- Model / Captured: infra-005
+
+**Type:** Model / Capture
+**BC:** infrastructure
+**Filed to:** backlog
+**Summary:** Captured the historical backfill workflow as a sibling to infra-004, splitting the previous "Joshua does manual backfill" plan into an automated job. Discovery source is `https://www.innoq.com/de/written/?by=joshua-toepfer` (per research `innoq-staff-page-scrape-2026-05-27`) — server-rendered, DE-only article URLs, robots.txt permissive. Parser stack: `requests` + `BeautifulSoup(lxml)` + `markdownify`. Trigger: `workflow_dispatch` only with `urls` (override) and `dry_run` inputs. Branch namespace `backfill/innoq/<slug>` to distinguish from infra-004's `sync/innoq/<slug>`. Shared label `sync-innoq`. `depends_on: [infra-004]` because both workflows share `.github/scripts/innoq_common.py` which infra-004 delivers. Article-count expectation: 3 (not Joshua's earlier ~5 estimate — research surfaced that the staff page counts DE/EN duplicates while `/de/written/?by=...` does not; flagged for sanity-check). One pre-implementation open: 5-min curl spike on `<head>` meta tags + `<article>` class + code-block convention — left to worker as first step rather than blocking PROMOTE.
+
+---
+
+## 2026-05-27 18:55 -- Research / Filed: innoq-staff-page-scrape-2026-05-27
+
+**Type:** Research / Report filed
+**BC:** infrastructure
+**Related task:** infra-005
+**Report:** `.agentheim/knowledge/research/innoq-staff-page-scrape-2026-05-27.md`
+**Summary:** Investigated INNOQ staff-page HTML structure and scrape feasibility for the historical backfill workflow. Confirmed: server-rendered HTML, no JS/Cloudflare, robots.txt permissive for current trailing-slash article URLs. Discovery surface: `/de/written/?by=joshua-toepfer` (DE-only, articles-only, no DE/EN duplicates — 3 entries today). Parser: BeautifulSoup(lxml). Body strip-list: newsletter forms, author-bio, "Weitere Informationen" boxes, footer, share icons. Open spike: `<head>` meta tag inventory (`article:published_time`, `og:title`, `link rel=canonical`, `<time datetime>`) — WebFetch strips `<head>` so could not verify; ~5 min curl spike recommended before parser commit. Indexed under infrastructure research-local.
+
+---
+
+## 2026-05-27 18:50 -- Model / Refined: infra-004
+
+**Type:** Model / Refine
+**BC:** infrastructure
+**Status after:** backlog (ready for PROMOTE)
+**Summary:** All previously-open questions resolved into a "Decisions" section. Body content: full Atom `<content>` (resolves ADR-0002's deferred legal question — Joshua greenlit full body) → markdownify → Markdown, images stay as remote `<img>` references to Cloudinary. Workflow language: Python (`feedparser` + `markdownify` + `pyyaml`). Dedup: 2-tier via `_posts/*.md` canonical_url + `gh pr list --state all --head sync/innoq/<slug>` — branches deleted on PR close (`delete-branch: true`), PR history is the dedup memory so no persistent branches accumulate. Force-resync via `workflow_dispatch` input `force_resync` (comma-separated URLs): bypasses dedup, preserves existing file's `topic`/`published` values, regenerates body, branch suffix `-resync-<timestamp>`. Topic mapping: left blank (Joshua fills in manually). Failure mode: fail loudly (job status = failed; default GH Actions email). Feed-window risk: accepted; backfill is now `infra-005`'s job. Architecture explicitly split into two workflows sharing `innoq_common.py`; `infra-004` now `blocks: [infra-005]`. Worker will write `ADR-0006` covering dual-workflow architecture + full-body decision + PR-history dedup + force-resync.
+**Split into:** [infra-005]
+**ADRs written:** none yet (ADR-0006 to be authored by infra-004's worker)
+
+---
+
 ## 2026-05-27 18:42 -- Work session ended
 
 **Type:** Work / Session end

@@ -1,0 +1,102 @@
+name: Sync from INNOQ
+
+# Polls Joshua's INNOQ articles from the /de/feed.atom rolling window and
+# opens one draft PR per new article. See:
+# - ADR-0002 (canonical content sync strategy)
+# - ADR-0006 (sync architecture: dual workflow, full body, PR-history dedup, force-resync)
+# - .github/scripts/sync_innoq.py + innoq_common.py
+
+on:
+  schedule:
+    # Daily at 03:00 UTC. Manual triggers below cover ad-hoc runs.
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      force_resync:
+        description: "Canonical URL(s) to re-sync, comma-separated. Empty = normal incremental run."
+        required: false
+        type: string
+        default: ""
+      feed_url_override:
+        description: "Override feed URL (smoke test only — set to a broken URL to confirm the failure path goes red and emails fire)."
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  plan:
+    name: Plan sync
+    runs-on: ubuntu-latest
+    outputs:
+      plan: ${{ steps.run-plan.outputs.plan }}
+      plan_count: ${{ steps.run-plan.outputs.plan_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install --quiet feedparser markdownify pyyaml
+
+      - name: Build plan
+        id: run-plan
+        env:
+          FORCE_RESYNC: ${{ inputs.force_resync }}
+          FEED_URL_OVERRIDE: ${{ inputs.feed_url_override }}
+          PLAN_ONLY: 'true'
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python .github/scripts/sync_innoq.py
+
+  publish:
+    name: Publish sync PR
+    needs: plan
+    if: ${{ needs.plan.outputs.plan_count != '0' && needs.plan.outputs.plan_count != '' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        item: ${{ fromJSON(needs.plan.outputs.plan) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install --quiet feedparser markdownify pyyaml
+
+      - name: Materialise post file
+        env:
+          FORCE_RESYNC: ${{ inputs.force_resync }}
+          FEED_URL_OVERRIDE: ${{ inputs.feed_url_override }}
+          MATERIALISE_FOR_SLUG: ${{ matrix.item.slug }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python .github/scripts/sync_innoq.py
+
+      - name: Open PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ matrix.item.branch }}
+          delete-branch: true
+          title: ${{ matrix.item.title }}
+          body: ${{ matrix.item.body }}
+          labels: sync-innoq
+          commit-message: |
+            sync(innoq): ${{ matrix.item.title }}
+
+            Canonical: ${{ matrix.item.canonical_url }}
+          add-paths: |
+            _posts/**

@@ -5,3 +5,8 @@ _site/
 .bundle/
 vendor/
 .claude/
+
+# Python — introduced with the .github/scripts/ tooling (infra-004)
+__pycache__/
+*.py[cod]
+*$py.class

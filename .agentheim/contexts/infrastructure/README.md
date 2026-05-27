@@ -40,6 +40,54 @@ Not applicable — no domain aggregates in infrastructure.
 ## Relationships with other contexts
 - **Deploys:** website and design-system artifacts
 
+## Sync workflow (innoq.com → PR)
+
+The incremental sync runs from `.github/workflows/sync-innoq.yml`, backed by
+`.github/scripts/sync_innoq.py` and the shared module
+`.github/scripts/innoq_common.py`. See ADR-0002 (canonical strategy) and
+ADR-0006 (sync architecture).
+
+**Filter chain** (a feed entry must pass all four to become a PR):
+1. `<author><email>joshua.toepfer@innoq.com</email></author>`
+2. `<content xml:lang="de">`
+3. `<link href>` contains `/de/`
+4. `<link href>` is under `/articles/` (talks, podcasts, blog posts are
+   skipped)
+
+**Dedup** (two checks, either match → skip):
+1. `canonical_url` already present in any `_posts/*.md` frontmatter
+2. `gh pr list --state all --head sync/innoq/<slug>` returns ≥ 1 (i.e. a
+   PR was opened for this article at some point — open, merged, or closed)
+
+**Two-step publish flow:**
+1. The workflow opens a draft PR with `published: false` and `topic:`
+   absent. Joshua reviews and merges the PR.
+2. Joshua separately edits the merged file: fills in `topic:`
+   (`ensemble | adhs | softdev`) and flips `published: true`. Only then
+   does the post appear on the live site.
+
+**Force-resync escape hatch** (for fixing broken syncs or picking up
+INNOQ-side updates):
+
+Trigger the workflow manually with the `force_resync` input set to one
+or more canonical URLs (comma-separated). For each listed URL the
+workflow bypasses dedup, preserves the existing file's `topic:` and
+`published:` values, and opens a re-sync PR on a timestamped branch.
+URLs that have rolled off the feed's ~25-entry window cause the job to
+fail loudly — use the backfill workflow (`infra-005`) for those.
+
+**Smoke test (run once after first deploy):**
+
+Trigger the workflow manually with `feed_url_override` set to a
+deliberately-broken URL (e.g. `https://this-domain-does-not-exist.invalid/feed.atom`).
+Confirm:
+- The Actions run goes red.
+- The standard GitHub Actions failure email arrives in Joshua's inbox.
+
+If neither happens, fix the observability before relying on the daily
+cron.
+
 ## Open questions
-- How does the innoq.com sync detect new posts — RSS feed, sitemap scrape, or innoq API?
 - Should sync PRs be auto-merged on no-conflict, or always require manual review?
+  → Currently always manual; revisit if the volume of innoq.com publishing
+  ever justifies auto-merge for trivially-clean cases.
