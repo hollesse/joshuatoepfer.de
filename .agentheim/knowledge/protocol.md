@@ -5,6 +5,29 @@ Newest entries on top.
 
 ---
 
+## 2026-05-27 18:06 -- Work session ended
+
+**Type:** Work / Session end
+**Completed:** 2 (first-try PASS: 2, re-dispatched: 0, skipped: 0)
+**Bounced:** 0
+**Failed:** 0
+**Escalated after verification:** 0
+**Commits:** 2
+
+---
+
+## 2026-05-27 18:05 -- Task verified and completed: website-003 - Document implemented pages and data sources
+
+**Type:** Work / Task completion
+**Task:** website-003 - Document implemented pages and data sources (talks, ueber-mich, impressum, datenschutz, post layout)
+**Summary:** Extended the website BC README with new ubiquitous-language entries and a Pages inventory covering all 7 current routes; appended 2026-05-27 Amendment sections to done/website-001 (homepage now also has newest-posts, focus areas, upcoming-talks, duotone portrait) and done/website-002 (blog now year-grouped with filter chips; post layout now has hero, sticky TOC, pager, related-posts); legacy `/posts/` confirmed removed in 4d4fb3e. ADR-0005 related_tasks bidirectionally updated with website-003.
+**Verification:** PASS (iteration 1)
+**Commit:** a68641c
+**Files changed:** 7
+**ADRs written:** none
+
+---
+
 ## 2026-05-27 17:56 -- Batch started: [website-003]
 
 **Type:** Work / Batch start
