@@ -125,14 +125,14 @@ body.jt-fade-ready .jt [data-fade]:not(.in) {
 /* Cells / rows */
 .jt .row {
   display: grid;
-  grid-template-columns: 96px 1fr auto;
+  grid-template-columns: 170px 1fr auto;
   gap: 24px;
   padding: 22px 0;
   border-top: 1px solid var(--rule);
   align-items: baseline;
 }
 .jt .row:last-child { border-bottom: 1px solid var(--rule); }
-.jt .row .date { color: var(--fg-dim); font-size: 13px; }
+.jt .row .date { color: var(--fg-dim); font-size: 13px; white-space: nowrap; }
 .jt .row .arrow { color: var(--fg-faint); font-family: "Geist Mono", monospace; }
 .jt .row:hover .arrow { color: var(--accent); }
 .jt .row .title { font-size: 22px; font-weight: 480; letter-spacing: -0.01em; }

@@ -6,15 +6,15 @@ Params:
 {%- endcomment -%}
 {%- assign post = include.post -%}
 {%- assign style = include.style | default: "compact" -%}
-{%- assign months = "Jan,Feb,Mär,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez" | split: "," -%}
+{%- assign months_full = "Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember" | split: "," -%}
 {%- assign m_idx = post.date | date: "%-m" | plus: -1 -%}
-{%- assign day = post.date | date: "%d" -%}
-{%- assign year = post.date | date: "%Y" -%}
-{%- assign short_date = day | append: " " | append: months[m_idx] | append: " " | append: year -%}
+{%- assign d_part = post.date | date: "%-d." -%}
+{%- assign y_part = post.date | date: "%Y" -%}
+{%- assign full_date = d_part | append: " " | append: months_full[m_idx] | append: " " | append: y_part -%}
 
 {%- if style == "related" -%}
   <a href="{{ post.url | relative_url }}" class="related-post-row">
-    <div class="date mono">{{ short_date }}</div>
+    <div class="date mono">{{ full_date }}</div>
     <div>
       <div class="title">{{ post.title }}</div>
       {% if post.subtitle or post.excerpt %}
@@ -25,7 +25,7 @@ Params:
   </a>
 {%- else -%}
   <a href="{{ post.url | relative_url }}" class="row">
-    <div class="date mono">{{ short_date }}</div>
+    <div class="date mono">{{ full_date }}</div>
     <div>
       <div class="title">
         {{ post.title }}

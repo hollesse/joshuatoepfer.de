@@ -3,10 +3,10 @@
 // Compact post-row list (used on home + 'related posts' sections) and talk row.
 // =============================================================================
 
-// Compact home-style post row: date 96px | title/excerpt | arrow
+// Compact home-style post row: date 170px | title/excerpt | arrow
 .jt .row {
   display: grid;
-  grid-template-columns: 96px 1fr auto;
+  grid-template-columns: 170px 1fr auto;
   gap: 24px;
   padding: 22px 0;
   border-top: 1px solid var(--rule);
@@ -19,6 +19,7 @@
   color: var(--fg-dim);
   font-size: 13px;
   font-family: "Geist Mono", monospace;
+  white-space: nowrap;
 }
 .jt .row .arrow {
   color: var(--fg-faint);

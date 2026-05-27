@@ -182,7 +182,7 @@ function PostsList({ items = POSTS.slice(0, 5), withArrows = true }) {
     <div>
       {items.map((p) =>
       <a key={p.title} href={p.href} className="row">
-          <div className="date mono">{fmtDate(p.date)}</div>
+          <div className="date mono">{fmtFullDate(p.date)}</div>
           <div>
             <div className="title">
               {p.title}
