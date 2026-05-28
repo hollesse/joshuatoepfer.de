@@ -5,6 +5,18 @@ Newest entries on top.
 
 ---
 
+## 2026-05-28 12:52 -- Work session ended
+
+**Type:** Work / Session end
+**Completed:** 1 (first-try PASS: 1)
+**Bounced:** 0
+**Failed:** 0
+**Escalated after verification:** 0
+**Commits:** 1 (021c7a8)
+**Notable:** Closes the spec/implementation gap from infra-005. Unblocks Joshua's 2023-article re-sync after pushing.
+
+---
+
 ## 2026-05-28 12:50 -- Task verified and completed: infra-007 - Backfill URL-list bypass
 
 **Type:** Work / Task completion
