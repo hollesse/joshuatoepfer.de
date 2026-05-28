@@ -55,6 +55,7 @@ research touching this BC, and concept synthesis pages.
 ## Concepts (opt-in synthesis pages)
 
 <!-- concepts:start -->
+- **innoq-sync** — how Joshua's INNOQ articles are mirrored to joshuatoepfer.de as syndicated draft posts, with a manual publish gate — 2026-05-28 — `concepts/innoq-sync.md`
 <!-- concepts:end -->
 
 ## Pointers

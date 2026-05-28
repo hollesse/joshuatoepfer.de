@@ -5,6 +5,16 @@ Newest entries on top.
 
 ---
 
+## 2026-05-28 09:00 -- Concept created: innoq-sync
+
+**Type:** Concept / Created
+**BC:** infrastructure
+**Page:** `.agentheim/contexts/infrastructure/concepts/innoq-sync.md`
+**Derived from:** ADR 0002, ADR 0006, research innoq-staff-feed-2026-05-27, research innoq-staff-page-scrape-2026-05-27, done infra-002, done infra-004, backlog infra-005
+**Summary:** Synthesis page for the INNOQ → joshuatoepfer.de mirror — the two workflows (live sync-innoq, planned backfill-innoq), the shared `innoq_common.py` module, the four-step filter chain (author email, German language, /de/ path, /articles/ segment), the two-step PR-history dedup, the manual two-step publish flow, and the force-resync escape hatch. 51-line body, well within the 60-line cap. Lists each source artifact in `derived_from` for drift detection.
+
+---
+
 ## 2026-05-27 19:38 -- Work session ended
 
 **Type:** Work / Session end
