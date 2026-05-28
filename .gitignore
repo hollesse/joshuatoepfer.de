@@ -10,3 +10,7 @@ vendor/
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Node — pa11y-ci runs ephemerally via npx (infra-006); no package.json is
+# committed, but local runs may leave behind a transient node_modules/.
+node_modules/

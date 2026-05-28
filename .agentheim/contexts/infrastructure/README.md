@@ -136,6 +136,98 @@ so one filter shows everything from INNOQ.
 User-Agent; exponential backoff (5 s → 30 s → 2 min, 3 attempts) on 5xx;
 `Retry-After`-aware on 429; no retry on 4xx (skip + fail-loud).
 
+## Accessibility checks
+
+Automated WCAG 2.1 AA audits run from `.github/workflows/accessibility.yml`,
+backed by `.pa11yci.json` at the repo root. See infra-006 for the task
+spec and ADR-0005 for the `data-mode` mechanism the workflow exploits.
+
+**What it does:** builds the Jekyll site, serves it locally, and runs
+`pa11y-ci` (pinned to `pa11y-ci@4.1.1`, ephemerally via `npx --yes`)
+against seven URLs in **both** dark mode and light mode. A single AA
+violation on any URL × mode combination fails the workflow.
+
+**URLs covered (×2 modes = 14 audit passes):**
+- `/`
+- `/blog/`
+- `/talks/`
+- `/ueber-mich/`
+- `/impressum/`
+- `/datenschutz/`
+- `/posts/2026/05/27/hello-welt/`
+
+When new pages or representative posts ship, append them to the `urls`
+list in `.pa11yci.json`. There is no glob-based auto-discovery — explicit
+opt-in keeps the audit fast and predictable.
+
+**Triggers:**
+- `pull_request` against `main` — gates merge.
+- `push` to `main` — backstop in case anything bypasses PR review.
+- `workflow_dispatch` — manual re-run for debugging.
+
+**Mode injection:** pa11y-ci's `actions` field does **not** support
+arbitrary JavaScript evaluation (its built-in actions are limited to
+navigate / click / set-field / wait / screen-capture). Instead, the
+workflow rewrites `_site/**/*.html` between passes:
+1. Dark-mode pass: `sed` sets `data-mode="dark"` and replaces the inline
+   boot script's `var saved = localStorage.getItem("jt-mode")` with
+   `var saved = "dark"`. This forces dark mode regardless of Chrome
+   headless's `prefers-color-scheme: light` default.
+2. Light-mode pass: same `sed` trick, with `light` instead of `dark`.
+
+`_site/` is `.gitignore`'d (per infra-001); the mutation is purely a
+CI-only artifact rewrite, the source tree is never touched.
+
+**How to run locally:**
+
+```sh
+bundle exec jekyll build
+bundle exec jekyll serve --no-watch --skip-initial-build --detach
+# In another terminal — or after the server is up:
+npx --yes pa11y-ci@4.1.1
+```
+
+To exercise the light-mode pass locally, apply the same `sed` mutation
+to `_site/` before the second pa11y-ci run. On macOS use `sed -i ''`
+(empty backup suffix); on Linux/CI use `sed -i` (no suffix):
+
+```sh
+find _site -name '*.html' -print0 | xargs -0 sed -i '' \
+  -e 's/data-mode="dark"/data-mode="light"/g' \
+  -e 's|var saved = localStorage.getItem("jt-mode");|var saved = "light";|g'
+npx --yes pa11y-ci@4.1.1
+```
+
+A fresh `bundle exec jekyll build` restores `_site/` to its original
+(dark, localStorage-reading) state.
+
+**Known initial failure — hand-off to design-system-002:**
+
+The first run of this workflow is **expected to fail**. Both dark and
+light modes surface real WCAG 2.1 AA contrast violations on muted text
+(the `--text-muted` token against the page background and the accent
+arrow). Concrete error counts on the seed run:
+
+| URL | Dark errors | Light errors |
+| --- | ---: | ---: |
+| `/` | 15 | 15 |
+| `/blog/` | 11 | 11 |
+| `/talks/` | 29 | 29 |
+| `/ueber-mich/` | 16 | 16 |
+| `/impressum/` | 7 | 7 |
+| `/datenschutz/` | 7 | 7 |
+| `/posts/2026/05/27/hello-welt/` | 8 | 8 |
+
+Failing elements (distinct selectors):
+- `.arrow` (accent arrow in section CTA)
+- `.count.mono` ("N BEITRÄGE" counters on the index)
+- `.sep` (dot separators in post-list metadata)
+- footer `h4` headings (Kontakt / Anderswo / Site / Rechtliches)
+
+Dark-mode contrast ratio: 2.82:1 (need 4.5:1). Light-mode contrast
+ratio: 2.35:1 (need 4.5:1). The task `design-system-002` is the next
+step: it uses this concrete output to pick a token fix.
+
 ## Open questions
 - Should sync PRs be auto-merged on no-conflict, or always require manual review?
   → Currently always manual; revisit if the volume of innoq.com publishing

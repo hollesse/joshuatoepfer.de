@@ -1,0 +1,83 @@
+name: Accessibility (WCAG 2.1 AA)
+
+# Audits the built Jekyll site against WCAG 2.1 AA using pa11y-ci.
+# Each URL is checked twice: dark mode and light mode. The mode is forced
+# at the served-HTML level (not via pa11y-ci's `actions`, which does not
+# support arbitrary JS injection — its built-in actions are limited to
+# navigate / click / set-field / wait / screen-capture). For each pass we
+# rewrite _site/**/*.html to (a) set data-mode on <html> and (b) replace
+# the pre-paint boot script's localStorage read with a literal mode
+# string, so prefers-color-scheme (which Chrome headless defaults to
+# "light") cannot override the intended pass. _site/ is .gitignore'd; the
+# mutation never touches the source tree.
+#
+# A single violation on any URL × mode combo fails the workflow.
+# See:
+# - .pa11yci.json (URL list + WCAG standard)
+# - infrastructure/README.md → "Accessibility checks"
+# - ADR-0005 (data-mode mechanism this exploits)
+# - infra-006 task spec
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pa11y:
+    name: pa11y-ci WCAG 2.1 AA
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version-file: .ruby-version
+          bundler-cache: true
+
+      - name: Build site
+        run: bundle exec jekyll build
+
+      - name: Force dark mode in served HTML
+        run: |
+          find _site -name '*.html' -print0 | xargs -0 sed -i \
+            -e 's/data-mode="light"/data-mode="dark"/g' \
+            -e 's|var saved = localStorage.getItem("jt-mode");|var saved = "dark";|g'
+
+      - name: Start Jekyll server
+        run: bundle exec jekyll serve --no-watch --skip-initial-build --detach
+
+      - name: Wait for server
+        run: |
+          for i in {1..30}; do
+            if curl -sf http://localhost:4000/ >/dev/null; then
+              echo "Server ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Server did not come up within 30s"
+          exit 1
+
+      - name: Run pa11y-ci (dark mode)
+        run: npx --yes pa11y-ci@4.1.1
+
+      - name: Force light mode in served HTML
+        if: always()
+        run: |
+          find _site -name '*.html' -print0 | xargs -0 sed -i \
+            -e 's/data-mode="dark"/data-mode="light"/g' \
+            -e 's|var saved = "dark";|var saved = "light";|g'
+
+      - name: Run pa11y-ci (light mode)
+        if: always()
+        run: npx --yes pa11y-ci@4.1.1

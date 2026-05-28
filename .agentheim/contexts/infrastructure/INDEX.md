@@ -11,14 +11,13 @@ research touching this BC, and concept synthesis pages.
 
 <!-- task-counts:start -->
 - **Backlog:** 0
-- **Todo:** 1
+- **Todo:** 0
 - **Doing:** 0
-- **Done:** 5
+- **Done:** 6
 <!-- task-counts:end -->
 
 ### Todo
 <!-- todo-list:start -->
-- **infra-006** — Automated WCAG AA checks via pa11y-ci in CI (light + dark mode) — `todo/infra-006-pa11y-ci-wcag-aa.md`
 <!-- todo-list:end -->
 
 ### Doing
@@ -27,6 +26,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **infra-006** — Automated WCAG AA checks via pa11y-ci in CI (light + dark mode) — 2026-05-28 — `done/infra-006-pa11y-ci-wcag-aa.md`
 - **infra-005** — INNOQ historical backfill workflow (staff-page scrape, German articles only) — 2026-05-28 — `done/infra-005-innoq-historical-backfill-scrape.md`
 - **infra-004** — INNOQ author sync pipeline — incremental, feed-based (German articles only) — 2026-05-27 — `done/infra-004-innoq-author-sync-pipeline.md`
 - **infra-003** — Walking skeleton: Jekyll builds and pipeline wired — 2026-05-26 — `done/infra-003-walking-skeleton.md`

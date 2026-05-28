@@ -5,6 +5,27 @@ Newest entries on top.
 
 ---
 
+## 2026-05-28 10:30 -- Task verified and completed: infra-006 - pa11y-ci WCAG AA in CI
+
+**Type:** Work / Task completion
+**Task:** infra-006 - Automated WCAG AA checks via pa11y-ci in CI (light + dark mode)
+**Summary:** Shipped `.github/workflows/accessibility.yml` running pa11y-ci@4.1.1 against the 7 implemented routes × both modes (14 audit passes per workflow run). Worker chose a `sed`-rewrite of `_site/**/*.html` between two pa11y-ci invocations to inject light mode, after correctly identifying that pa11y has no `evaluate` action (the spec's proposed mechanism was wrong). The sed approach mutates both the `data-mode` attribute on `<html>` and the localStorage-reading boot script's fallback value, defeating Chrome headless's `prefers-color-scheme: light` default. Local validation: dark mode surfaces 93 AA violations at 2.82:1, light mode 93 violations at 2.35:1, all on `--text-muted`-styled elements (`.arrow`, `.count.mono`, `.sep`, footer `h4`). **Scope-expanding finding**: design-system-002 needs to broaden from "light-mode accent only" to "both-mode `--text-muted` calibration" — full hand-off documented in the task's Outcome section.
+**Verification:** PASS (iteration 1)
+**Commit:** (pending)
+**Files changed:** 4 worker files + 3 task/index/protocol updates
+**Tests added:** 0 (config-only task; pa11y-ci itself is the test suite)
+**ADRs written:** none
+
+---
+
+## 2026-05-28 10:05 -- Batch started: [infra-006]
+
+**Type:** Work / Batch start
+**Tasks:** infra-006 - Automated WCAG AA checks via pa11y-ci in CI (light + dark mode)
+**Parallel:** no (1 worker)
+
+---
+
 ## 2026-05-28 10:00 -- Task verified and completed: infra-005 - INNOQ historical backfill workflow
 
 **Type:** Work / Task completion

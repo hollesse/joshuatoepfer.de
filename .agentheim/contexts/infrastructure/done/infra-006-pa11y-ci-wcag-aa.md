@@ -1,11 +1,11 @@
 ---
 id: infra-006
 title: "Automated WCAG AA checks via pa11y-ci in CI (light + dark mode)"
-status: todo
+status: done
 type: feature
 context: infrastructure
 created: 2026-05-28
-completed:
+completed: 2026-05-28
 commit:
 depends_on: []
 blocks: [design-system-002]
@@ -145,3 +145,123 @@ picks whichever pa11y-ci configures more cleanly.
 - The `_site/` path is `.gitignore`'d (per `infra-001`), so the workflow always builds fresh — that's the correct behaviour.
 - This task does NOT add Lighthouse, axe-core, or any other accessibility tool. `pa11y-ci` is the chosen single tool. Stacking tools is a future consideration if the audit surface grows.
 - The workflow does not run on commits to the `gh-pages` branch (if any) or feature branches that haven't opened a PR. The `push to main` + `pull_request` combo is sufficient.
+
+## Outcome
+
+Shipped:
+
+- `.github/workflows/accessibility.yml` — new workflow, triggers on
+  `pull_request` to `main`, `push` to `main`, and `workflow_dispatch`.
+  Pinned to `pa11y-ci@4.1.1` (latest stable as of 2026-05-28) via
+  `npx --yes`.
+- `.pa11yci.json` — repo-root config, `WCAG2AA` standard, seven URLs,
+  `chromeLaunchConfig.args: ["--no-sandbox"]` for CI sandboxing.
+- `.agentheim/contexts/infrastructure/README.md` — new "Accessibility
+  checks" section under the existing CI sections.
+- `.gitignore` — added `node_modules/` proactively in case future local
+  pa11y-ci runs leave behind a transient install.
+
+### Deviation from the proposed `actions: ["evaluate ..."]` syntax
+
+The task spec's suggested syntax
+`["evaluate document.documentElement.dataset.mode = 'light'"]` does not
+work: pa11y / pa11y-ci has no `evaluate` action. Inspection of
+`pa11y@9.1.1` confirmed the action set is fixed at: navigate-url,
+click-element, set-field-value, clear-field-value, check-field,
+screen-capture, wait-for-url, wait-for-element-state,
+wait-for-element-event. None of these support arbitrary JS injection.
+
+**Approach taken** (per the task spec's "Worker picks the cleanest
+approach that demonstrably works" clause): the workflow runs pa11y-ci
+twice against the same `.pa11yci.json` URL list, and between passes it
+rewrites the served `_site/**/*.html` with `sed` to flip both
+(a) `data-mode` on `<html>` and (b) the inline pre-paint boot script's
+`var saved = localStorage.getItem("jt-mode")` to a literal `"dark"` or
+`"light"`. This forces the intended mode regardless of Chrome headless's
+`prefers-color-scheme: light` default. `_site/` is gitignored so the
+mutation is CI-only — the source tree is never touched. A fresh
+`bundle exec jekyll build` restores the original output.
+
+This deviation was necessary; without it the light-mode pass cannot
+flip the mode and acceptance criterion #4 ("Each URL is tested in both
+modes") cannot be met. The mechanism was validated locally against a
+live `bundle exec jekyll serve` — both passes connect, both surface
+distinct AA contrast ratios per mode, and both fail correctly with a
+non-zero pa11y-ci exit code.
+
+### First-failure hand-off to design-system-002
+
+The local seed run captured the exact failure shape that
+`design-system-002` will need to fix:
+
+Error counts per URL (identical in both modes; same elements fail):
+
+| URL | Dark | Light |
+| --- | ---: | ---: |
+| `/` | 15 | 15 |
+| `/blog/` | 11 | 11 |
+| `/talks/` | 29 | 29 |
+| `/ueber-mich/` | 16 | 16 |
+| `/impressum/` | 7 | 7 |
+| `/datenschutz/` | 7 | 7 |
+| `/posts/2026/05/27/hello-welt/` | 8 | 8 |
+
+**Total: 93 violations per mode, 186 across both.**
+
+Distinct failing elements (selectors collapsed):
+- `<div class="arrow">→</div>` — section-CTA accent arrow
+- `<div class="count mono">N BEITRÄGE</div>` — topic counters on `/`
+- `<span class="sep">·</span>` — separator dots in post-list metadata
+- `<h4>Kontakt</h4>`, `<h4>Anderswo</h4>`, `<h4>Site</h4>`,
+  `<h4>Rechtliches</h4>` — footer column headings
+
+Measured contrast ratios:
+- Dark mode: **2.82:1** (need 4.5:1). pa11y recommends `#fff` (brighter).
+- Light mode: **2.35:1** (need 4.5:1). pa11y recommends `#272727`
+  (darker).
+
+Notably the failing token in **both** modes is the same: `--text-muted`
+applied to the elements above. design-system-002 was originally framed
+around the light-mode amber/coral/lime accent contrast; this seed run
+broadens that — there is a more pervasive `--text-muted` token
+mis-calibration that affects **both** modes. design-system-002 should
+re-refine with this concrete data:
+
+1. Dial `--text-muted` to hit ≥4.5:1 against `--bg` in both modes
+   (token value pair: dark-bg variant + light-bg variant).
+2. Re-check the accent arrow (`.arrow`) — it inherits `--text-muted`,
+   not the accent token, so the arrow failure is a `--text-muted`
+   regression, not an accent-token regression.
+3. Re-check `.count.mono`, `.sep`, footer `h4` — same root cause.
+4. Decide separately whether `.post-body a` (the original
+   design-system-002 driver) is also affected; this seed run did not
+   surface a `.post-body a` failure on the single existing post page
+   (`hello-welt`), but the post body uses only neutral text. Test a
+   second representative post once one with `<a>` body links lands.
+
+### Reproducing locally
+
+```sh
+bundle exec jekyll build
+bundle exec jekyll serve --no-watch --skip-initial-build --detach
+# Wait a moment for the server, then:
+find _site -name '*.html' -print0 | xargs -0 sed -i '' \
+  -e 's/data-mode="light"/data-mode="dark"/g' \
+  -e 's|var saved = localStorage.getItem("jt-mode");|var saved = "dark";|g'
+npx --yes pa11y-ci@4.1.1   # dark mode pass
+
+find _site -name '*.html' -print0 | xargs -0 sed -i '' \
+  -e 's/data-mode="dark"/data-mode="light"/g' \
+  -e 's|var saved = "dark";|var saved = "light";|g'
+npx --yes pa11y-ci@4.1.1   # light mode pass
+```
+
+(Linux/CI: `sed -i` without the empty backup suffix.)
+
+### Key files
+
+- `.github/workflows/accessibility.yml`
+- `.pa11yci.json`
+- `.agentheim/contexts/infrastructure/README.md` (new "Accessibility
+  checks" section)
+- `.gitignore`

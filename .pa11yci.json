@@ -1,0 +1,20 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 30000,
+    "wait": 500,
+    "concurrency": 1,
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox"]
+    }
+  },
+  "urls": [
+    "http://localhost:4000/",
+    "http://localhost:4000/blog/",
+    "http://localhost:4000/talks/",
+    "http://localhost:4000/ueber-mich/",
+    "http://localhost:4000/impressum/",
+    "http://localhost:4000/datenschutz/",
+    "http://localhost:4000/posts/2026/05/27/hello-welt/"
+  ]
+}
