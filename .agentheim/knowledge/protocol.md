@@ -5,6 +5,19 @@ Newest entries on top.
 
 ---
 
+## 2026-05-28 10:32 -- Work session ended
+
+**Type:** Work / Session end
+**Completed:** 2 (first-try PASS: 2, re-dispatched: 0, skipped: 0)
+**Bounced:** 0
+**Failed:** 0
+**Escalated after verification:** 0
+**Commits:** 2 (8c968d0, 15d899e)
+**Tasks done this session:** infra-005 (INNOQ backfill workflow), infra-006 (pa11y-ci WCAG AA in CI)
+**Key user hand-off:** design-system-002 scope needs to expand from "light-mode accent only" to "both-mode `--text-muted` calibration" before being PROMOTEd — see infra-006's Outcome section for the concrete pa11y-ci violation list and the recommended fix direction.
+
+---
+
 ## 2026-05-28 10:30 -- Task verified and completed: infra-006 - pa11y-ci WCAG AA in CI
 
 **Type:** Work / Task completion
