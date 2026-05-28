@@ -422,34 +422,45 @@ def build_plan(
     urls: Iterable[str],
     *,
     fetch_fn=_fetch_html,
+    bypass_dedup: bool = False,
 ) -> tuple[list[dict], list[dict]]:
     """Iterate candidate URLs and produce a plan + a skip-log.
 
     Returns (plan, skips):
     - plan: list of items the workflow turns into PRs (one per article).
     - skips: list of {url, reason} entries for dry-run logging.
+
+    When ``bypass_dedup`` is True (URL-list mode — see infra-007), both
+    dedup checks (`existing_canonical_urls` and `pr_history_has_branch`)
+    are skipped. The semantic mirrors `sync_innoq`'s `force_resync`: an
+    explicitly-named URL is unconditionally processed. Auto-discovery
+    callers must leave ``bypass_dedup`` at its default of False so the
+    full dedup chain still gates the discovery output.
     """
-    seen_canonicals = existing_canonical_urls()
+    seen_canonicals = existing_canonical_urls() if not bypass_dedup else set()
     plan: list[dict] = []
     skips: list[dict] = []
 
     for url in urls:
         guard_article_url(url)
 
-        # Dedup #1: already in _posts/.
-        if url in seen_canonicals or url.rstrip("/") + "/" in seen_canonicals:
-            _log(f"SKIP (already in _posts): {url}")
-            skips.append({"url": url, "reason": "already-in-posts"})
-            continue
+        if not bypass_dedup:
+            # Dedup #1: already in _posts/.
+            if url in seen_canonicals or url.rstrip("/") + "/" in seen_canonicals:
+                _log(f"SKIP (already in _posts): {url}")
+                skips.append({"url": url, "reason": "already-in-posts"})
+                continue
 
-        slug = url.rstrip("/").split("/")[-1]
-        branch = f"backfill/innoq/{slug}"
+            slug = url.rstrip("/").split("/")[-1]
+            branch = f"backfill/innoq/{slug}"
 
-        # Dedup #2: PR history.
-        if pr_history_has_branch(branch):
-            _log(f"SKIP (PR already exists for {branch}): {url}")
-            skips.append({"url": url, "reason": "pr-history"})
-            continue
+            # Dedup #2: PR history.
+            if pr_history_has_branch(branch):
+                _log(f"SKIP (PR already exists for {branch}): {url}")
+                skips.append({"url": url, "reason": "pr-history"})
+                continue
+        else:
+            _log(f"URL-list (bypassed dedup): {url}")
 
         # Fetch + extract.
         html = fetch_fn(url)
@@ -508,7 +519,11 @@ def main() -> int:
     # Resolve candidate URLs.
     if raw_urls:
         candidate_urls = split_url_list_input(raw_urls)
-        _log(f"URL-list mode: {len(candidate_urls)} URL(s) provided.")
+        _log(
+            f"URL-list mode: {len(candidate_urls)} URL(s) provided — "
+            "bypassing dedup (explicit re-process)."
+        )
+        url_list_mode = True
     else:
         _log(f"Auto-discovery mode: fetching {BACKFILL_DISCOVERY_URL}")
         listing_html = _fetch_html(BACKFILL_DISCOVERY_URL)
@@ -519,8 +534,9 @@ def main() -> int:
                 f"Listing page {BACKFILL_DISCOVERY_URL} returned 0 article URLs; "
                 "page structure may have changed or discovery filter is wrong"
             )
+        url_list_mode = False
 
-    plan, skips = build_plan(candidate_urls)
+    plan, skips = build_plan(candidate_urls, bypass_dedup=url_list_mode)
     _log(f"Plan size: {len(plan)} PR(s). Skipped: {len(skips)}.")
     for item in plan:
         _log(f"  PLAN: {item['branch']} — {item['title']}")

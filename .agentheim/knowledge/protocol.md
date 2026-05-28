@@ -5,6 +5,38 @@ Newest entries on top.
 
 ---
 
+## 2026-05-28 12:50 -- Task verified and completed: infra-007 - Backfill URL-list bypass
+
+**Type:** Work / Task completion
+**Task:** infra-007 - Backfill URL-list mode bypasses dedup (force-resync semantic)
+**Summary:** Added keyword-only `bypass_dedup` parameter to `build_plan()` in `backfill_innoq.py` (Approach A). URL-list mode (`urls` workflow input non-empty) now passes `bypass_dedup=True`, skipping both `existing_canonical_urls` and `pr_history_has_branch` checks while logging `URL-list (bypassed dedup): <url>`. Auto-discovery flow byte-identical at the default. 4 new tests in `BuildPlanDedupBypassTests` (2 bypass-mode, 2 regression guards); full suite 69 tests passing. README's Backfill-workflow sub-section now explicitly states the bypass semantic. Workflow YAML and `innoq_common.py` untouched.
+**Verification:** PASS (iteration 1)
+**Commit:** (pending)
+**Files changed:** 3 worker files + 2 task/index/protocol updates
+**Tests added:** 4 (total: 69)
+**ADRs written:** none
+
+---
+
+## 2026-05-28 12:35 -- Batch started: [infra-007]
+
+**Type:** Work / Batch start
+**Tasks:** infra-007 - Backfill URL-list mode bypasses dedup (force-resync semantic)
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-05-28 12:30 -- Model / Captured + Promoted: infra-007
+
+**Type:** Model / Capture + Promote
+**BC:** infrastructure
+**Filed to:** todo (skipped backlog — task is small, well-specified, immediately actionable)
+**Summary:** Spec/implementation gap in `infra-005` (backfill workflow). The `urls` workflow_dispatch input was specified as an explicit re-sync mechanism that bypasses dedup, but the worker's implementation applied the two-tier dedup chain (`_posts/` canonical_url + `gh pr list --state all --head <branch>`) to every URL regardless of input source. Surfaced today when Joshua tried to re-trigger backfill for the 2023 article (whose original conversion needed cleanup of 4 source-side URL typos in INNOQ's HTML): closed the existing PR, deleted the branch, re-ran with `urls: <URL>` — got skipped because GitHub keeps closed PR records and the dedup check sees them. Joshua's reasoning ("Wenn ich eine canonical URL angebe soll er ein PR aufmachen, sonst hat URL-Input keinen Zweck") is exactly the spec intent. infra-007 is a small targeted fix: URL-list mode skips both dedup checks; auto-discovery mode unchanged. Should be 1 conditional branch in `build_plan`, 2 new tests, 1 README clarification sentence. No new ADR.
+**Split into:** none
+**ADRs written:** none expected
+
+---
+
 ## 2026-05-28 11:22 -- Work session ended
 
 **Type:** Work / Session end

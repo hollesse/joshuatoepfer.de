@@ -119,9 +119,16 @@ duplicates and no talks/podcasts mixed in. Selector
      titles, but creates no branches and no PRs. Use this for a preview
      before committing.
 
-The `urls` input doubles as a per-article re-sync mechanism for backfill
-articles whose original conversion was buggy. (The incremental sibling
-exposes the same capability under the name `force_resync`.)
+When you supply `urls`, the workflow **bypasses both dedup checks**
+(`existing_canonical_urls` and `pr_history_has_branch`) for the listed
+URLs — explicit re-process mode. Use this to re-trigger backfill on a
+specific article whose original conversion was buggy, or to re-run after
+a previous attempt's PR was closed without merging (GitHub keeps the
+closed PR record forever, so the dedup memory would otherwise skip it).
+Auto-discovery mode (`urls` empty) keeps the full dedup chain. The
+parallel for the incremental sibling is `force_resync` on
+`sync-innoq.yml` (same semantic, different branch-naming strategy — see
+infra-007).
 
 **Branch namespace:** `backfill/innoq/<slug>` (distinct from
 `sync/innoq/<slug>`) so the two workflows' PRs are visually

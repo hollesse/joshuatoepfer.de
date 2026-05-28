@@ -12,6 +12,7 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -279,6 +280,78 @@ class GuardArticleUrlTests(unittest.TestCase):
     def test_rejects_off_domain(self):
         with self.assertRaises(ValueError):
             bf.guard_article_url("https://example.com/de/articles/2023/06/x/")
+
+
+class BuildPlanDedupBypassTests(unittest.TestCase):
+    """URL-list mode (infra-007) skips both dedup checks. Auto-discovery
+    mode still applies them. These tests cover the bypass semantic without
+    touching the live network or the `gh` CLI."""
+
+    URL = "https://www.innoq.com/de/articles/2023/06/remote-mob-programming/"
+
+    def _fake_fetch(self, _url: str) -> str:
+        return ARTICLE_HTML
+
+    def test_url_list_mode_bypasses_existing_posts_check(self):
+        """URL already present in `_posts/*.md` is still planned when
+        bypass_dedup=True. (Without the bypass it would be skipped with
+        reason `already-in-posts`.)"""
+        seen = {self.URL}
+        with mock.patch.object(bf, "existing_canonical_urls", return_value=seen), \
+             mock.patch.object(bf, "pr_history_has_branch", return_value=False):
+            plan, skips = bf.build_plan(
+                [self.URL],
+                fetch_fn=self._fake_fetch,
+                bypass_dedup=True,
+            )
+        self.assertEqual(len(plan), 1)
+        self.assertEqual(plan[0]["canonical_url"], self.URL)
+        self.assertEqual(skips, [])
+
+    def test_url_list_mode_bypasses_pr_history_check(self):
+        """Closed-PR record for `backfill/innoq/<slug>` does not block a
+        URL-list-mode re-process. (Without the bypass it would be skipped
+        with reason `pr-history`.)"""
+        with mock.patch.object(bf, "existing_canonical_urls", return_value=set()), \
+             mock.patch.object(bf, "pr_history_has_branch", return_value=True) as pr_mock:
+            plan, skips = bf.build_plan(
+                [self.URL],
+                fetch_fn=self._fake_fetch,
+                bypass_dedup=True,
+            )
+        self.assertEqual(len(plan), 1)
+        self.assertEqual(plan[0]["canonical_url"], self.URL)
+        self.assertEqual(skips, [])
+        # And the dedup helpers should never have been called in bypass mode.
+        pr_mock.assert_not_called()
+
+    def test_auto_discovery_mode_still_dedups_against_existing_posts(self):
+        """Regression guard for infra-007: bypass_dedup defaults to False,
+        and at that default the `existing_canonical_urls` check still
+        skips known URLs (byte-identical to pre-infra-007 behaviour)."""
+        seen = {self.URL}
+        with mock.patch.object(bf, "existing_canonical_urls", return_value=seen), \
+             mock.patch.object(bf, "pr_history_has_branch", return_value=False):
+            plan, skips = bf.build_plan(
+                [self.URL],
+                fetch_fn=self._fake_fetch,
+            )
+        self.assertEqual(plan, [])
+        self.assertEqual(len(skips), 1)
+        self.assertEqual(skips[0]["reason"], "already-in-posts")
+
+    def test_auto_discovery_mode_still_dedups_against_pr_history(self):
+        """Regression guard: with bypass_dedup=False, pr_history_has_branch
+        match still blocks the URL."""
+        with mock.patch.object(bf, "existing_canonical_urls", return_value=set()), \
+             mock.patch.object(bf, "pr_history_has_branch", return_value=True):
+            plan, skips = bf.build_plan(
+                [self.URL],
+                fetch_fn=self._fake_fetch,
+            )
+        self.assertEqual(plan, [])
+        self.assertEqual(len(skips), 1)
+        self.assertEqual(skips[0]["reason"], "pr-history")
 
 
 if __name__ == "__main__":
