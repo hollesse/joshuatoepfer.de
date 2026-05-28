@@ -1,0 +1,108 @@
+name: Backfill from INNOQ
+
+# One-shot historical-backfill workflow for Joshua's older INNOQ articles
+# that sit outside the /de/feed.atom rolling window. Manual trigger only —
+# no `schedule:` block — because the article set is small and changes
+# rarely. See:
+# - ADR-0002 (canonical content sync strategy)
+# - ADR-0006 (sync architecture: dual workflow, full body, PR-history dedup)
+# - .github/scripts/backfill_innoq.py + innoq_common.py
+# - infra-005 (this task)
+#
+# Distinction vs sync-innoq.yml: this workflow scrapes
+# https://www.innoq.com/de/written/?by=joshua-toepfer instead of polling
+# the Atom feed, and uses the `backfill/innoq/<slug>` branch namespace so
+# PR history stays visually separable. Both workflows share the
+# `sync-innoq` label for one-click filtering.
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: "Specific canonical URL(s) to backfill, comma-separated. Empty = auto-discover from /de/written/?by=joshua-toepfer."
+        required: false
+        type: string
+        default: ""
+      dry_run:
+        description: "If true, only log what would be done; create no PRs."
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  plan:
+    name: Plan backfill
+    runs-on: ubuntu-latest
+    outputs:
+      plan: ${{ steps.run-plan.outputs.plan }}
+      plan_count: ${{ steps.run-plan.outputs.plan_count }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install --quiet feedparser markdownify pyyaml beautifulsoup4
+
+      - name: Build plan
+        id: run-plan
+        env:
+          URLS: ${{ inputs.urls }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          PLAN_ONLY: ${{ inputs.dry_run && 'false' || 'true' }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python .github/scripts/backfill_innoq.py
+
+  publish:
+    name: Publish backfill PR
+    needs: plan
+    if: ${{ inputs.dry_run != true && needs.plan.outputs.plan_count != '0' && needs.plan.outputs.plan_count != '' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        item: ${{ fromJSON(needs.plan.outputs.plan) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install --quiet feedparser markdownify pyyaml beautifulsoup4
+
+      - name: Materialise post file
+        env:
+          URLS: ${{ inputs.urls }}
+          DRY_RUN: 'false'
+          MATERIALISE_FOR_SLUG: ${{ matrix.item.slug }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python .github/scripts/backfill_innoq.py
+
+      - name: Open PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ matrix.item.branch }}
+          delete-branch: true
+          title: ${{ matrix.item.title }}
+          body: ${{ matrix.item.body }}
+          labels: sync-innoq
+          commit-message: |
+            backfill(innoq): ${{ matrix.item.title }}
+
+            Canonical: ${{ matrix.item.canonical_url }}
+          add-paths: |
+            _posts/**

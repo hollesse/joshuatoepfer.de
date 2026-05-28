@@ -87,6 +87,55 @@ Confirm:
 If neither happens, fix the observability before relying on the daily
 cron.
 
+## Backfill workflow (innoq.com → PR, historical)
+
+The historical backfill runs from `.github/workflows/backfill-innoq.yml`,
+backed by `.github/scripts/backfill_innoq.py` and the same shared module
+`.github/scripts/innoq_common.py`. Sibling to the incremental sync above.
+See ADR-0006 for the dual-workflow architecture and infra-005 for this
+workflow's task spec.
+
+**When to use which:**
+- **Incremental sync** (`sync-innoq.yml`) — articles still inside the
+  `/de/feed.atom` rolling ~25-entry window. Runs daily; you don't have to
+  do anything.
+- **Backfill** (`backfill-innoq.yml`) — older articles that have rolled
+  off the feed (currently 3 known DE articles from 2021–2023). Manual
+  trigger only; the article set changes rarely.
+
+**Discovery:** the backfill scrapes
+`https://www.innoq.com/de/written/?by=joshua-toepfer` — the per-author
+archive, which returns DE-only `/de/articles/...` URLs with no DE/EN
+duplicates and no talks/podcasts mixed in. Selector
+`a[href^="/de/articles/"]`.
+
+**How to trigger:**
+1. GitHub UI → Actions → "Backfill from INNOQ" → "Run workflow".
+2. Inputs:
+   - `urls` (optional) — a comma-separated list of canonical URLs to
+     process. Empty = auto-discover from the archive page above.
+   - `dry_run` (optional, default false) — when true, the workflow logs
+     the discovered articles, the dedup outcomes, and the would-be PR
+     titles, but creates no branches and no PRs. Use this for a preview
+     before committing.
+
+The `urls` input doubles as a per-article re-sync mechanism for backfill
+articles whose original conversion was buggy. (The incremental sibling
+exposes the same capability under the name `force_resync`.)
+
+**Branch namespace:** `backfill/innoq/<slug>` (distinct from
+`sync/innoq/<slug>`) so the two workflows' PRs are visually
+distinguishable in the PR list. Both still share the `sync-innoq` label
+so one filter shows everything from INNOQ.
+
+**Publish flow:** identical to the incremental sync — draft PR with
+`published: false`, Joshua reviews and merges, then separately fills in
+`topic:` and flips `published: true` on the merged file.
+
+**Politeness:** 2 s delay between INNOQ requests; identifying
+User-Agent; exponential backoff (5 s → 30 s → 2 min, 3 attempts) on 5xx;
+`Retry-After`-aware on 429; no retry on 4xx (skip + fail-loud).
+
 ## Open questions
 - Should sync PRs be auto-merged on no-conflict, or always require manual review?
   → Currently always manual; revisit if the volume of innoq.com publishing

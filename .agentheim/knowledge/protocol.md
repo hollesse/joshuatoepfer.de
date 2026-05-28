@@ -5,6 +5,46 @@ Newest entries on top.
 
 ---
 
+## 2026-05-28 10:00 -- Task verified and completed: infra-005 - INNOQ historical backfill workflow
+
+**Type:** Work / Task completion
+**Task:** infra-005 - INNOQ historical backfill workflow (staff-page scrape, German articles only)
+**Summary:** Shipped the scrape-based backfill workflow as a sibling to the feed-poll incremental sync. Worker's curl spike (required first step) confirmed `og:title`, `og:url`, `<time datetime>`, and `<article class="article-page-default">` are reliably present on INNOQ article pages; found `article:published_time` absent (handled gracefully via `<time datetime>` fallback) and `<link rel=canonical>` unreliable (some 2023/06-style reprints point external — code uses fetched URL instead). Auto-discovery returns 3 DE articles today as the research predicted. Worker extended `innoq_common.py` with `ScrapedArticle` dataclass, `build_backfill_pr_title/_body`, `largest_src_from_srcset` (promotes Cloudinary srcset → src), `parse_german_date`, `split_url_list_input`, plus `BACKFILL_BRANCH_PREFIX`/`BACKFILL_DISCOVERY_URL` constants. Test suite expanded from 22 → 65 tests (43 new), all passing.
+**Verification:** PASS (iteration 1)
+**Commit:** (pending)
+**Files changed:** 6 worker files + 3 task/index/protocol updates
+**Tests added:** 43 (total: 65)
+**ADRs written:** none (ADR-0006 already covers the architecture)
+
+---
+
+## 2026-05-28 09:40 -- Batch started: [infra-005]
+
+**Type:** Work / Batch start
+**Tasks:** infra-005 - INNOQ historical backfill workflow (staff-page scrape, German articles only)
+**Parallel:** no (1 worker — infra-006 demoted to next batch due to shared `infrastructure/README.md` conflict)
+
+---
+
+## 2026-05-28 09:30 -- Model / Refined + Captured: design-system-002 deferred → blocked on new infra-006
+
+**Type:** Model / Refine + Capture
+**BC:** design-system + infrastructure
+**Status after:** design-system-002 stays in backlog (deferred); infra-006 filed to todo
+**Summary:** Joshua looked at concrete proposed color values for both fix options A (darken `--accent` L) and B (separate `--accent-text` token) and rejected both visually. A third path emerged in conversation — Option C (`.post-body a` uses `color: inherit`, animated underline carries link signal, tokens untouched) — but rather than commit to it now, Joshua chose to build automated WCAG checks first so the next refinement of design-system-002 is informed by concrete pa11y-ci output rather than estimates. New task `infra-006` captures the pa11y-ci CI setup (covers all 7 routes × dark + light mode, fails on WCAG 2.1 AA violations, no package.json — ephemeral npx). design-system-002 updated with `depends_on: [design-system-001, infra-006]`, a "Deferred 2026-05-28" section, the rejected A/B path, and 5 candidate fix paths (C + D-G) to re-evaluate once pa11y-ci surfaces real failures. The first infra-006 run is expected to fail — that's the proof the check works.
+**Split into:** infra-006 (new, todo)
+**ADRs written:** none
+
+---
+
+## 2026-05-28 09:10 -- Model / Promoted: infra-005
+
+**Type:** Model / Promote
+**BC:** infrastructure
+**From → To:** backlog → todo
+
+---
+
 ## 2026-05-28 09:00 -- Concept created: innoq-sync
 
 **Type:** Concept / Created

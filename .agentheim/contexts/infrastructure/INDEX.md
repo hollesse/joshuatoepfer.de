@@ -10,14 +10,15 @@ research touching this BC, and concept synthesis pages.
 ## Tasks by status
 
 <!-- task-counts:start -->
-- **Backlog:** 1
-- **Todo:** 0
+- **Backlog:** 0
+- **Todo:** 1
 - **Doing:** 0
-- **Done:** 4
+- **Done:** 5
 <!-- task-counts:end -->
 
 ### Todo
 <!-- todo-list:start -->
+- **infra-006** — Automated WCAG AA checks via pa11y-ci in CI (light + dark mode) — `todo/infra-006-pa11y-ci-wcag-aa.md`
 <!-- todo-list:end -->
 
 ### Doing
@@ -26,6 +27,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **infra-005** — INNOQ historical backfill workflow (staff-page scrape, German articles only) — 2026-05-28 — `done/infra-005-innoq-historical-backfill-scrape.md`
 - **infra-004** — INNOQ author sync pipeline — incremental, feed-based (German articles only) — 2026-05-27 — `done/infra-004-innoq-author-sync-pipeline.md`
 - **infra-003** — Walking skeleton: Jekyll builds and pipeline wired — 2026-05-26 — `done/infra-003-walking-skeleton.md`
 - **infra-002** — Decision: Content sync strategy (innoq.com → PR) — 2026-05-26 — `done/infra-002-decision-content-sync-strategy.md`
@@ -34,7 +36,6 @@ research touching this BC, and concept synthesis pages.
 
 ### Backlog
 <!-- backlog-list:start -->
-- **infra-005** — INNOQ historical backfill workflow (staff-page scrape, German articles only) — `backlog/infra-005-innoq-historical-backfill-scrape.md`
 <!-- backlog-list:end -->
 
 ## ADRs scoped to this BC

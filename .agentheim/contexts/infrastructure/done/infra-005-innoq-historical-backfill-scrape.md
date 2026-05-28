@@ -1,11 +1,11 @@
 ---
 id: infra-005
 title: "INNOQ historical backfill workflow (staff-page scrape, German articles only)"
-status: backlog
+status: done
 type: feature
 context: infrastructure
 created: 2026-05-27
-completed:
+completed: 2026-05-28
 commit:
 depends_on: [infra-004]
 blocks: []
@@ -254,3 +254,34 @@ actually creating PRs.
 - The `WebFetch`-induced unknowns from the research report (`<head>` meta tag presence, exact `<article>` class) are intentionally left to the worker's spike rather than blocking PROMOTE. The spike is small (5 min) and reduces redundant remote calls.
 - The shared `sync-innoq` PR label means filtering "all INNOQ-sourced PRs" in the GH UI is one click, regardless of which workflow produced the PR. Joshua can review both backfill and incremental PRs from one list.
 - A small additional benefit of the URL-list mode: it also serves as a generic re-sync mechanism for backfill articles whose original conversion was buggy. (The equivalent for incremental-window articles is `infra-004`'s `force_resync` input.)
+
+## Outcome
+
+Shipped 2026-05-28. Backfill workflow scrapes `https://www.innoq.com/de/written/?by=joshua-toepfer`, discovers 3 historical DE articles today (2021/01, 2022/12, 2023/06 — as the research predicted), and opens one draft PR per article in the `_posts/<YYYY-MM-DD>-<slug>.md` shape with `published: false`. Shares `innoq_common.py` with the incremental sibling.
+
+**Curl spike finding (documented in `backfill_innoq.py` header):**
+
+- `<meta property="og:title">` — PRESENT on all 3 articles
+- `<meta property="og:url">` — PRESENT on all 3
+- `<time datetime="YYYY-MM-DD">` — PRESENT on all 3 (primary date source)
+- `<article class="article-page-default">` — PRESENT on all 3
+- `<meta property="article:published_time">` — **ABSENT** on all 3 (tentative selector in ADR-0006 turned out wrong; harmless because `<time datetime>` is reliable)
+- `<link rel="canonical">` — PRESENT but **UNRELIABLE**: on the 2023/06 article it points at the print-magazine reprint (shop.doag.org), not back at INNOQ. Backfill therefore ignores `<link rel=canonical>` and uses the fetched URL as the canonical. Captured inline in the `backfill_innoq.py` header comment.
+
+**Article body structure** (consistent across all 3 articles):
+- `<section class="author-section">` → stripped
+- `<aside class="toc">` → stripped
+- `<div class="content">` → kept (the article body)
+
+**Image handling:** INNOQ Cloudinary `<img>` tags carry only `srcset` (no `src`). Added `largest_src_from_srcset` to `innoq_common.py`; backfill promotes the largest-width URL onto `src` before markdownify so the converter emits a usable Markdown image reference.
+
+**Files delivered:**
+- `.github/workflows/backfill-innoq.yml` — workflow_dispatch-only, plan-then-matrix shape mirroring `sync-innoq.yml`. Inputs: `urls`, `dry_run`. Branch namespace `backfill/innoq/<slug>`. PR label `sync-innoq` (shared with incremental for unified filtering).
+- `.github/scripts/backfill_innoq.py` — entry point: discovery (or URL-list), per-URL fetch with 2 s delay + 5xx backoff + 429 Retry-After, metadata extraction (preferred → fallback order), body strip + srcset promotion, plan emission, dry-run mode, materialise-for-slug mode.
+- `.github/scripts/test_backfill_innoq.py` — 24 unit tests for discovery, metadata extraction (incl. external-canonical guard), body strip, srcset promotion, URL guard.
+- `.github/scripts/innoq_common.py` — extended with: `BACKFILL_BRANCH_PREFIX`, `BACKFILL_DISCOVERY_URL`, `ScrapedArticle` dataclass (FeedEntry-compatible shape so `build_post_content`/`write_post_file` accept either), `build_backfill_pr_title`, `build_backfill_pr_body`, `largest_src_from_srcset`, `parse_german_date`, `split_url_list_input` (alias). 19 new unit tests in `test_innoq_common.py`. Existing 22 tests still green.
+- `.agentheim/contexts/infrastructure/README.md` — new "Backfill workflow" section under the existing "Sync workflow" section.
+
+**Test suite:** 65 tests total (41 `innoq_common`, 24 `backfill_innoq`); all passing. No network in tests — fixtures inline.
+
+**Not done (intentionally):** no live INNOQ network call from this machine. The workflow's live behaviour will be validated by Joshua triggering it manually with `dry_run: true` first, then real run after that. ADR-0006 already covers the architectural decisions; no new ADR needed.

@@ -5,7 +5,7 @@ status: backlog
 type: bug
 context: design-system
 created: 2026-05-26
-depends_on: [design-system-001]
+depends_on: [design-system-001, infra-006]
 tags: [accessibility, light-mode, color, contrast]
 related_adrs: [0005]
 prior_art: [design-system-001, design-system-003]
@@ -63,13 +63,53 @@ verdicts hold: blue passes, amber/coral/lime are borderline.
       `--accent-soft`, `--accent-fg`) keep their meaning across the four
       accent options
 
+## Deferred 2026-05-28 — waiting on automated check
+
+In the refinement conversation on 2026-05-28, Joshua looked at the
+proposed new color values for both approach A (darken L) and approach B
+(separate `--accent-text` token) and didn't like the visual result of
+either: A loses too much light-mode warmth across the board, B adds
+vocabulary the system doesn't strictly need.
+
+A third path emerged from that conversation: **Option C — make
+`.post-body a` use `color: inherit`** (i.e. body text color, not
+accent), and rely on the already-animated underline as the link signal.
+Tokens stay untouched. Light-mode accent warmth stays intact for
+headline-marks, chips, and other display uses. WCAG-conformant by
+design because link text is body text color.
+
+But before picking C (or any fix), Joshua wants automated WCAG checks in
+CI first — so the next refinement of this task is informed by concrete
+pa11y-ci output (which pages, which elements, exact contrast ratios),
+not estimates. That work is `infra-006`. Once `infra-006` lands and
+produces its first failing run, this task gets re-refined with the
+real failure output and a final fix path is chosen.
+
+This task is therefore blocked on `infra-006`. `depends_on` updated.
+
+## Fix-path options on the table (re-evaluate after infra-006 lands)
+- **A** — darken `--accent` light-mode L values. Joshua rejected the
+  proposed visual on 2026-05-28.
+- **B** — separate `--accent-text` token. Joshua rejected the
+  proposed visual on 2026-05-28.
+- **C — `.post-body a` uses `color: inherit`.** Strong candidate.
+  Tokens unchanged. Headline-marks keep their warmth. Animated
+  underline carries the link signal. Worth proving against pa11y-ci's
+  output before committing.
+- **D** — underline + hover/focus coloring (link default body-color,
+  hover lifts to accent). Two-state CSS; default state is
+  WCAG-conformant, accent re-enters on interaction.
+- **E** — bolder/larger link weight so links qualify as "large text"
+  under WCAG (3:1 instead of 4.5:1). Affects reading flow.
+- **F** — `.post-body a` gets `background: var(--accent-soft)`.
+  Highlight aesthetic instead of color-conveying.
+- **G** — a separate dark-neutral link color, independent of accent
+  palette. Decouples link color from accent identity.
+
 ## Notes
-- Approach A (darken L) is the smaller change and keeps the per-mode
-  `--accent` token contract uniform. The downside is a slight loss of
-  vibrancy.
-- Approach B (separate text token) preserves the on-brand accent for
-  display use but adds a token to the system. Worth doing if Joshua
-  decides the current light-mode warmth is non-negotiable.
+- Original notes from the 2026-05-27 refinement (approach A vs B
+  trade-offs) are superseded by the 2026-05-28 conversation above.
+  Kept for history: approach A loses warmth, approach B adds a token.
 - See ADR-0005 for the token model and the four-accent matrix.
 - The dark-mode side of this bug was effectively resolved by ADR-0005
   (oklch lets L=0.74–0.86 sit comfortably on `#0d0d0d`); the remaining

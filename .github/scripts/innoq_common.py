@@ -39,7 +39,13 @@ POSTS_DIR = REPO_ROOT / "_posts"
 JOSHUA_EMAIL = "joshua.toepfer@innoq.com"
 FEED_URL = "https://www.innoq.com/de/feed.atom"
 BRANCH_PREFIX = "sync/innoq"
+BACKFILL_BRANCH_PREFIX = "backfill/innoq"
 PR_LABEL = "sync-innoq"
+
+# Discovery URL for the historical-backfill workflow (infra-005). The
+# `/de/written/?by=...` archive returns DE-only `/de/articles/...` URLs and
+# excludes talks/podcasts — cleanest input for the scraper.
+BACKFILL_DISCOVERY_URL = "https://www.innoq.com/de/written/?by=joshua-toepfer"
 
 
 @dataclass
@@ -71,6 +77,36 @@ class FeedEntry:
 
     def resync_branch_name(self, timestamp: str) -> str:
         return f"{BRANCH_PREFIX}/{self.slug}-resync-{timestamp}"
+
+
+@dataclass
+class ScrapedArticle:
+    """Scrape-mode counterpart to FeedEntry, used by the historical backfill.
+
+    Carries exactly the fields the downstream post-builder needs. No
+    `xml_lang` or `author_emails` — the backfill discovery URL
+    (`/de/written/?by=joshua-toepfer`) already constrains the result set
+    to Joshua's German articles, so the feed-side filter chain is replaced
+    by the discovery-URL guarantee plus a defensive `/de/articles/` URL
+    check in `backfill_innoq.py`.
+    """
+
+    title: str
+    canonical_url: str
+    published_date: str  # YYYY-MM-DD
+    content_html: str
+
+    @property
+    def slug(self) -> str:
+        return slugify_url(self.canonical_url)
+
+    @property
+    def post_filename(self) -> str:
+        return f"{self.published_date}-{self.slug}.md"
+
+    @property
+    def backfill_branch_name(self) -> str:
+        return f"{BACKFILL_BRANCH_PREFIX}/{self.slug}"
 
 
 def slugify_url(canonical_url: str) -> str:
@@ -226,11 +262,15 @@ def _code_language_from_class(tag) -> str:
 
 
 def build_post_content(
-    entry: FeedEntry,
+    entry: "FeedEntry | ScrapedArticle",
     *,
     preserved_meta: dict | None = None,
 ) -> str:
     """Assemble the full post file body: frontmatter + Markdown content.
+
+    Accepts either a feed-derived `FeedEntry` (incremental sync) or a
+    scrape-derived `ScrapedArticle` (historical backfill). Both expose the
+    same shape: `title`, `published_date`, `canonical_url`, `content_html`.
 
     `preserved_meta` is used in force-resync mode to carry forward
     `topic` and `published` from the existing file.
@@ -261,7 +301,7 @@ def build_post_content(
 
 
 def write_post_file(
-    entry: FeedEntry,
+    entry: "FeedEntry | ScrapedArticle",
     *,
     posts_dir: Path = POSTS_DIR,
     preserved_meta: dict | None = None,
@@ -275,6 +315,41 @@ def write_post_file(
 
 def build_pr_title(entry: FeedEntry) -> str:
     return f"Sync: {entry.title} [innoq.com]"
+
+
+def build_backfill_pr_title(article: ScrapedArticle) -> str:
+    """PR title for a historical-backfill PR.
+
+    The `Backfill:` prefix (vs. `Sync:`) lets Joshua tell the two
+    workflows' PRs apart at a glance, even though they share the
+    `sync-innoq` label for filtering.
+    """
+    return f"Backfill: {article.title} [innoq.com]"
+
+
+def build_backfill_pr_body(article: ScrapedArticle) -> str:
+    """Markdown body for the backfill PR.
+
+    Mirrors the sync-PR body but skips the feed-specific filter-chain
+    bullet (xml:lang from the Atom feed). The backfill discovers articles
+    via `/de/written/?by=...` instead.
+    """
+    return (
+        f"Backfill from INNOQ for [{article.title}]({article.canonical_url}).\n"
+        "\n"
+        "**Discovery:**\n"
+        f"- Source: `{BACKFILL_DISCOVERY_URL}`\n"
+        f"- Canonical URL: `{article.canonical_url}`\n"
+        f"- Published date (from page): `{article.published_date}`\n"
+        "\n"
+        "**Two-step publish:**\n"
+        "1. Review and merge this PR. The post is still hidden — "
+        "`published: false`.\n"
+        "2. Edit the merged file: fill in `topic:` "
+        "(`ensemble | adhs | softdev`) and flip `published: true`.\n"
+        "\n"
+        "Body images point at INNOQ's CDN; no assets are mirrored.\n"
+    )
 
 
 def build_pr_body(entry: FeedEntry, *, resync: bool = False) -> str:
@@ -470,3 +545,97 @@ def split_force_resync_input(raw: str | None) -> list[str]:
     if not raw:
         return []
     return [piece.strip() for piece in raw.split(",") if piece.strip()]
+
+
+# Alias: the backfill workflow exposes the same parsing behaviour under a
+# more accurate name for its own `urls` input. Keep the canonical
+# implementation above; this is just a readability shim used by
+# `backfill_innoq.py`.
+def split_url_list_input(raw: str | None) -> list[str]:
+    """Parse a comma-separated URL list (whitespace tolerant). Empty → []."""
+    return split_force_resync_input(raw)
+
+
+# ---------------------------------------------------------------------------
+# Backfill-only helpers (infra-005)
+# ---------------------------------------------------------------------------
+
+
+_GERMAN_MONTHS = {
+    "januar": "01",
+    "februar": "02",
+    "märz": "03",
+    "maerz": "03",
+    "april": "04",
+    "mai": "05",
+    "juni": "06",
+    "juli": "07",
+    "august": "08",
+    "september": "09",
+    "oktober": "10",
+    "november": "11",
+    "dezember": "12",
+}
+
+_GERMAN_DATE_RE = re.compile(
+    r"(\d{1,2})\.\s*([A-Za-zÄÖÜäöüß]+)\s+(\d{4})",
+)
+
+
+def parse_german_date(text: str | None) -> str | None:
+    """Parse a German publication date like '23. Juni 2023' → '2023-06-23'.
+
+    Tolerates surrounding text. Returns None if no recognisable date is
+    found — caller decides whether to use a different fallback.
+    """
+    if not text:
+        return None
+    match = _GERMAN_DATE_RE.search(text)
+    if not match:
+        return None
+    day, month_name, year = match.groups()
+    month = _GERMAN_MONTHS.get(month_name.lower())
+    if not month:
+        return None
+    return f"{year}-{month}-{day.zfill(2)}"
+
+
+def largest_src_from_srcset(srcset: str | None) -> str:
+    """Pick the largest-width URL out of a `srcset` attribute.
+
+    INNOQ Cloudinary images expose only `srcset` (no `src`). Markdownify
+    needs a plain `<img src=...>` to emit a Markdown image; we materialise
+    one before conversion.
+
+    Behaviour:
+    - Empty / None → returns "".
+    - Single URL with no descriptor → returns it as-is.
+    - Mix of width-descriptors (`400w`, `1200w`) → returns the URL with
+      the largest `w`.
+    - Density-descriptors (`1x`, `2x`) → returns the first URL. (We don't
+      have to compare them; any sensible image is fine.)
+    """
+    if not srcset:
+        return ""
+    candidates: list[tuple[int, str]] = []
+    fallback: str = ""
+    for raw_entry in srcset.split(","):
+        entry = raw_entry.strip()
+        if not entry:
+            continue
+        parts = entry.split()
+        url = parts[0]
+        if not fallback:
+            fallback = url
+        if len(parts) >= 2:
+            descriptor = parts[1]
+            if descriptor.endswith("w"):
+                try:
+                    width = int(descriptor[:-1])
+                except ValueError:
+                    continue
+                candidates.append((width, url))
+    if candidates:
+        candidates.sort(key=lambda t: t[0])
+        return candidates[-1][1]
+    return fallback
