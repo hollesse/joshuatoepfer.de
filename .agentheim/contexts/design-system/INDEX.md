@@ -10,10 +10,10 @@ research touching this BC, and concept synthesis pages.
 ## Tasks by status
 
 <!-- task-counts:start -->
-- **Backlog:** 1
+- **Backlog:** 0
 - **Todo:** 0
 - **Doing:** 0
-- **Done:** 2
+- **Done:** 3
 <!-- task-counts:end -->
 
 ### Todo
@@ -26,13 +26,13 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **design-system-002** — WCAG AA fix — route text-bearing elements to AA-passing tokens — 2026-05-28 — `done/design-system-002-wcag-aa-token-audit.md`
 - **design-system-003** — Document redesigned visual system (Geist + oklch + multi-accent + container queries) — 2026-05-27 — `done/design-system-003-document-redesign.md`
 - **design-system-001** — Styleguide: visual identity, dark mode, typography — 2026-05-26 — `done/design-system-001-styleguide.md`
 <!-- done-list:end -->
 
 ### Backlog
 <!-- backlog-list:start -->
-- **design-system-002** — Fix accent color contrast in light mode — `backlog/design-system-002-fix-light-mode-accent.md`
 <!-- backlog-list:end -->
 
 ## ADRs scoped to this BC

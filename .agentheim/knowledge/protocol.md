@@ -5,6 +5,38 @@ Newest entries on top.
 
 ---
 
+## 2026-05-28 11:20 -- Task verified and completed: design-system-002 - WCAG AA token routing
+
+**Type:** Work / Task completion
+**Task:** design-system-002 - WCAG AA fix — route text-bearing elements to AA-passing tokens
+**Summary:** Audited all 23 `var(--fg-faint)` usages across `_sass/_layout.scss`, `_sass/_posts.scss`, `_sass/_base.scss`; switched 22 text-bearing usages to `var(--fg-dim)` (which already passes AA at 7.5:1 dark / 6.0:1 light), kept 1 truly decorative (`.numeral`, currently unreferenced) with rationale comment. Reclassified `.row .arrow` and `.related-post-row .arrow` as text-bearing after pa11y flagged the Unicode `→` as content. Rerouted `.post-body a` in `_sass/_typography.scss` to `color: inherit` with hover lift to accent. **`_sass/_tokens.scss` untouched** — no token-value changes. Verifier re-ran pa11y-ci@4.1.1 live: 7/7 URLs × 2 modes = 0 errors (down from 93 errors/mode). Accessibility CI now goes green.
+**Verification:** PASS (iteration 1) — verifier re-ran pa11y-ci live for definitive confirmation
+**Commit:** (pending)
+**Files changed:** 4 SCSS files
+**Tests added:** 0 (pa11y-ci itself is the test suite, validated green)
+**ADRs written:** none
+
+---
+
+## 2026-05-28 10:55 -- Batch started: [design-system-002]
+
+**Type:** Work / Batch start
+**Tasks:** design-system-002 - WCAG AA fix — route text-bearing elements to AA-passing tokens
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-05-28 10:50 -- Model / Refined + Promoted: design-system-002
+
+**Type:** Model / Refine + Promote
+**BC:** design-system
+**Status after:** todo
+**Summary:** Scope broadened and fix path locked in after pa11y-ci output and Joshua's Pfad-2 choice. The active failure is `--fg-faint` text usages (footer h4, `.sep`, `.count`, `.row .arrow`) failing 2.82:1 dark and 2.35:1 light, not the accent palette. The companion `--fg-dim` token already passes AA (7.5:1 dark, 6.0:1 light), so the fix is usage-routing not value-recalibration: audit `var(--fg-faint)` in `_sass/`, switch text-bearing usages to `var(--fg-dim)`, keep decorative usages (e.g. icon-glyph arrows) on `--fg-faint`. Bundled in the same task: `.post-body a` switches from `color: var(--accent)` to `color: inherit` (Option C from the 2026-05-28 conversation) — same pattern, addresses the original accent-link concern that pa11y-ci hasn't yet seen because no post bodies have inline links. Token values themselves are NOT changed. Filename slug updated from `fix-light-mode-accent` to `wcag-aa-token-audit` to reflect new scope. depends_on `[design-system-001, infra-006]` both done → promoted to todo.
+**Split into:** none (consolidated)
+**ADRs written:** none
+
+---
+
 ## 2026-05-28 10:32 -- Work session ended
 
 **Type:** Work / Session end

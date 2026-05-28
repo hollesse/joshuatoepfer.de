@@ -63,11 +63,14 @@ body.jt-fade-ready .jt [data-fade]:not(.in) {
 .jt .post-body blockquote p:last-child { margin-bottom: 0; }
 
 .jt .post-body a {
-  color: var(--accent);
+  // Default state inherits body color (--fg) for AA contrast.
+  // The underline + hover lift to accent carry the link signal.
+  color: inherit;
   border-bottom: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
-  transition: border-color 200ms ease;
+  transition: color 200ms ease, border-color 200ms ease;
 }
 .jt .post-body a:hover {
+  color: var(--accent);
   border-bottom-color: var(--accent);
 }
 .jt .post-body code {

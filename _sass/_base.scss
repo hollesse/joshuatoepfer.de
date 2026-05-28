@@ -94,6 +94,7 @@ img, svg, video {
 .jt .numeral {
   font-family: "Geist Mono", monospace;
   font-size: 11px;
+  // Decorative: accent numeral that pairs with focus-card titles, no informational content — stays --fg-faint.
   color: var(--fg-faint);
   letter-spacing: 0.08em;
   display: block;

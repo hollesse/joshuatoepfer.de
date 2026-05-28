@@ -22,7 +22,7 @@
   white-space: nowrap;
 }
 .jt .row .arrow {
-  color: var(--fg-faint);
+  color: var(--fg-dim);
   font-family: "Geist Mono", monospace;
   transition: color 200ms ease;
 }
@@ -43,7 +43,7 @@
   letter-spacing: -0.003em;
 }
 .jt .row .src {
-  color: var(--fg-faint);
+  color: var(--fg-dim);
   font-size: 11px;
   font-family: "Geist Mono", monospace;
   text-transform: uppercase;
@@ -88,6 +88,6 @@
   border-radius: 999px;
 }
 .jt .talk .status.past {
-  color: var(--fg-faint);
+  color: var(--fg-dim);
   border-color: var(--rule);
 }
