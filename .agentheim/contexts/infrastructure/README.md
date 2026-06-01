@@ -47,6 +47,14 @@ The incremental sync runs from `.github/workflows/sync-innoq.yml`, backed by
 `.github/scripts/innoq_common.py`. See ADR-0002 (canonical strategy) and
 ADR-0006 (sync architecture).
 
+**Heading promotion** (applies to both sync and backfill, since both reach
+`innoq_common.convert_html_to_markdown`): heading levels in the synced body
+are promoted by one (`<h3>` → `<h2>`, `<h4>` → `<h3>`, etc.), and any
+stray body `<h1>` is stripped. INNOQ uses H1 for the article title (already
+in our frontmatter) and H3 for primary sections; the site renders the
+post title as the page's H1 in `_layouts/post.html`'s hero, so the body
+must begin at H2 to keep the document outline contiguous. See infra-008.
+
 **Filter chain** (a feed entry must pass all four to become a PR):
 1. `<author><email>joshua.toepfer@innoq.com</email></author>`
 2. `<content xml:lang="de">`

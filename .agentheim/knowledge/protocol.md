@@ -5,6 +5,36 @@ Newest entries on top.
 
 ---
 
+## 2026-06-01 14:25 -- Task verified and completed: infra-008 - Heading promotion
+
+**Type:** Work / Task completion
+**Task:** infra-008 - Promote heading levels (H3→H2 etc.) during INNOQ body conversion
+**Summary:** Added `_promote_heading_levels` helper to `innoq_common.convert_html_to_markdown` (strips body H1, promotes H3-H6 by one level via BeautifulSoup, leaves H2 untouched). Wired in before markdownify runs. Both INNOQ workflows (sync + backfill) benefit since they share the converter. 8 new tests in `HeadingPromotionTests`; full suite 77 / 77 green (was 69). Verifier flagged a small spec inconsistency in `test_h2_untouched`'s prose example — worker resolved against the promotion-table rule consistently.
+**Verification:** PASS (iteration 1)
+**Commit:** (pending)
+**Files changed:** 3 worker files + INDEX + protocol updates
+**Tests added:** 8 (total: 77)
+**ADRs written:** none
+
+---
+
+## 2026-06-01 14:05 -- Batch started: [infra-008]
+
+**Type:** Work / Batch start
+**Tasks:** infra-008 - Promote heading levels (H3→H2 etc.) during INNOQ body conversion
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-06-01 14:00 -- Model / Captured + Promoted: infra-008
+
+**Type:** Model / Capture + Promote
+**BC:** infrastructure
+**Filed to:** todo (skipped backlog — small, well-specified, immediately actionable)
+**Summary:** Heading-hierarchy follow-up to website-005. The 2023 Remote Mob Programming post's body sections render as small H3s because INNOQ's HTML uses H1=title, H2=subtitle, H3=section and the converter preserves levels 1:1 — but the site's H1 is in the post-hero, so the body should start at H2. Joshua noticed the visual mismatch ("ist es richtig, dass ich beim Inhalt mit der ersten Unterüberschrift anfange?"). Fix: promote h3→h2, h4→h3, h5→h4, h6→h5 in `innoq_common.py`'s body extraction before markdownify runs. H1 in body stripped (defensive — already in frontmatter title). H2 in body untouched. This is "Option B" from website-005's spec, deferred when Option A (TOC JS scan h2+h3) shipped. Both INNOQ workflows benefit since they share `innoq_common.py`. Existing posts need re-conversion: 2023er via force-resync; 2021er + 2022er (still open backfill PRs) closed + re-triggered. ~15 min worker run.
+
+---
+
 ## 2026-06-01 13:32 -- Work session ended
 
 **Type:** Work / Session end

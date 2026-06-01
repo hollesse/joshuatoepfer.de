@@ -125,6 +125,94 @@ class HtmlToMarkdownTests(unittest.TestCase):
         self.assertIn("https://www.innoq.com/img.png", md)
 
 
+class HeadingPromotionTests(unittest.TestCase):
+    """Heading-level rewrite during HTML → Markdown conversion (infra-008).
+
+    INNOQ articles use H1 for the article title, H2 for an optional
+    subtitle, and H3 for primary sections. The post layout renders the
+    title as the page's H1, so the converter promotes H3→H2 (etc.) and
+    strips any stray H1 from the body. See ADR-0006 and infra-008.
+    """
+
+    def test_h3_becomes_h2(self):
+        md = ic.convert_html_to_markdown("<article><h3>Section</h3></article>")
+        self.assertIn("## Section", md)
+        self.assertNotIn("### Section", md)
+
+    def test_h4_becomes_h3(self):
+        md = ic.convert_html_to_markdown("<article><h4>Sub</h4></article>")
+        self.assertIn("### Sub", md)
+        self.assertNotIn("#### Sub", md)
+
+    def test_h5_becomes_h4(self):
+        md = ic.convert_html_to_markdown("<article><h5>Deep</h5></article>")
+        self.assertIn("#### Deep", md)
+        self.assertNotIn("##### Deep", md)
+
+    def test_h6_becomes_h5(self):
+        md = ic.convert_html_to_markdown("<article><h6>Deeper</h6></article>")
+        self.assertIn("##### Deeper", md)
+        self.assertNotIn("###### Deeper", md)
+
+    def test_h1_is_stripped(self):
+        md = ic.convert_html_to_markdown(
+            "<article><h1>Title</h1><h3>Body</h3></article>"
+        )
+        # H1 was decomposed entirely — its text must not survive in any form.
+        self.assertNotIn("Title", md)
+        self.assertNotIn("# Title", md)
+        # H3 still promoted to H2.
+        self.assertIn("## Body", md)
+
+    def test_h2_untouched(self):
+        # Per the promotion table: H2 stays H2; H3 is promoted to H2.
+        # So both headings end up as `## ...` after conversion — H2 was
+        # never demoted, and H3 climbed up to match.
+        md = ic.convert_html_to_markdown(
+            "<article><h2>Intro</h2><h3>Detail</h3></article>"
+        )
+        self.assertIn("## Intro", md)
+        self.assertIn("## Detail", md)
+        # H2 didn't become H1 (no over-promotion). Check against
+        # line-boundary patterns so the `## Intro` H2 marker doesn't
+        # itself match as a substring.
+        self.assertNotIn("\n# Intro", md)
+        self.assertFalse(md.startswith("# Intro"))
+        # H3 didn't survive at its source level.
+        self.assertNotIn("### Detail", md)
+
+    def test_no_headings_no_op(self):
+        md = ic.convert_html_to_markdown("<article><p>plain text</p></article>")
+        self.assertIn("plain text", md)
+        # No heading hashes leak in.
+        self.assertNotIn("#", md)
+
+    def test_full_cascade(self):
+        html = (
+            "<article>"
+            "<h1>Title</h1>"
+            "<h2>Subtitle</h2>"
+            "<h3>Section</h3>"
+            "<h4>Sub</h4>"
+            "<h5>Deep</h5>"
+            "<h6>Deeper</h6>"
+            "</article>"
+        )
+        md = ic.convert_html_to_markdown(html)
+        # H1 stripped.
+        self.assertNotIn("Title", md)
+        # H2 stays H2.
+        self.assertIn("## Subtitle", md)
+        # H3→H2, H4→H3, H5→H4, H6→H5.
+        self.assertIn("## Section", md)
+        self.assertIn("### Sub", md)
+        self.assertIn("#### Deep", md)
+        self.assertIn("##### Deeper", md)
+        # No promoted level overshoots into H1.
+        self.assertNotIn("\n# ", md)
+        self.assertFalse(md.startswith("# "))
+
+
 class FilterChainTests(unittest.TestCase):
     def _parse(self):
         return ic.parse_feed_entries(SAMPLE_ATOM)

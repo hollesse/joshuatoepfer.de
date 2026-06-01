@@ -31,6 +31,7 @@ from pathlib import Path
 from typing import Iterable
 
 import yaml
+from bs4 import BeautifulSoup
 from markdownify import markdownify as _markdownify
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -225,9 +226,15 @@ def convert_html_to_markdown(html: str) -> str:
     - `<img>` tags left as Markdown image references with remote URLs
       (no local asset mirroring; INNOQ remains the asset source)
     - No table-of-contents auto-extraction
+    - Heading levels promoted by one (`<h3>` → `<h2>`, `<h4>` → `<h3>`,
+      etc.); any stray `<h1>` is stripped. The site renders the post title
+      as the page's H1 inside `_layouts/post.html`'s hero, so the synced
+      body should begin at H2 to keep the document outline contiguous.
+      Refines ADR-0006's full-body-republishing decision; see infra-008.
     """
     if not html:
         return ""
+    html = _promote_heading_levels(html)
     md = _markdownify(
         html,
         heading_style="ATX",
@@ -238,6 +245,37 @@ def convert_html_to_markdown(html: str) -> str:
     # Normalise excessive blank lines that markdownify sometimes emits.
     md = re.sub(r"\n{3,}", "\n\n", md).strip()
     return md + "\n"
+
+
+def _promote_heading_levels(html: str) -> str:
+    """Strip body `<h1>` and promote `<h3>`–`<h6>` up by one level.
+
+    INNOQ articles use H1 for the article title (already lifted into our
+    frontmatter), H2 for an optional kicker / subtitle, and H3 for primary
+    section headings — which would render as awkwardly-small sections
+    under the site's H1-in-hero layout. We rewrite the level mapping
+    before markdownify serialises:
+
+    | Source | After |
+    |---|---|
+    | `<h1>` | stripped (defensive — title is in frontmatter) |
+    | `<h2>` | unchanged (rare but kept as manual override room) |
+    | `<h3>` | `<h2>` |
+    | `<h4>` | `<h3>` |
+    | `<h5>` | `<h4>` |
+    | `<h6>` | `<h5>` |
+
+    Operates on the full HTML string. Both `sync_innoq.py` (feed-poll)
+    and `backfill_innoq.py` (scrape) reach this function via
+    `convert_html_to_markdown`, so both workflows benefit.
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    for h1 in soup.find_all("h1"):
+        h1.decompose()
+    for tag in soup.find_all(["h3", "h4", "h5", "h6"]):
+        new_level = int(tag.name[1]) - 1
+        tag.name = f"h{new_level}"
+    return str(soup)
 
 
 def _code_language_from_class(tag) -> str:

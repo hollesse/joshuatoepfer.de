@@ -13,7 +13,7 @@ research touching this BC, and concept synthesis pages.
 - **Backlog:** 0
 - **Todo:** 0
 - **Doing:** 0
-- **Done:** 7
+- **Done:** 8
 <!-- task-counts:end -->
 
 ### Todo
@@ -26,6 +26,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **infra-008** — Promote heading levels (H3→H2 etc.) during INNOQ body conversion — 2026-06-01 — `done/infra-008-promote-headings-in-innoq-conversion.md`
 - **infra-007** — Backfill URL-list mode bypasses dedup (force-resync semantic) — 2026-05-28 — `done/infra-007-backfill-url-list-bypasses-dedup.md`
 - **infra-006** — Automated WCAG AA checks via pa11y-ci in CI (light + dark mode) — 2026-05-28 — `done/infra-006-pa11y-ci-wcag-aa.md`
 - **infra-005** — INNOQ historical backfill workflow (staff-page scrape, German articles only) — 2026-05-28 — `done/infra-005-innoq-historical-backfill-scrape.md`
