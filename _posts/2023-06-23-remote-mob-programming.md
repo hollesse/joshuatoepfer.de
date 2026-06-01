@@ -4,24 +4,25 @@ title: Remote Mob Programming
 date: '2023-06-23'
 source: innoq
 canonical_url: https://www.innoq.com/de/articles/2023/06/remote-mob-programming/
-topic: ensemble
-published: true
+published: false
 render_with_liquid: false
 ---
+
+[This article is also available in English](https://www.innoq.com/en/articles/2023/06/remote-mob-programming/)
 
 [Remote Mob Programming](https://remotemobprogramming.com) ist eine Methode der Softwareentwicklung, die das Konzept des Mob Programming mit dem der verteilten Teams kombiniert. Durch die Verbreitung von COVID-19 haben verteilte Teams in Deutschland und weltweit an Bedeutung gewonnen. Woody Zuill beschreibt Mob Programming oder auch Software Teaming wie folgt: „Mob Programming ist eine Softwareentwicklungsmethodik, bei der das gesamte Team zur gleichen Zeit, im gleichen Raum und am gleichen Computer an der gleichen Sache arbeitet.“ [[1]](#fn:1 "siehe Fußnote")
 Remote Mob Programming überträgt diese Methode auf verteilte Teams, indem ein virtueller Raum geschaffen wird, in dem sich das Team trifft und gemeinsam programmiert. Remote Mob Programming ist jedoch kein Widerspruch in sich. Es ist eine neue Art der Zusammenarbeit, die die Vorteile beider Methoden vereint.
 
-### Wie funktioniert Mob Programming?
+## Wie funktioniert Mob Programming?
 
 Aber was genau ist Mob Programming? Stellen Sie sich vor, Sie und Ihr Team arbeiten an einer Aufgabe, aber anstatt dass jeder für sich arbeitet, arbeitet das ganze Team zusammen an dieser. Der Computerbildschirm wird an eine Wand projiziert und einer von Ihnen, der sogenannte Typist, sitzt an der Tastatur und tippt ein, was der Rest des Teams diskutiert und entscheidet. Jeder im Rest des Teams hat die Möglichkeit, am Entscheidungsprozess teilzunehmen und das Ergebnis zu beeinflussen. Der Typist ist jedoch bewusst aus der Entscheidungsfindung herausgenommen, da er sonst die Macht hätte zu tippen, was er will, ohne dass es vorher im Team diskutiert wurde. So kann es keine Alleingänge geben und die Mitglieder des Teams müssen sich vorher verständigen und die gewünschte Lösung diskutieren.
 
-### Was ist Remote Mob Programming?
+## Was ist Remote Mob Programming?
 
 Remote Mob Programming überträgt Mob Programming ins Internet. Ein virtueller Raum, etwa ein Zoom-Meeting, ersetzt den physischen Raum. Das Team trifft sich dort, um die Software gemeinsam weiterzuentwickeln. Der Typist teilt seinen Bildschirm und kann als High-Level-API für die Entwicklungsumgebung gesehen werden. Er nimmt nicht direkt an der Diskussion und Lösungsfindung teil, sondern wartet auf Anweisungen und programmiert nur, wenn er vom Rest des Teams dazu aufgefordert wird. Je mehr Erfahrung der Typist hat, desto abstrakter können diese Anweisungen sein. So kann ein eher unerfahrener Typist genaue Anweisungen bekommen, was er zu tippen hat. Einem erfahrenen Typist würde beispielsweise nur gesagt werden, dass er einen Test schreiben soll, der Feature X mit den Parametern Y testet. Wenn der Typist gerade keine Anweisungen vom Rest des Teams erhält, wird meditativ das Blinken des Cursors betrachtet, da jede Mausbewegung den Rest des Teams von der Diskussion ablenken könnte.
 Die Rolle des Typist wird regelmäßig gewechselt, sodass die Person ab diesem Zeitpunkt wieder aktiv an der Lösungsfindung teilnehmen kann. Bei einem Team von vier Personen hat es sich bewährt, alle zehn Minuten den Typist zu wechseln. So ist jeder im Team nach spätestens einer halben Stunde erneut Typist. Dies sorgt dafür, dass die Aufmerksamkeit der Teammitglieder aufrechterhalten wird. Beim Remote Mob Programming gestaltet sich der Wechsel des Typist etwas schwieriger, da nicht einfach die Tastatur an das nächste Teammitglied weitergegeben werden kann. Eine Lösung ist die Übergabe des Quellcodes über [Git](https://git-scm.com/). Damit der Code nicht jedes Mal erst mühsam manuell committet und dann vom nächsten Kollegen ausgecheckt werden muss, gibt es das Kommandozeilenprogramm [mob](https://mob.sh/). Mob kapselt die Übergabe in einfachen Befehlen. Damit ist ein Handover des Codes in weniger als zehn Sekunden möglich. Um an den regelmäßigen Wechsel zu erinnern, bietet mob auch einen Timer.
 
-### Konstanter Fortschritt und gute Qualität
+## Konstanter Fortschritt und gute Qualität
 
 Das gesamte Team arbeitet an einem Feature, sodass es maximal ein Ticket gibt, das Work in Progress ist. Der Fokus liegt somit immer auf dem wichtigsten Ticket. Um diesen Fokus beizubehalten, versucht Remote Mob Programming, jegliche Wartezeiten zu vermeiden, da diese meist zu Kontextwechseln führen und zusätzliche Zeit für die erneute Einarbeitung kosten. Daher ist es besonders wichtig, dass das Team möglichst unabhängig arbeiten kann. Ein guter Schnitt der Software und Unabhängigkeit von anderen Teams sowie gut vorbereitete Tickets hinsichtlich der Abhängigkeiten zu anderen Teams sind daher unbedingt notwendig.
 
@@ -33,15 +34,15 @@ Auch während der Programmierung werden viele kleine Entscheidungen implizit get
 
 All dies sorgt für eine starke Fokussierung auf das wichtigste Ticket und ermöglicht einen stetigen Fortschritt durch die Reduzierung von Wartezeiten und Kontextwechseln. Dies führt zu einer sehr guten Time-to-Market, was einer der Hauptvorteile von Remote Mob Programming ist.
 
-### Von den anderen lernen
+## Von den anderen lernen
 
 Beim Remote Mob Programming lernt man durch die enge Zusammenarbeit ständig dazu. So wird aus einem anfangs sehr heterogenen Team immer mehr ein homogenes Team. Das macht auch ein klassisches Onboarding überflüssig. Wenn ein neuer Entwickler ins Team kommt, ist er am ersten Tag der Typist. Gemeinsam werden sein Rechner und die Zugänge eingerichtet. Am Ende des Tages ist das Ziel, dass es eine Codeänderung des neuen Kollegen in Produktion schafft. Danach ist der neue Kollege einfach Teil des Teams. Wenn er etwas nicht versteht, kann er jederzeit nachfragen. Das bremst das Team am Anfang etwas aus, sorgt aber für eine schnellere und bessere Einarbeitung des Kollegen. Schon nach kurzer Zeit hat sich der Kollege ein breites Wissen über das Fachgebiet und die Anwendung angeeignet, sodass er effektiv im Team mitarbeiten kann.
 
-### Zuhause, aber nicht allein
+## Zuhause, aber nicht allein
 
 Die Vorteile des Remote Mob Programming sind vielfältig: Das Pendeln zur Arbeit fällt weg. Es kann gemeinsam mit der Familie zu Mittag gegessen werden. Private Termine, wie beispielsweise der Handwerker oder ein Arztbesuch, sind auch kein Problem, da der virtuelle Raum für diese Zeit einfach verlassen werden kann. Obwohl nur noch von zu Hause aus gearbeitet wird, entsteht trotzdem eine starke Bindung zu den Kollegen. Remote Mob Programming schweißt ein Team zusammen und schafft viel Vertrauen. Durch den regelmäßigen Small Talk lernt man sich auch persönlich sehr gut kennen. Unstimmigkeiten und Konflikte im Team können so leichter und schneller erkannt und gelöst werden. Allerdings gibt es auch einen Nachteil gegenüber der asynchronen Arbeitsweise: So muss sich das Team beim Remote Mob Programming auf einen gemeinsamen Arbeitsbeginn sowie auf Pausen und Arbeitsende einigen. Um das Vertrauen im Team weiter zu stärken, empfiehlt es sich dennoch, regelmäßige Workshops oder Teamevents vor Ort durchzuführen.
 
-### Wann ist Remote Mob Programming keine gute Idee?
+## Wann ist Remote Mob Programming keine gute Idee?
 
 Remote Mob Programming kann eine gute Methode sein, aber, wie so oft in der Softwareentwicklung, ist es kein Silver Bullet. So gibt es bestimmte Rahmenbedingungen, unter denen der Einsatz von Remote Mob Programming nicht oder nur bedingt zu empfehlen ist. Ist das Team zum Beispiel weltweit über verschiedene Zeitzonen verteilt, ist es unmöglich, für alle ein gemeinsames Zeitfenster für Remote Mob Programming zu finden, und somit Remote Mob Programming praktisch unmöglich.
 
@@ -51,10 +52,12 @@ Wenn ein Team in hohem Maße von anderen Teams abhängig und nicht in der Lage i
 
 Remote Mob Programming ist eine sehr kommunikative Arbeitsweise. Es gibt Persönlichkeiten, die mit dieser Arbeitsweise nicht gut zurechtkommen, da sie soziale Interaktion als sehr anstrengend empfinden und so nicht lange arbeiten können. Auch wenn man das Bedürfnis hat, Probleme selbst zu durchdenken, wird man mit Remote Mob Programming nicht glücklich werden. Es empfiehlt sich daher, Remote Mob Programming als ein Experiment über einen begrenzten Zeitraum auszuprobieren und danach gemeinsam zu entscheiden, ob diese Arbeitsweise zum Team passt.
 
-### Fazit
+## Fazit
 
 Remote Mob Programming ist eine neue und aufregende Arbeitsmethode, die verteiltes Arbeiten neu denkt und besonders geeignet ist, wenn eines der Hauptziele des Projekts eine schnelle Time-to-Market ist und auch der Wissenstransfer maximiert werden soll. Remote Mob Programming ermöglicht es dem Team, gemeinsam ein gutes und qualitativ hochwertiges Produkt zu erstellen, in dem neue Features schnell implementiert werden können, da Wartezeiten reduziert werden. Remote Mob Programming sollte jedoch nicht einfach als Wundermittel betrachtet werden. Es ist wichtig, im Vorfeld die Ziele des Teams und des Projekts mit den Vor- und Nachteilen des Remote Mob Programming abzugleichen und zu prüfen, ob die Persönlichkeiten im Team mit dieser Arbeitsweise kompatibel sind.
 
 *Weitere Informationen zu Remote Mob Programming finden Sie unter [remotemobprogramming.org](https://remotemobprogramming.org) oder in unserem [Primer](https://www.innoq.com/de/books/remote-mob-programming/). Wenn Sie Remote Mob Programming im Team ausprobieren wollen, können Sie einen [eintägigen Workshop bei socreatory](https://www.socreatory.com/de/trainings/remote-mob-programming) buchen. Wenn Sie es alleine mit anderen ausprobieren wollen, können Sie kostenlos an einer Remote Mob Session unter [mobusoperandi.com](https://mobusoperandi.com) teilnehmen.*
+
+Workshop buchen
 
 1. [Mob Programming – A Whole Team Approach by Woody Zuill, Woody Zuill, July 2014, Agile2014 Conference](https://www.agilealliance.org/resources/experience-reports/mob-programming-agile2014/) [↩︎](#fnref:1 "zurück zum Text")
