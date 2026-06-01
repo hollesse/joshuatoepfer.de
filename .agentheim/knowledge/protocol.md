@@ -5,6 +5,36 @@ Newest entries on top.
 
 ---
 
+## 2026-06-01 13:30 -- Task verified and completed: website-005 - Syndicated post polish
+
+**Type:** Work / Task completion
+**Task:** website-005 - Syndicated post polish: visible source link at end + working TOC
+**Summary:** Added conditional `.post-source` aside in `_layouts/post.html` rendering between `.post-body` and `.post-pager` when `page.source` is set — links via `rel="external"` to `page.canonical_url`, uses `.link` + `.mono` classes, German wording ("↗ Ursprünglich erschienen auf innoq.com."). Styled in `_sass/_layout.scss` with `border-top: var(--rule)`, `color: var(--fg-dim)` (AA-passing per design-system-002), 16px padding-top, 13px font-size — quiet footnote, not banner. Fixed empty TOC by switching `assets/js/theme-toggle.js`'s scanner to `body.querySelectorAll("h2, h3")` (Option A — simpler, more local, robust to source-format quirks). 2023 INNOQ post now shows 7-entry TOC in browser; Hello-Welt control untouched. pa11y-ci stays green (7/7 URLs × dark + light, 0 errors).
+**Verification:** PASS (iteration 1) — verifier re-ran pa11y-ci live
+**Commit:** (pending)
+**Files changed:** 3 worker files + 2 task/index/protocol updates
+**Tests added:** 0 (UI/template work; pa11y-ci is the standing UI gate)
+**ADRs written:** none
+
+---
+
+## 2026-06-01 13:05 -- Batch started: [website-005]
+
+**Type:** Work / Batch start
+**Tasks:** website-005 - Syndicated post polish: visible source link at end + working TOC
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-06-01 13:00 -- Model / Captured + Promoted: website-005
+
+**Type:** Model / Capture + Promote
+**BC:** website
+**Filed to:** todo
+**Summary:** Two UX bugs on the first live INNOQ-synced post (2023-06-23 Remote Mob Programming, just merged + published) bundled as one polish task. (1) No visible source link at the end of post body — `canonical_url` is only in `<head>` for SEO and the meta-line shows "↗ Erscheint auch auf innoq.com" at the top, but readers who finish reading should be reminded to click through to innoq.com. Fix: add a `.post-source` block in `_layouts/post.html` between `.post-body` and `.post-pager`, conditional on `page.source`. (2) TOC aside renders empty — JS scans `<h2>` only, but INNOQ articles use `<h3>` for section headings (H1=title is in hero, H2=subtitle absent, H3=sections per markdownify-preserved hierarchy). Fix: either extend the TOC scan to `h2, h3` (Option A — simpler, recommended) or promote `<h3>` → `<h2>` during conversion in `innoq_common.py` (Option B — more invasive). Worker picks. Two changes, one task; small enough for one worker run with verifier.
+
+---
+
 ## 2026-05-28 12:52 -- Work session ended
 
 **Type:** Work / Session end

@@ -1,7 +1,7 @@
 // =============================================================================
 // theme-toggle.js
 // Sun/Moon button toggles data-mode on <html>, persists to localStorage.
-// Also: scroll-fade observer + post-page TOC generation from <h2>s.
+// Also: scroll-fade observer + post-page TOC generation from <h2>s and <h3>s.
 // =============================================================================
 
 (function () {
@@ -37,14 +37,17 @@
     document.querySelectorAll("[data-fade]").forEach(function (el) { el.classList.add("in"); });
   }
 
-  // -- Post TOC: build from h2s inside .post-body ----------------------------
+  // -- Post TOC: build from h2s/h3s inside .post-body ------------------------
+  // Scan both h2 and h3 so syndicated INNOQ articles (h3 section headings,
+  // h1=title already in hero) get a populated TOC. Flat list; if both levels
+  // ever coexist in one post, refine to nested rendering then.
   const toc = document.getElementById("post-toc-list");
   const body = document.querySelector(".post-body");
   if (toc && body) {
-    const h2s = body.querySelectorAll("h2");
-    if (h2s.length > 0) {
+    const headings = body.querySelectorAll("h2, h3");
+    if (headings.length > 0) {
       const items = [];
-      h2s.forEach(function (h, i) {
+      headings.forEach(function (h, i) {
         if (!h.id) {
           h.id = "h-" + (h.textContent || "")
             .toLowerCase()

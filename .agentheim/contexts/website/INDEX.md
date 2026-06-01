@@ -13,7 +13,7 @@ research touching this BC, and concept synthesis pages.
 - **Backlog:** 0
 - **Todo:** 0
 - **Doing:** 0
-- **Done:** 4
+- **Done:** 5
 <!-- task-counts:end -->
 
 ### Todo
@@ -26,6 +26,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **website-005** — Syndicated post polish: visible source link at end + working TOC — 2026-06-01 — `done/website-005-syndicated-post-polish.md`
 - **website-004** — Replace placeholder posts with a single Hello-World post — 2026-05-27 — `done/website-004-replace-placeholder-posts-with-hello-world.md`
 - **website-003** — Document implemented pages and data sources (talks, ueber-mich, impressum, datenschutz, post layout) — 2026-05-27 — `done/website-003-document-implemented-pages.md`
 - **website-002** — Blog listing page /posts/ — 2026-05-26 — `done/website-002-blog-listing.md`

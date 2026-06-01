@@ -61,6 +61,13 @@ layout: default
     </div>
   </section>
 
+  {% if page.source and page.canonical_url %}
+    <aside class="post-source mono" aria-label="Quelle">
+      ↗ Ursprünglich erschienen auf
+      <a href="{{ page.canonical_url }}" class="link" rel="external">{{ page.source }}.com</a>.
+    </aside>
+  {% endif %}
+
   {%- assign published_posts = site.posts | where_exp: "p", "p.published != false" -%}
   {%- assign next_post = nil -%}
   {%- assign prev_post = nil -%}
