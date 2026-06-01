@@ -4,11 +4,10 @@ title: Remote Mob Programming
 date: '2023-06-23'
 source: innoq
 canonical_url: https://www.innoq.com/de/articles/2023/06/remote-mob-programming/
-published: false
+topic: ensemble
+published: true
 render_with_liquid: false
 ---
-
-[This article is also available in English](https://www.innoq.com/en/articles/2023/06/remote-mob-programming/)
 
 [Remote Mob Programming](https://remotemobprogramming.com) ist eine Methode der Softwareentwicklung, die das Konzept des Mob Programming mit dem der verteilten Teams kombiniert. Durch die Verbreitung von COVID-19 haben verteilte Teams in Deutschland und weltweit an Bedeutung gewonnen. Woody Zuill beschreibt Mob Programming oder auch Software Teaming wie folgt: „Mob Programming ist eine Softwareentwicklungsmethodik, bei der das gesamte Team zur gleichen Zeit, im gleichen Raum und am gleichen Computer an der gleichen Sache arbeitet.“ [[1]](#fn:1 "siehe Fußnote")
 Remote Mob Programming überträgt diese Methode auf verteilte Teams, indem ein virtueller Raum geschaffen wird, in dem sich das Team trifft und gemeinsam programmiert. Remote Mob Programming ist jedoch kein Widerspruch in sich. Es ist eine neue Art der Zusammenarbeit, die die Vorteile beider Methoden vereint.
@@ -57,7 +56,5 @@ Remote Mob Programming ist eine sehr kommunikative Arbeitsweise. Es gibt Persön
 Remote Mob Programming ist eine neue und aufregende Arbeitsmethode, die verteiltes Arbeiten neu denkt und besonders geeignet ist, wenn eines der Hauptziele des Projekts eine schnelle Time-to-Market ist und auch der Wissenstransfer maximiert werden soll. Remote Mob Programming ermöglicht es dem Team, gemeinsam ein gutes und qualitativ hochwertiges Produkt zu erstellen, in dem neue Features schnell implementiert werden können, da Wartezeiten reduziert werden. Remote Mob Programming sollte jedoch nicht einfach als Wundermittel betrachtet werden. Es ist wichtig, im Vorfeld die Ziele des Teams und des Projekts mit den Vor- und Nachteilen des Remote Mob Programming abzugleichen und zu prüfen, ob die Persönlichkeiten im Team mit dieser Arbeitsweise kompatibel sind.
 
 *Weitere Informationen zu Remote Mob Programming finden Sie unter [remotemobprogramming.org](https://remotemobprogramming.org) oder in unserem [Primer](https://www.innoq.com/de/books/remote-mob-programming/). Wenn Sie Remote Mob Programming im Team ausprobieren wollen, können Sie einen [eintägigen Workshop bei socreatory](https://www.socreatory.com/de/trainings/remote-mob-programming) buchen. Wenn Sie es alleine mit anderen ausprobieren wollen, können Sie kostenlos an einer Remote Mob Session unter [mobusoperandi.com](https://mobusoperandi.com) teilnehmen.*
-
-Workshop buchen
 
 1. [Mob Programming – A Whole Team Approach by Woody Zuill, Woody Zuill, July 2014, Agile2014 Conference](https://www.agilealliance.org/resources/experience-reports/mob-programming-agile2014/) [↩︎](#fnref:1 "zurück zum Text")
