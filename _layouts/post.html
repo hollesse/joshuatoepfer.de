@@ -40,7 +40,11 @@ layout: default
       {% endif %}
       {% if page.source %}
         <span>·</span>
-        <span>↗ Erscheint auch auf {{ page.source }}.com</span>
+        {% if page.canonical_url %}
+          <a href="{{ page.canonical_url }}" class="link" rel="external">↗ Erscheint auch auf {{ page.source }}.com</a>
+        {% else %}
+          <span>↗ Erscheint auch auf {{ page.source }}.com</span>
+        {% endif %}
       {% endif %}
     </div>
   </section>
@@ -60,13 +64,6 @@ layout: default
       {{ content }}
     </div>
   </section>
-
-  {% if page.source and page.canonical_url %}
-    <aside class="post-source mono" aria-label="Quelle">
-      ↗ Ursprünglich erschienen auf
-      <a href="{{ page.canonical_url }}" class="link" rel="external">{{ page.source }}.com</a>.
-    </aside>
-  {% endif %}
 
   {%- assign published_posts = site.posts | where_exp: "p", "p.published != false" -%}
   {%- assign next_post = nil -%}
