@@ -64,3 +64,9 @@ Der Timer kann nicht nur für die Arbeit genutzt werden, sondern auch für die P
 ![Abb. 4: Zeigt beim Mob Timer an, wie die Zeit bei einer Pause heruntergezählt wird.](w_2800/v1/uploads-production/cmqfj7uhtyik1ac6cdw5aodwbpco?_a=BACMTiAE)
 
 Abb. 4: Zeigt beim Mob Timer an, wie die Zeit bei einer Pause heruntergezählt wird.
+
+## Fazit
+
+Das mob-Tool ist ein einfacher Helfer, um die Codeübergabe von einer Person zur nächsten in wenigen Sekunden mittels Git zu ermöglichen – ohne dass dabei der Arbeitsfluss reißt. Entstanden ist es im Kontext von Remote Mob Programming, aber – und das ist das Spannende – genutzt wird es mittlerweile auch für Zwecke, an die wir am Anfang gar nicht gedacht haben: beim Mob Programming vor Ort, um die individuellen Setups der einzelnen Teammitglieder zu berücksichtigen und sogar beim stillen Arbeiten alleine, um Zwischenstände per Git zu sichern. Wir sind gespannt, wohin die Reise für das mob-Tool noch geht.
+
+Besonderer Dank geht an Vera Peuntinger, Jochen Christ, Stefan Tilkov, Gregor Riegler und Thomas Much für ihr wertvolles und konstruktives Feedback zu einer früheren Version dieses Artikels.
