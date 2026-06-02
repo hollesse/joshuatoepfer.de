@@ -213,6 +213,84 @@ class HeadingPromotionTests(unittest.TestCase):
         self.assertFalse(md.startswith("# "))
 
 
+class ConclusionSectionTests(unittest.TestCase):
+    """Conclusion-section merge + empty-heading strip (infra-009).
+
+    Older INNOQ article templates (2022 and earlier) emit the Fazit in a
+    `<section class="conclusion">` that is a sibling of `<article>`
+    under `<main>` — not a child. The converter merges that content
+    back into the article so the Fazit ends up in the Markdown body.
+    Empty headings (e.g. INNOQ's empty `conclusion-subheadline`) are
+    stripped during the cleanup pass. See ADR-0006 and infra-009.
+    """
+
+    def test_conclusion_section_appended(self):
+        html = (
+            "<main>"
+            "<article><p>body</p></article>"
+            '<section class="conclusion">'
+            '<div class="conclusion-wrapper">'
+            '<h2 class="conclusion-headline">Fazit</h2>'
+            '<div class="conclusion-text">Conclusion text</div>'
+            "</div>"
+            "</section>"
+            "</main>"
+        )
+        md = ic.convert_html_to_markdown(html)
+        self.assertIn("body", md)
+        self.assertIn("## Fazit", md)
+        self.assertIn("Conclusion text", md)
+
+    def test_no_conclusion_section_unchanged(self):
+        html = "<main><article><p>body</p></article></main>"
+        md = ic.convert_html_to_markdown(html)
+        # Body survives, no Fazit hallucinated.
+        self.assertIn("body", md)
+        self.assertNotIn("Fazit", md)
+        self.assertNotIn("##", md)
+
+    def test_empty_heading_stripped(self):
+        # H2 stays an H2 after promotion; empty → stripped.
+        md = ic.convert_html_to_markdown("<article><h2></h2><p>text</p></article>")
+        self.assertIn("text", md)
+        # No bare heading marker emitted.
+        for marker in ("# ", "## ", "### ", "#### ", "##### ", "###### "):
+            self.assertNotIn(marker, md)
+
+    def test_empty_h3_stripped_after_promotion(self):
+        # H3 → H2 via promotion, then empty → stripped.
+        md = ic.convert_html_to_markdown("<article><h3></h3><p>text</p></article>")
+        self.assertIn("text", md)
+        for marker in ("# ", "## ", "### ", "#### ", "##### ", "###### "):
+            self.assertNotIn(marker, md)
+
+    def test_conclusion_subheadline_promoted_or_stripped(self):
+        """Full 2022 template shape: H2 Fazit + empty H3 subheadline + text."""
+        html = (
+            "<main>"
+            "<article><p>body</p></article>"
+            '<section class="conclusion">'
+            '<div class="conclusion-wrapper">'
+            '<h2 class="conclusion-headline">Fazit</h2>'
+            '<h3 class="conclusion-subheadline"></h3>'
+            '<div class="conclusion-text">Das mob-Tool ist ein einfacher Helfer</div>'
+            "</div>"
+            "</section>"
+            "</main>"
+        )
+        md = ic.convert_html_to_markdown(html)
+        self.assertIn("## Fazit", md)
+        self.assertIn("Das mob-Tool ist ein einfacher Helfer", md)
+        # No orphan empty heading between Fazit and the text. After
+        # promotion the empty H3 would become an empty H2; after strip
+        # it must be gone entirely. We assert that "## Fazit" is the
+        # only heading marker present.
+        self.assertEqual(md.count("## "), 1)
+        # No promotion overshoot into H1.
+        self.assertNotIn("\n# ", md)
+        self.assertFalse(md.startswith("# "))
+
+
 class FilterChainTests(unittest.TestCase):
     def _parse(self):
         return ic.parse_feed_entries(SAMPLE_ATOM)

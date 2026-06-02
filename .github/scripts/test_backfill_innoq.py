@@ -95,6 +95,34 @@ ARTICLE_HTML_NO_OG = """
 """
 
 
+ARTICLE_HTML_WITH_SIBLING_CONCLUSION = """
+<html>
+<head>
+  <title>Typist wechsel dich – INNOQ</title>
+  <meta property="og:title" content="Typist wechsel dich">
+  <meta property="og:url" content="https://www.innoq.com/de/articles/2022/12/typist-wechsel-dich/">
+</head>
+<body>
+  <main>
+    <article class="article-page-default">
+      <div class="content">
+        <h2>Einleitung</h2>
+        <p>Erster Absatz.</p>
+      </div>
+    </article>
+    <section class="conclusion">
+      <div class="conclusion-wrapper">
+        <h2 class="conclusion-headline">Fazit</h2>
+        <h3 class="conclusion-subheadline"></h3>
+        <div class="conclusion-text">Das mob-Tool ist ein einfacher Helfer.</div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+"""
+
+
 ARTICLE_HTML_NO_DATE_META = """
 <html>
 <head>
@@ -230,6 +258,53 @@ class StripArticleBodyTests(unittest.TestCase):
         self.assertIn("https://res.cloudinary.com/innoq/upload/w_1200/x.png", body_html)
         # And that URL is now visible to markdownify via a src attribute.
         self.assertIn('src="https://res.cloudinary.com/innoq/upload/w_1200/x.png"', body_html)
+
+
+class ConclusionMergeTests(unittest.TestCase):
+    """Older INNOQ templates (2022 and earlier) emit `<section class="conclusion">`
+    as a sibling of `<article>`. `extract_article_body` must merge that
+    content back into the article so the Fazit reaches markdownify.
+    See infra-009.
+    """
+
+    def test_conclusion_text_merged_into_article_body(self):
+        body_html = bf.extract_article_body(ARTICLE_HTML_WITH_SIBLING_CONCLUSION)
+        # Original article content survives.
+        self.assertIn("Erster Absatz", body_html)
+        self.assertIn("Einleitung", body_html)
+        # Conclusion content is now part of the article body.
+        self.assertIn("Fazit", body_html)
+        self.assertIn("Das mob-Tool ist ein einfacher Helfer", body_html)
+
+    def test_conclusion_section_no_longer_separate(self):
+        # After merge, the `<section class="conclusion">` element itself
+        # is gone (its inner content was lifted into `<article>`).
+        body_html = bf.extract_article_body(ARTICLE_HTML_WITH_SIBLING_CONCLUSION)
+        self.assertNotIn('class="conclusion"', body_html)
+
+    def test_existing_template_unaffected(self):
+        # The standard fixture has no separate conclusion section; the
+        # merge step must be a no-op there.
+        body_html = bf.extract_article_body(ARTICLE_HTML)
+        self.assertIn("Erster Absatz", body_html)
+        self.assertNotIn("Fazit", body_html)
+
+    def test_end_to_end_markdown_contains_fazit(self):
+        # Round-trip through build_scraped_article → convert_html_to_markdown
+        # to verify the conclusion survives the full pipeline (merge +
+        # heading promotion + empty-heading strip).
+        from innoq_common import convert_html_to_markdown
+
+        article = bf.build_scraped_article(
+            ARTICLE_HTML_WITH_SIBLING_CONCLUSION,
+            fetched_url="https://www.innoq.com/de/articles/2022/12/typist-wechsel-dich/",
+        )
+        md = convert_html_to_markdown(article.content_html)
+        self.assertIn("## Fazit", md)
+        self.assertIn("Das mob-Tool ist ein einfacher Helfer", md)
+        # The empty conclusion-subheadline must not have left an
+        # orphan heading marker between `## Fazit` and the text.
+        self.assertEqual(md.count("## Fazit"), 1)
 
 
 class BuildArticleTests(unittest.TestCase):

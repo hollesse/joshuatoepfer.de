@@ -5,6 +5,36 @@ Newest entries on top.
 
 ---
 
+## 2026-06-02 10:25 -- Task verified and completed: infra-009 - INNOQ conclusion-section merge
+
+**Type:** Work / Task completion
+**Task:** infra-009 - Extract INNOQ `<section class="conclusion">` Fazit into synced body
+**Summary:** Added `_merge_conclusion_section` + `_strip_empty_headings` to `innoq_common.convert_html_to_markdown` and `_merge_sibling_conclusion` to `backfill_innoq.extract_article_body`. Older INNOQ templates' Fazit (sibling `<section class="conclusion">` of `<article>` under `<main>`) is now lifted into the body before strip + heading-promotion. Empty headings (e.g. INNOQ's empty `conclusion-subheadline`) stripped during the cleanup pass, runs AFTER heading-promotion so newly-emptied headings are caught. 9 new tests (5 ConclusionSectionTests + 4 ConclusionMergeTests including end-to-end), full suite 86 / 86 green. No regression on 2023-style articles (Fazit already inside article).
+**Verification:** PASS (iteration 1)
+**Commit:** (pending)
+**Files changed:** 5 worker files + INDEX + protocol updates
+**Tests added:** 9 (total: 86)
+**ADRs written:** none
+
+---
+
+## 2026-06-02 10:10 -- Batch started: [infra-009]
+
+**Type:** Work / Batch start
+**Tasks:** infra-009 - Extract INNOQ `<section class="conclusion">` Fazit into synced body
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-06-02 10:00 -- Model / Captured + Promoted: infra-009
+
+**Type:** Model / Capture + Promote
+**BC:** infrastructure
+**Filed to:** todo
+**Summary:** Body-extraction bug found while reviewing the 2022 "Typist wechsel dich" backfill PR. The Fazit section is missing entirely. Root cause: INNOQ's older-article template (2022 and earlier) puts the conclusion in a `<section class="conclusion">` sibling of `<article>` under `<main>`, not inside the article wrapper. Our converter only extracts `<article>` content. 2021er had Fazit inside `<article>` (no issue); 2023er also (no issue); 2022 is the visible case. Fix: extend body extraction to also pick up the sibling conclusion section, merge into the body before strip pipeline; add empty-heading stripping for defensive cleanup of the empty `<h3 class="conclusion-subheadline">`. 4 new tests, post-ship Joshua re-runs backfill for 2022 via URL-list mode.
+
+---
+
 ## 2026-06-01 14:28 -- Work session ended
 
 **Type:** Work / Session end

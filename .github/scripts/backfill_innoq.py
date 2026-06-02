@@ -282,6 +282,11 @@ def extract_article_body(html: str) -> str:
     in class), and any element with a heading text matching
     /newsletter|weitere informationen|über den autor/i.
 
+    Merges any sibling `<section class="conclusion">` into the article
+    element before stripping so older INNOQ templates' Fazit content
+    (which lives outside `<article>`) lands in the converted body.
+    See infra-009.
+
     Promotes Cloudinary `srcset` → `src` so markdownify emits a usable
     image reference.
     """
@@ -290,9 +295,33 @@ def extract_article_body(html: str) -> str:
     if article is None:
         return ""
 
+    _merge_sibling_conclusion(article)
     _strip_article(article)
     _promote_srcset_to_src(article)
     return article.decode_contents()
+
+
+def _merge_sibling_conclusion(article) -> None:
+    """Lift `<section class="conclusion">` content into `<article>`.
+
+    Searches the article's parent (typically `<main>`) for a
+    `<section class="conclusion">` sibling. If found, appends its inner
+    wrapper (or, lacking that, its direct children) to the article and
+    removes the now-empty section. No-op when the section is absent —
+    newer INNOQ templates (2023+) include the Fazit inside `<article>`
+    already. See infra-009.
+    """
+    parent = article.parent
+    if parent is None:
+        return
+    conclusion = parent.find("section", class_="conclusion", recursive=False)
+    if conclusion is None:
+        return
+    wrapper = conclusion.find("div", class_="conclusion-wrapper")
+    donor = wrapper if wrapper is not None else conclusion
+    for child in list(donor.children):
+        article.append(child.extract())
+    conclusion.decompose()
 
 
 _DROP_SELECTORS = [

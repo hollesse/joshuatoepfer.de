@@ -231,10 +231,20 @@ def convert_html_to_markdown(html: str) -> str:
       as the page's H1 inside `_layouts/post.html`'s hero, so the synced
       body should begin at H2 to keep the document outline contiguous.
       Refines ADR-0006's full-body-republishing decision; see infra-008.
+    - Older INNOQ article templates (2022 and earlier) place the
+      conclusion in a sibling `<section class="conclusion">` outside the
+      `<article>` element. When such a structure is present in the input
+      HTML, the conclusion content is merged into the article so the
+      Fazit appears in the converted Markdown. See infra-009.
+    - Empty headings (no non-whitespace text content) are stripped during
+      a final cleanup pass — defensive against template-only heading
+      hooks (e.g. INNOQ's empty `conclusion-subheadline`). See infra-009.
     """
     if not html:
         return ""
+    html = _merge_conclusion_section(html)
     html = _promote_heading_levels(html)
+    html = _strip_empty_headings(html)
     md = _markdownify(
         html,
         heading_style="ATX",
@@ -275,6 +285,82 @@ def _promote_heading_levels(html: str) -> str:
     for tag in soup.find_all(["h3", "h4", "h5", "h6"]):
         new_level = int(tag.name[1]) - 1
         tag.name = f"h{new_level}"
+    return str(soup)
+
+
+def _merge_conclusion_section(html: str) -> str:
+    """Merge a sibling `<section class="conclusion">` into `<article>`.
+
+    Older INNOQ article templates (2022 and earlier) emit the Fazit in a
+    `<section class="conclusion">` that is a *sibling* of `<article>`
+    under `<main>`, not a child:
+
+        <main>
+          <article>…body…</article>
+          <section class="conclusion">
+            <div class="conclusion-wrapper">
+              <h2 class="conclusion-headline">Fazit</h2>
+              <h3 class="conclusion-subheadline"></h3>   (often empty)
+              <div class="conclusion-text">…</div>
+            </div>
+          </section>
+        </main>
+
+    Without intervention the conclusion is dropped because
+    `extract_article_body` (backfill) and `convert_html_to_markdown`
+    (feed) only see the `<article>` subtree. This helper finds the
+    section, lifts its inner content into the article element, and then
+    removes the now-empty section. Idempotent: if no conclusion section
+    is present, the HTML is returned unchanged. See infra-009.
+    """
+    if "conclusion" not in html:
+        # Cheap pre-filter; avoids a full BS4 parse for the common case.
+        return html
+    soup = BeautifulSoup(html, "html.parser")
+    for conclusion in soup.find_all("section", class_="conclusion"):
+        article = _find_sibling_article(conclusion)
+        if article is None:
+            continue
+        # Prefer the inner wrapper if present so we don't inherit the
+        # `<section>`'s own attributes; otherwise lift the section's
+        # children directly.
+        wrapper = conclusion.find("div", class_="conclusion-wrapper")
+        donor = wrapper if wrapper is not None else conclusion
+        for child in list(donor.children):
+            article.append(child.extract())
+        conclusion.decompose()
+    return str(soup)
+
+
+def _find_sibling_article(conclusion):
+    """Locate an `<article>` sibling of the conclusion section.
+
+    Searches forward and backward siblings under the same parent. Returns
+    None if no sibling `<article>` exists — in that case the conclusion
+    is left in place rather than guessed at.
+    """
+    for sibling in conclusion.previous_siblings:
+        if getattr(sibling, "name", None) == "article":
+            return sibling
+    for sibling in conclusion.next_siblings:
+        if getattr(sibling, "name", None) == "article":
+            return sibling
+    return None
+
+
+def _strip_empty_headings(html: str) -> str:
+    """Remove `<h1>`–`<h6>` elements with no non-whitespace text content.
+
+    Defensive cleanup: INNOQ's conclusion subheadline is sometimes an
+    empty `<h3>`, which markdownify would otherwise render as a bare
+    `###` (or `##` after heading promotion). Applied to any heading
+    level so future template-only heading hooks don't leak through.
+    See infra-009.
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    for heading in soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6"]):
+        if heading.get_text(strip=True) == "":
+            heading.decompose()
     return str(soup)
 
 

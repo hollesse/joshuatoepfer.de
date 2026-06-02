@@ -55,6 +55,15 @@ in our frontmatter) and H3 for primary sections; the site renders the
 post title as the page's H1 in `_layouts/post.html`'s hero, so the body
 must begin at H2 to keep the document outline contiguous. See infra-008.
 
+**Conclusion-section merge** (older INNOQ article templates, 2022 and
+earlier): the Fazit lives in a `<section class="conclusion">` that is a
+sibling of `<article>` under `<main>`, not a child — so the naive
+`soup.find("article")` extraction would drop it. The converter merges that
+sibling section's content back into the article element before stripping
+so the Fazit appears in the synced post. Empty headings (e.g. INNOQ's
+empty `conclusion-subheadline` styling hook) are stripped during the
+cleanup pass so they don't leak in as bare `##` markers. See infra-009.
+
 **Filter chain** (a feed entry must pass all four to become a PR):
 1. `<author><email>joshua.toepfer@innoq.com</email></author>`
 2. `<content xml:lang="de">`
