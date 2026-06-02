@@ -5,6 +5,16 @@ Newest entries on top.
 
 ---
 
+## 2026-06-02 15:00 -- Backfill: website-006 - Homepage talks fallback
+
+**Type:** Backfill / Capture-as-done
+**BC:** website
+**Filed to:** done
+**Summary:** Captured-after-the-fact. Joshua asked in conversation for a homepage fallback to recent past talks when no upcoming exist. Shipped inline as commit `4816dfe`: `_layouts/home.html` falls back to the 3 most recent past talks under the heading "ZULETZT AUF DER BÜHNE" (more-link "Alle Talks →") when `upcoming_talks` is empty; section hides only when both sets are empty. `talk-card.html` `home` variant reused as-is. Backfill preserves the audit trail; not a precedent for skipping `/agentheim:model` + `/agentheim:work` on non-trivial changes.
+**Commit:** 4816dfe
+
+---
+
 ## 2026-06-02 14:15 -- Work session ended
 
 **Type:** Work / Session end
