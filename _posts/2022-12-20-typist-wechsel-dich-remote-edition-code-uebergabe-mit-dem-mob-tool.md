@@ -4,7 +4,8 @@ title: Typist wechsel dich (Remote Edition)
 date: '2022-12-20'
 source: innoq
 canonical_url: https://www.innoq.com/de/articles/2022/12/typist-wechsel-dich-remote-edition-code-uebergabe-mit-dem-mob-tool/
-published: false
+topic: ensemble
+published: true
 render_with_liquid: false
 ---
 
