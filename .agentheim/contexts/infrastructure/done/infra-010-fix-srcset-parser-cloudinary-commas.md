@@ -6,7 +6,7 @@ type: bug
 context: infrastructure
 created: 2026-06-02
 completed: 2026-06-02
-commit:
+commit: 8590d68
 depends_on: [infra-005]
 blocks: []
 tags: [sync, innoq, conversion, srcset, images, cloudinary]
