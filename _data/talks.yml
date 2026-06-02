@@ -13,4 +13,341 @@
 # `source: manual` entries are owned by Joshua and are never touched by the sync.
 # Flip an entry to `source: manual` to lock in a local override.
 
-[]
+- date: '2026-03-13'
+  what: 'ADHS in der IT: Vom Chaos zum Code'
+  where: DevLand 2026
+  city: Rust
+  status: past
+  type: talk
+  duration: 45
+  abstract: 'ADHS ist mehr als nur das Bild des zappeligen Kindes — gerade in der IT-Branche sind viele Erwachsene betroffen, oft ohne es zu wissen. Doch ADHS kann sowohl Fluch als auch Segen sein: Die kreativen Höhenflüge und der tiefe Hyperfokus sind oft genauso präsent wie das chaotische Durcheinander und der ständige Kampf mit Prokrastination.
+
+
+    In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kollegen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen — egal, ob als Betroffene oder als Kollegen.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2026/03/adhs-in-der-it-vom-chaos-zum-code-devland-2026/
+- date: '2026-03-11'
+  what: 'ADHS in der IT: Vom Chaos zum Code'
+  where: JavaLand 2026
+  city: Rust
+  status: past
+  type: talk
+  duration: 40
+  abstract: 'ADHS ist mehr als nur das Bild des zappeligen Kindes — gerade in der IT-Branche sind viele Erwachsene betroffen, oft ohne es zu wissen. Doch ADHS kann sowohl Fluch als auch Segen sein: Die kreativen Höhenflüge und der tiefe Hyperfokus sind oft genauso präsent wie das chaotische Durcheinander und der ständige Kampf mit Prokrastination.
+
+
+    In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kollegen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen — egal, ob als Betroffene oder als Kollegen.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2026/03/adhs-in-der-it-vom-chaos-zum-code-javaland-2026/
+- date: '2026-03-10'
+  what: Four Years, One Ensemble – Challenges, Aha Moments, and True Team Transformation
+  where: Agile Meets Architecture
+  city: Berlin
+  status: past
+  type: talk
+  duration: 40
+  abstract: 'Ensemble Programming is more than just a way of working – it’s a paradigm shift in team collaboration. In this talk, I’ll share my journey through four years of exclusively working with the Ensemble Programming methodology. Together, we’ll take a behind-the-scenes look: What were my biggest aha moments, and which challenges tested me the most?
+
+
+    I’ll highlight the obvious benefits but also uncover hidden pitfalls, showing how teams – whether newcomers or seasoned pros – can enhance their collaboration. From overcoming initial hurdles to unexpected learning experiences, we’ll explore how this methodology transforms not just code but the team itself. Discover what I’ve learned and what even experienced teams often overlook.
+
+
+    This talk is for anyone curious about Ensemble Programming or already practicing it and seeking fresh insights.'
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:four-years-one-ensemble-challenges-aha-moments-and-true-team-transformation-slides/v1/uploads-production/0juwsmmi0inhx157dfjzuwh5b0f6?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2026/03/four-years-one-ensemble-challenges-aha-moments-and-true-team-transformation/
+- date: '2025-10-08'
+  what: 'ADHS in der IT: Vom Chaos zum Code'
+  where: Berlin Expert Days (BED-Con 2025)
+  city: Berlin
+  status: past
+  type: talk
+  duration: 60
+  abstract: 'ADHS ist mehr als nur das Bild des zappeligen Kindes — gerade in der IT-Branche sind viele Erwachsene betroffen, oft ohne es zu wissen. Doch ADHS kann sowohl Fluch als auch Segen sein: Die kreativen Höhenflüge und das tiefe Hyperfokus-Tauchen sind oft genauso präsent wie das chaotische Durcheinander und der ständige Kampf mit Prokrastination.
+
+
+    In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kollegen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen — egal, ob als Betroffene oder als Kollegen.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2025/10/adhs-in-der-it-bedcon-2025/
+- date: '2025-09-16'
+  what: 'ADHS in der IT: Vom Chaos zum Code'
+  where: Java Forum Nord
+  city: Hannover
+  status: past
+  type: talk
+  abstract: 'ADHS ist mehr als nur das Bild des zappeligen Kindes — gerade in der IT-Branche sind viele Erwachsene betroffen, oft ohne es zu wissen. Doch ADHS kann sowohl Fluch als auch Segen sein: Die kreativen Höhenflüge und das tiefe Hyperfokus-Tauchen sind oft genauso präsent wie das chaotische Durcheinander und der ständige Kampf mit Prokrastination.
+
+
+    In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kollegen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen — egal, ob als Betroffene oder als Kollegen.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2025/09/adhs-in-der-it-java-forum-2025/
+- date: '2025-06-04'
+  what: 'ADHS in der IT: Vom Chaos zum Code — Wie wir die Stärken nutzen und die Herausforderungen meistern'
+  where: techcamp Hamburg
+  city: Hamburg
+  status: past
+  type: talk
+  duration: 45
+  abstract: 'ADHS ist mehr als nur das Bild des zappeligen Kindes — gerade in der IT-Branche sind viele Erwachsene betroffen, oft ohne es zu wissen. Doch ADHS kann sowohl Fluch als auch Segen sein: Die kreativen Höhenflüge und das tiefe Hyperfokus-Tauchen sind oft genauso präsent wie das chaotische Durcheinander und der ständige Kampf mit Prokrastination.
+
+
+    In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kolleg:innen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler:innen, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen — egal, ob als Betroffene oder als Kolleg:innen.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2025/06/vortrag-adhs-in-der-it-2025/
+- date: '2025-06-03'
+  what: Softwarearchitektur im Ensemble
+  where: Karlsruher Entwicklertag 2025
+  city: Karlsruhe
+  status: past
+  type: talk
+  duration: 45
+  abstract: Die Arbeit von Softwarearchitekten findet in klassisch aufgestellten Teams oft abseits der Entwicklungsarbeit statt - sowohl räumlich als auch zeitlich getrennt. Dass das auch anders geht, zeigt Joshua in seinem Vortrag. Er arbeiten seit mehr als 3 Jahren in einem Remote Ensemble, in dem das ganze Team bei Bedarf die Rolle des Architekten einnimmt. So wird die Arbeit an Domänen- und Lösungsarchitektur genauso vom ganzen Team gemeinsam durchgeführt, wie die Entwicklung und der Betrieb der Lösungen. In diesem Vortrag erfahrt ihr, wie ein Ensemble funktioniert und welche Veränderungen die synchrone Zusammenarbeit bei Architektur-Methoden mit sich bringt.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:softwarearchitektur-im-ensemble-karlsruher-entwicklertag2025-slides/v1/uploads-production/y41v76c3lnzib79p8mqzeu9urzus?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2025/06/softwarearchitektur-im-ensemble-karlsruher-entwicklertag2025/
+- date: '2025-05-20'
+  what: Remote Ensemble Programming - Zuhause, aber nicht alleine
+  where: International Software Quality Days Online Preconference
+  city: ''
+  status: past
+  type: talk
+  duration: 45
+  abstract: Das ganze Team sitzt in einem Online-Meeting und entwickelt gemeinsam. Einer tippt den Code, die anderen diskutieren. Klingt ungewöhnlich? Das ist Remote Ensemble Programming, eine spannende Arbeitsweise für verteilte Teams. Seit über 3 Jahren arbeitet Joshua Töpfer Vollzeit in einem Remote Ensemble und möchte nicht mehr anders arbeiten. Was es damit auf sich hat, was die Vor- und Nachteile dieser Methodik sind und wie ihr herausfinden könnt, ob diese Methodik etwas für euer Team ist, erfahrt ihr in diesem Vortrag.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-ensemble-programming-zuhause-aber-nicht-alleine-slides/v1/uploads-production/0824kq17xvaw5xwmkjbczi90fqaj?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2025/05/remote-ensemble-programming-zuhause-aber-nicht-alleine/
+- date: '2025-05-06'
+  what: Softwarearchitektur im Ensemble
+  where: JAX
+  city: Mainz & online
+  status: past
+  type: talk
+  duration: 60
+  abstract: Die Arbeit von Softwarearchitekten findet in klassisch aufgestellten Teams oft abseits der Entwicklungsarbeit statt - sowohl räumlich als auch zeitlich getrennt. Dass das auch anders geht, zeigt Joshua in seinem Vortrag. Er arbeiten seit mehr als vier Jahren in einem Remote Ensemble, in dem das ganze Team bei Bedarf die Rolle des Architekten einnimmt. So wird die Arbeit an Domänen- und Lösungsarchitektur genauso vom ganzen Team gemeinsam durchgeführt, wie die Entwicklung und der Betrieb der Lösungen. In diesem Vortrag erfahrt ihr, wie ein Ensemble funktioniert und welche Veränderungen die synchrone Zusammenarbeit bei Architektur-Methoden mit sich bringt.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:softwarearchitektur-im-ensemble-slides/v1/uploads-production/uvjcej0daujwucj9ksq2os4txx8i?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2025/05/softwarearchitektur-im-ensemble/
+- date: '2025-04-08'
+  what: 'ADHS in der IT: Vom Chaos zum Code — Wie wir die Stärken nutzen und die Herausforderungen meistern'
+  where: devday.25
+  city: Dresden
+  status: past
+  type: talk
+  duration: 60
+  abstract: 'ADHS ist mehr als nur das Bild des zappeligen Kindes — gerade in der IT-Branche sind viele Erwachsene betroffen, oft ohne es zu wissen. Doch ADHS kann sowohl Fluch als auch Segen sein: Die kreativen Höhenflüge und das tiefe Hyperfokus-Tauchen sind oft genauso präsent wie das chaotische Durcheinander und der ständige Kampf mit Prokrastination.
+
+
+    In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kollegen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen — egal, ob als Betroffene oder als Kollegen.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2025/04/adhs-in-der-it-vom-chaos-zum-code-devday25/
+- date: '2025-03-14'
+  what: 'Die andere Art des Teamworks: Whole Team Ensemble Programming'
+  where: BOB 2025
+  city: Berlin
+  status: past
+  type: talk
+  duration: 90
+  abstract: 'Stell dir vor, das gesamte Team sitzt zusammen vor einem Bildschirm und arbeitet zusammen – einer tippt, der Rest diskutiert und entscheidet. Das klingt nach einer ungewöhnlichen, aber höchst effektiven Arbeitsweise: Whole Team Ensemble Programming. Diese Methode geht weit über Pair Programming hinaus und ermöglicht es dem gesamten Team, gemeinsam zu denken, zu lernen und zu entwickeln. Dabei wird das Silodenken durchbrochen, Wissensinseln werden beseitigt, und der Fokus liegt auf maximalem Team-Engagement und schnelleren, besseren Entscheidungen.
+
+
+    In diesem Tutorial erfährst und erlebst du, was Ensemble Programming ausmacht und warum es Teams zu einer echten High-Performance-Einheit machen kann. Joshua Töpfer, der seit über vier Jahren Vollzeit in einem Ensemble arbeitet, teilt seine Erfahrungen, die Vor- und Nachteile der Methodik und gibt wertvolle Tipps, wie du dein eigenes Team auf Ensemble Programming vorbereiten kannst – egal ob vor Ort oder remote. Zudem werden wir ein Kata als Ensemble lösen.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2025/03/vortrag-whole-team-ensemble-programming/
+- date: '2024-12-10'
+  what: Remote Mob Programming – Zuhause, aber nicht alleine
+  where: IT-Tage
+  city: Frankfurt am Main
+  status: past
+  type: talk
+  duration: 45
+  abstract: 'Das ganze Team sitzt in einem Online-Meeting und entwickelt gemeinsam. Einer tippt den Code, die anderen diskutieren. Klingt ungewöhnlich? Das ist Remote Mob Programming, eine spannende Arbeitsweise für verteilte Teams.
+
+
+    Seit über 3 Jahren arbeitet Joshua Töpfer Vollzeit in einem Remote Mob und möchte nicht mehr anders arbeiten. Was es damit auf sich hat, was die Vor- und Nachteile dieser Methodik sind und wie ihr herausfinden könnt, ob diese Methodik etwas für euer Team ist, erfahrt ihr in diesem Vortrag.'
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-zuhause-aber-nicht-alleine-it-tage-slides/v1/uploads-production/8s3hoblb3bmuv34er7sp2uhd94ct?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/12/remote-mob-programming-zuhause-aber-nicht-alleine-it-tage/
+- date: '2024-12-05'
+  what: Remote Mob Programming - Zuhause, aber nicht alleine
+  where: INNOQ Technology Day 2024
+  city: ''
+  status: past
+  type: talk
+  abstract: Das ganze Team sitzt in einem Online-Meeting und entwickelt gemeinsam. Einer tippt den Code, die anderen diskutieren. Klingt ungewöhnlich? Das ist Remote Mob Programming, eine spannende Arbeitsweise für verteilte Teams. Seit über 3 Jahren arbeitet Joshua Töpfer Vollzeit in einem Remote Mob und möchte nicht mehr anders arbeiten. Was es damit auf sich hat, was die Vor- und Nachteile dieser Methodik sind und wie ihr herausfinden könnt, ob diese Methodik etwas für euer Team ist, erfahrt ihr in diesem Vortrag.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:technologyday-remote-mob-programming-slides/v1/uploads-production/7zhbtnd8lp4v45qbjjv4rrxitlfr?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/12/technologyday-remote-mob-programming/
+- date: '2024-11-14'
+  what: We Don’t Talk About Bruno — The Open Source HTTP Client Alternative to Postman and Insomnia
+  where: c't <webdev>
+  city: Köln
+  status: past
+  type: talk
+  duration: 45
+  abstract: 'A reliable HTTP client is an indispensable tool in the everyday life of a web developer. These tools make it possible to efficiently test and manage API requests, significantly easing development and debugging processes. While Postman and Insomnia have been the preferred tools for these tasks in recent years, a new HTTP client is now gaining popularity: Bruno.
+
+
+    Bruno distinguishes itself from Postman and Insomnia by its deliberate avoidance of cloud services, allowing for a completely offline-based usage. Bruno enables the storage and versioning of request collections using Git and its own Bru Markup Language, ensuring seamless team collaboration and easy tracking of changes. Compared to the established tools, Bruno is a lightweight and user-friendly alternative.
+
+
+    In this talk, we will explore the functionality of Bruno in detail and experiment together to see how Bruno compares to Insomnia and Postman.'
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:we-don-t-talk-about-bruno-ct-webdev-2024-slides/v1/uploads-production/2zli409ad3p4q650avx2atfmg1q2?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/11/we-don-t-talk-about-bruno-ct-webdev-2024/
+- date: '2024-10-15'
+  what: Effektive Softwarearchitektur im Mob
+  where: Software Architecture Summit
+  city: Berlin
+  status: past
+  type: talk
+  duration: 180
+  abstract: 'Die Arbeit von Softwarearchitekten findet in klassisch aufgestellten Teams oft abseits der Entwicklungsarbeit statt - sowohl räumlich als auch zeitlich getrennt. Dass das auch anders geht, zeigen Niko und Joshua in ihrem Workshop. Sie arbeiten seit mehr als 3 Jahren in einem Remote Mob, in dem das ganze Team bei Bedarf die Rolle des Architekten einnimmt. So wird die Arbeit an Domänen- und Lösungsarchitektur genauso vom ganzen Team gemeinsam durchgeführt, wie die Entwicklung und der Betrieb der Lösungen.Wir möchten euch vorstellen, wie ein Mob funktioniert und welche Veränderungen die synchrone Zusammenarbeit bei Architektur-Methoden mit sich bringt und gemeinsam mit euch die Architekturarbeit im Mob einmal ausprobieren.
+
+
+    Der Workshop ist für Einsteiger und Fortgeschrittene geeignet, die verwendeten Methoden werden vorab erklärt.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/10/effektive-softwarearchitektur-im-mob/
+- date: '2024-10-10'
+  what: Software Architektur im Mob
+  where: XP Days Germany 2024
+  city: Leinfelden-Echterdingen
+  status: past
+  type: talk
+  duration: 30
+  abstract: Die Arbeit von Softwarearchitekten findet in klassisch aufgestellten Teams oft abseits der Entwicklungsarbeit statt - sowohl räumlich als auch zeitlich getrennt. Dass das auch anders geht, zeigt Joshua in seinem Vortrag. Er arbeiten seit mehr als 3 Jahren in einem Remote Mob, in dem das ganze Team bei Bedarf die Rolle des Architekten einnimmt. So wird die Arbeit an Domänen- und Lösungsarchitektur genauso vom ganzen Team gemeinsam durchgeführt, wie die Entwicklung und der Betrieb der Lösungen. In diesem Vortrag erfahrt ihr, wie ein Mob funktioniert und welche Veränderungen die synchrone Zusammenarbeit bei Architektur-Methoden mit sich bringt.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:software-architektur-im-mob-xpdays-2024-slides/v1/uploads-production/4zebvks9tx5p7l2kjetv14u35p1o?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/10/software-architektur-im-mob-xpdays-2024/
+- date: '2024-09-19'
+  what: Softwarearchitektur im Mob
+  where: Berlin Expert Days
+  city: Berlin
+  status: past
+  type: talk
+  duration: 60
+  abstract: Die Arbeit von Softwarearchitekten findet in klassisch aufgestellten Teams oft abseits der Entwicklungsarbeit statt - sowohl räumlich als auch zeitlich getrennt. Dass das auch anders geht, zeigt Joshua in seinem Vortrag. Er arbeiten seit mehr als 3 Jahren in einem Remote Mob, in dem das ganze Team bei Bedarf die Rolle des Architekten einnimmt. So wird die Arbeit an Domänen- und Lösungsarchitektur genauso vom ganzen Team gemeinsam durchgeführt, wie die Entwicklung und der Betrieb der Lösungen. In diesem Vortrag erfahrt ihr, wie ein Mob funktioniert und welche Veränderungen die synchrone Zusammenarbeit bei Architektur-Methoden mit sich bringt.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:softwarearchitektur-im-mob-bed-con-2024-slides/v1/uploads-production/a6w1pm6w0uggtzizr4rsk077vaxx?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/09/softwarearchitektur-im-mob-bed-con-2024/
+- date: '2024-07-18'
+  what: Remote Mob Programming - At home, but not alone
+  where: WeAreDevelopers World Congress
+  city: Berlin
+  status: past
+  type: talk
+  duration: 30
+  abstract: The whole team attends an online meeting and develops together. One person types the code, the others discuss it. Sounds unusual? That’s Remote Mob Programming, an exciting way of working for distributed teams. Joshua Töpfer has been working full-time in a remote mob for over 3 years and wouldn’t want to work any other way. In this talk, you’ll learn what it’s all about, what the pros and cons of this methodology are, and how you can find out if this methodology is something for your team.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-at-home-but-not-alone-2024-slides/v1/uploads-production/vlfwwkgm9ku9ctoutamam3dc994t?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/07/remote-mob-programming-at-home-but-not-alone-2024/
+- date: '2024-06-05'
+  what: Remote Mob Programming - Zuhause, aber nicht alleine
+  where: Karlsruher Entwicklertag
+  city: Karlsruhe
+  status: past
+  type: talk
+  duration: 45
+  abstract: Das ganze Team sitzt in einem Online-Meeting und entwickelt gemeinsam. Einer tippt den Code, die anderen diskutieren. Klingt ungewöhnlich? Das ist Remote Mob Programming, eine spannende Arbeitsweise für verteilte Teams. Seit über 3 Jahren arbeitet Joshua Töpfer Vollzeit in einem Remote Mob und möchte nicht mehr anders arbeiten. Was es damit auf sich hat, was die Vor- und Nachteile dieser Methodik sind und wie ihr herausfinden könnt, ob diese Methodik etwas für euer Team ist, erfahrt ihr in diesem Vortrag.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-zuhause-aber-nicht-alleine-2024-slides/v1/uploads-production/oefpe86cb4pjgk1d44wlhn3fpqvu?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/06/remote-mob-programming-zuhause-aber-nicht-alleine-2024/
+- date: '2024-04-16'
+  what: Remote Mob Programming - Die besondere Art des Teamworks
+  where: Dev Day 2024
+  city: Dresden
+  status: past
+  type: talk
+  duration: 30
+  abstract: Das ganze Team sitzt in einem Online-Meeting und entwickelt gemeinsam. Einer tippt den Code, die anderen diskutieren. Klingt ungewöhnlich? Das ist Remote Mob Programming, eine spannende Arbeitsweise für verteilte Teams. Seit über 3 Jahren arbeitet Joshua Töpfer Vollzeit in einem Remote Mob und möchte nicht mehr anders arbeiten. Was es damit auf sich hat, was die Vor- und Nachteile dieser Methodik sind und wie ihr herausfinden könnt, ob diese Methodik etwas für euer Team ist, erfahrt ihr in diesem Vortrag.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-die-besondere-art-des-teamworks-dev-day-2024-slides/v1/uploads-production/clab24wvkklbgtjihsbsikx581kq?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/04/remote-mob-programming-die-besondere-art-des-teamworks-dev-day-2024/
+- date: '2024-03-26'
+  what: 'Remote Mob Programming: Zuhause, aber nicht alleine'
+  where: INNOQ Technology Night Rhein-Main (März 2024)
+  city: Offenbach am Main
+  status: past
+  type: talk
+  duration: 45
+  abstract: Das ganze Team sitzt in einem Online-Meeting und entwickelt gemeinsam. Eine:r tippt den Code, die anderen diskutieren. Klingt ungewöhnlich? Das ist Remote Mob Programming, eine spannende Arbeitsweise für verteilte Teams. Seit über 3 Jahren arbeite ich in Vollzeit in einem Remote Mob und möchte nicht mehr anders arbeiten. Was es damit auf sich hat, was die Vor- und Nachteile dieser Methodik sind und wie ihr herausfinden könnt, ob diese Methodik etwas für Euer Team ist, erfahrt ihr in meinem Vortrag.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-zuhause-aber-nicht-alleine-slides/v1/uploads-production/hsvfk4nzitp3mc6ptzeodedop4mj?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/03/remote-mob-programming-zuhause-aber-nicht-alleine/
+- date: '2024-03-13'
+  what: Architekturarbeit im Mob
+  where: Software Architecture Summit 2024
+  city: München
+  status: past
+  type: talk
+  duration: 210
+  abstract: 'Die Arbeit von Softwarearchitekten findet in klassisch aufgestellten Teams oft abseits der Entwicklungsarbeit statt - sowohl räumlich als auch zeitlich getrennt. Dass das auch anders geht, zeigen Niko und Joshua in ihrem Workshop. Sie arbeiten seit mehr als 3 Jahren in einem Remote Mob, in dem das ganze Team bei Bedarf die Rolle des Architekten einnimmt. So wird die Arbeit an Domänen- und Lösungsarchitektur genauso vom ganzen Team gemeinsam durchgeführt, wie die Entwicklung und der Betrieb der Lösungen. Wir möchten euch vorstellen, wie ein Mob funktioniert und welche Veränderungen die synchrone Zusammenarbeit bei Architektur-Methoden mit sich bringt und gemeinsam mit euch die Architekturarbeit im Mob einmal ausprobieren.
+
+
+    Der Workshop ist für Einsteiger und Fortgeschrittene geeignet, die verwendeten Methoden werden vorab erklärt.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/03/architekturarbeit-im-mob/
+- date: '2024-02-27'
+  what: Remote Mob Programming - At home but not alone
+  where: Web Engineering Düsseldorf
+  city: Düsseldorf
+  status: past
+  type: talk
+  duration: 240
+  abstract: The whole team attends an online meeting and develops together. One person types the code, the others discuss it. Sounds unusual? That’s Remote Mob Programming, an exciting way of working for distributed teams. Joshua Töpfer has been working full-time in a remote mob for over 3 years and wouldn’t want to work any other way. In this talk, you’ll learn what it’s all about, what the pros and cons of this methodology are, and how you can find out if this methodology is something for your team.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-at-home-but-not-alone-slides/v1/uploads-production/e0ftcl1hg2od50zk7pm63z3lffn1?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/02/remote-mob-programming-at-home-but-not-alone/
+- date: '2024-01-25'
+  what: DataDevOps und Remote Mob Programming
+  where: INNOQ Technology Night Köln
+  city: Köln
+  status: past
+  type: talk
+  duration: 180
+  abstract: 'Willkommen zur ersten INNOQ Technology Night in unserem Büro in Köln! Wir freuen uns, euch zu einem Abend voller Vorträge und angeregter Diskussionen einzuladen. Unsere Gäste Nikolas Hermann von Breuninger und Joshua Töpfer von INNOQ werden spannende Einblicke in ihre Arbeit geben. Beginnen werden wir um 18:30 Uhr mit einem entspannten Get-together bei Snacks und Erfrischungen. Der erste Vortrag startet um 19:00 Uhr. Nutzt die Pausen und die Zeit nach den Präsentationen für Networking und Austausch. Wir freuen uns auf einen tollen Feierabend mit euch!
+
+
+    Nikolas Hermann, Breuninger
+
+
+    In der Entwicklung vieler Produkte werden Entscheidungen für oder gegen Features anhand des Bauchgefühls von Stakeholdern getroffen. Eine Validierung der Ergebnisse findet höchstens im Nachhinein statt, oftmals wird sogar ganz darauf verzichtet.
+
+
+    In den letzten Jahren haben wir in einem Produktteam bei Breuninger immer mehr versucht, diesen Prozess umzukehren und durch einen datengetriebenen Ansatz zu ersetzen. Dies versetzt uns in die Lage, Features viel schneller zu bewerten und dadurch auch Thesen evaluieren zu können, deren Implementierung sich auf den ersten Blick nicht zu lohnen scheint. Gleichzeitig können wir uns sicher sein, nur das umzusetzen, was einen wirklichen Mehrwert stiftet.
+
+
+    In diesem Talk möchte ich anhand von Praxisbeispielen zeigen, wie man ein Team in die Lage versetzt, Daten aus verschiedenen Quellen zentral zusammenzuführen und dadurch nutzbar zu machen. Ich erzähle, wie aus fixen Ideen in wenigen Tagen Features werden können und wie aus dem datengetriebenen Entwicklungsansatz ein Data Mesh entstehen kann.
+
+
+    Joshua Töpfer, INNOQ
+
+
+    Das ganze Team sitzt in einem Online-Meeting und entwickelt gemeinsam. Eine:r tippt den Code, die anderen diskutieren. Klingt ungewöhnlich? Das ist Remote Mob Programming, eine spannende Arbeitsweise für verteilte Teams. Seit über 3 Jahren arbeitet Joshua Töpfer Vollzeit in einem Remote Mob und möchte nicht mehr anders arbeiten. Was es damit auf sich hat, was die Vor- und Nachteile dieser Methodik sind und wie Ihr herausfinden könnt, ob diese Methodik etwas für Euer Team ist, erfahrt ihr in diesem Vortrag.'
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:data-dev-ops-und-remote-mob-programming-slides/v1/uploads-production/9u29k6u20tefohyli3b2b0fnkhaj?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2024/01/data-dev-ops-und-remote-mob-programming/
+- date: '2023-12-01'
+  what: Remote Mob Programming - Die besondere Art des Teamworks
+  where: Tools 4 Agile Teams
+  city: Wiesbaden
+  status: past
+  type: talk
+  duration: 40
+  abstract: Das ganze Team sitzt in einem Online-Meeting und entwickelt gemeinsam. Einer tippt den Code, die anderen diskutieren. Klingt ungewöhnlich? Das ist Remote Mob Programming, eine spannende Arbeitsweise für verteilte Teams. Seit über 3 Jahren arbeitet Joshua Töpfer Vollzeit in einem Remote Mob und möchte nicht mehr anders arbeiten. Was es damit auf sich hat, was die Vor- und Nachteile dieser Methodik sind und wie ihr herausfinden könnt, ob diese Methodik etwas für euer Team ist, erfahrt ihr in diesem Vortrag.
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-die-besondere-art-des-teamworks-slides/v1/uploads-production/72tpq7wwlgrsjaol5v0sd9vu5rct?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2023/12/remote-mob-programming-die-besondere-art-des-teamworks/
+- date: '2023-11-15'
+  what: Remote Mob Programming — Zuhause, aber nicht allein
+  where: c't web dev
+  city: Köln
+  status: past
+  type: talk
+  duration: 60
+  abstract: 'Das ganze Team sitzt in einem Online-Meeting und entwickelt gemeinsam. Einer tippt den Code, die anderen diskutieren. Klingt ungewöhnlich? Das ist Remote Mob Programming, eine spannende Arbeitsweise für verteilte Teams. Seit über 3 Jahren arbeitet Joshua Töpfer Vollzeit in einem Remote Mob und möchte nicht mehr anders arbeiten. Was es damit auf sich hat, was die Vor- und Nachteile dieser Methodik sind und wie ihr herausfinden könnt, ob diese Methodik etwas für euer Team ist, erfahrt ihr in diesem Vortrag.
+
+
+    Lernziele: Es wird vermittelt, was Remote Mob Programming ist. Was die Vor- und Nachteile von Remote Mob Programming sind und wie man am besten damit anfangen kann. Niveau: Grundlagen Vorkenntnisse: An sich werden keine Vorkenntnisse benötigt, es ist jedoch von Vorteil, wenn man schon mal Pair oder Mob Programming ausprobiert hat.'
+  slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-zuhause-aber-nicht-allein-slides/v1/uploads-production/rretlq2hdqv54u7idu5h0ewcw1sc?_a=BACMTiAE
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2023/11/remote-mob-programming-zuhause-aber-nicht-allein/
