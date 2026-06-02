@@ -4,10 +4,11 @@ title: Typist wechsel dich (Remote Edition)
 date: '2022-12-20'
 source: innoq
 canonical_url: https://www.innoq.com/de/articles/2022/12/typist-wechsel-dich-remote-edition-code-uebergabe-mit-dem-mob-tool/
-topic: ensemble
-published: true
+published: false
 render_with_liquid: false
 ---
+
+[This article is also available in English](https://www.innoq.com/en/articles/2022/12/typist-wechsel-dich-remote-edition-code-uebergabe-mit-dem-mob-tool/)
 
 Wir schreiben das Jahr vor Corona. Ein Team aus drei Personen im Homeoffice beginnt ein Projekt auf der grünen Wiese. Jeden Tag treffen sie sich online in ihrem Zoom-Raum und beginnen, Software zu entwickeln, und zwar mit der Methode [Remote Mob Programming](https://www.remotemobprogramming.org) (auch bekannt als Remote Ensemble Programming oder Remote Team Programming). Der [Typist](https://www.remotemobprogramming.org/typist), zu Deutsch „die Schreibkraft“, teilt den Bildschirm und tippt das, was die anderen beiden anweisen. Der Typist
 agiert somit als smartes Eingabegerät für die anderen beiden, die sich auf das Analysieren von Problemen, die Abwägung von Lösungsalternativen und auf die Ausgestaltung von verabschiedeten Lösungen konzentrieren können. Das läuft für die drei überraschend gut. [Sogar so gut, dass mindestens einer von ihnen nicht mehr anders arbeiten möchte](https://twitter.com/simonharrer/status/1160982263481475073).
@@ -20,7 +21,7 @@ Das mob-Tool ist in Go geschrieben, quelloffen unter der MIT-Lizenz und auf [Git
 
 Das Tool bietet drei Grundfunktionen: `mob start`, `mob next`, und `mob done`. Es ist ein wenig wie bei einem Brettspiel. Jeder Typist beginnt seinen Zug mit `mob start` und beendet ihn mit `mob next`. Das Feature ist fertig, wenn ein Zug mit `mob done` beendet wird. Was es mit diesen Grundfunktionen konkret auf sich hat, zeigen wir anhand eines Beispiels in Abbildung 1.
 
-![Abb. 1: Visualisiert die Funktionsweise des mob Tools.](w_2800/v1/uploads-production/e035w3dl0y0y28nu2prr5i7acmr4?_a=BACMTiAE)
+![Abb. 1: Visualisiert die Funktionsweise des mob Tools.](https://res.cloudinary.com/innoq/image/upload/c_limit,f_auto,q_auto,w_2800/v1/uploads-production/e035w3dl0y0y28nu2prr5i7acmr4?_a=BACMTiAE)
 
 Abb. 1: Visualisiert die Funktionsweise des mob Tools.
 
@@ -46,13 +47,13 @@ Bei der kollaborativen Arbeit des Remote Mob Programming ist es enorm wichtig, r
 
 Zusätzlich gibt es noch die Möglichkeit, das mob-Tool mit dem [Mob Timer](https://timer.mob.sh/) zu kombinieren. Dieser ist als Webanwendung unter [timer.mob.sh](https://timer.mob.sh/) erreichbar. Der Vorteil: Der Timer läuft nun nicht mehr ausschließlich lokal, sondern zusätzlich geteilt an einer zentralen Stelle, die jedes Teammitglied einsehen kann.
 
-![Abb. 2: Zeigt die Startseite des Mob Timer.](w_2800/v1/uploads-production/osuginz8zfraea4hd7forupnksr7?_a=BACMTiAE)
+![Abb. 2: Zeigt die Startseite des Mob Timer.](https://res.cloudinary.com/innoq/image/upload/c_limit,f_auto,q_auto,w_2800/v1/uploads-production/osuginz8zfraea4hd7forupnksr7?_a=BACMTiAE)
 
 Abb. 2: Zeigt die Startseite des Mob Timer.
 
 Um den Mob Timer zu nutzen, ist ein Raum auf [timer. mob.sh](https://timer.mob.sh/) nötig. Dazu kann, wie in Abbildung 2 zu sehen ist, einfach ein Name vergeben und so der Raum betreten werden. In unserem Beispiel erstellen wir den Raum mit dem Namen „javamagazin“.
 
-![Abb. 3: Zeigt beim Mob Timer an, wie die Zeit heruntergezählt wird, inklusive der Historie.](w_2800/v1/uploads-production/238k033qjmujtr1cdld8iunu2kim?_a=BACMTiAE)
+![Abb. 3: Zeigt beim Mob Timer an, wie die Zeit heruntergezählt wird, inklusive der Historie.](https://res.cloudinary.com/innoq/image/upload/c_limit,f_auto,q_auto,w_2800/v1/uploads-production/238k033qjmujtr1cdld8iunu2kim?_a=BACMTiAE)
 
 Abb. 3: Zeigt beim Mob Timer an, wie die Zeit heruntergezählt wird, inklusive der Historie.
 
@@ -60,7 +61,7 @@ In Abbildung 3 sehen wir nun den geöffneten Raum „javamagazin“. Um den Time
 
 Der Timer kann nicht nur für die Arbeit genutzt werden, sondern auch für die Pausen. Dazu bietet das mob-Tool den Befehl break. Wenn eine Pause von zehn Minuten gemacht werden soll, muss einfach der Befehl `mob break 10` eingegeben werden. Wie in Abbildung 4 zu sehen ist, startet dann ein Pausentimer von zehn Minuten, der durch das Kaffeetassensymbol zu erkennen ist.
 
-![Abb. 4: Zeigt beim Mob Timer an, wie die Zeit bei einer Pause heruntergezählt wird.](w_2800/v1/uploads-production/cmqfj7uhtyik1ac6cdw5aodwbpco?_a=BACMTiAE)
+![Abb. 4: Zeigt beim Mob Timer an, wie die Zeit bei einer Pause heruntergezählt wird.](https://res.cloudinary.com/innoq/image/upload/c_limit,f_auto,q_auto,w_2800/v1/uploads-production/cmqfj7uhtyik1ac6cdw5aodwbpco?_a=BACMTiAE)
 
 Abb. 4: Zeigt beim Mob Timer an, wie die Zeit bei einer Pause heruntergezählt wird.
 
