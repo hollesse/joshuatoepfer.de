@@ -4,11 +4,10 @@ title: Typist wechsel dich (Remote Edition)
 date: '2022-12-20'
 source: innoq
 canonical_url: https://www.innoq.com/de/articles/2022/12/typist-wechsel-dich-remote-edition-code-uebergabe-mit-dem-mob-tool/
-published: false
+topic: ensemble
+published: true
 render_with_liquid: false
 ---
-
-[This article is also available in English](https://www.innoq.com/en/articles/2022/12/typist-wechsel-dich-remote-edition-code-uebergabe-mit-dem-mob-tool/)
 
 Wir schreiben das Jahr vor Corona. Ein Team aus drei Personen im Homeoffice beginnt ein Projekt auf der grünen Wiese. Jeden Tag treffen sie sich online in ihrem Zoom-Raum und beginnen, Software zu entwickeln, und zwar mit der Methode [Remote Mob Programming](https://www.remotemobprogramming.org) (auch bekannt als Remote Ensemble Programming oder Remote Team Programming). Der [Typist](https://www.remotemobprogramming.org/typist), zu Deutsch „die Schreibkraft“, teilt den Bildschirm und tippt das, was die anderen beiden anweisen. Der Typist
 agiert somit als smartes Eingabegerät für die anderen beiden, die sich auf das Analysieren von Problemen, die Abwägung von Lösungsalternativen und auf die Ausgestaltung von verabschiedeten Lösungen konzentrieren können. Das läuft für die drei überraschend gut. [Sogar so gut, dass mindestens einer von ihnen nicht mehr anders arbeiten möchte](https://twitter.com/simonharrer/status/1160982263481475073).
