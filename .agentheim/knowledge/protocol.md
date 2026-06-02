@@ -5,6 +5,47 @@ Newest entries on top.
 
 ---
 
+## 2026-06-02 12:18 -- Work session ended
+
+**Type:** Work / Session end
+**Completed:** 1 (first-try PASS: 1, re-dispatched: 0, skipped: 0)
+**Bounced:** 0
+**Failed:** 0
+**Escalated after verification:** 0
+**Commits:** 1 (8590d68)
+
+---
+
+## 2026-06-02 12:15 -- Task verified and completed: infra-010 - Fix srcset parser for Cloudinary commas-in-URL
+
+**Type:** Work / Task completion
+**Task:** infra-010 - Fix srcset parser to handle Cloudinary commas-in-URL
+**Summary:** Replaced naive `srcset.split(",")` in `innoq_common.largest_src_from_srcset` with a regex split on `,\s+(?=https?://)` so Cloudinary's URL-internal transformation commas (`c_limit,f_auto,q_auto,w_NNN`) survive intact. Largest-width pick now returns the absolute Cloudinary URL instead of a relative-path fragment, fixing the 4 broken body images in the 2022 "Typist wechsel dich" backfill PR (and any future INNOQ article with Cloudinary srcsets). Both sync and backfill workflows benefit since they share the helper.
+**Verification:** PASS (iteration 1)
+**Commit:** (pending)
+**Files changed:** 3 worker files + INDEX + protocol updates
+**Tests added:** 3 (total: 89)
+**ADRs written:** none
+
+---
+
+## 2026-06-02 12:00 -- Batch started: [infra-010]
+
+**Type:** Work / Batch start
+**Tasks:** infra-010 - Fix srcset parser to handle Cloudinary commas-in-URL
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-06-02 10:50 -- Model / Captured + Promoted: infra-010
+
+**Type:** Model / Capture + Promote
+**BC:** infrastructure
+**Filed to:** todo
+**Summary:** Image-bug found while reviewing the re-triggered 2022 backfill PR. The 4 body images render as broken (404) because the converter writes relative-path fragments like `w_2800/v1/uploads-production/<id>?_a=BACMTiAE` instead of absolute Cloudinary URLs. Root cause: `largest_src_from_srcset` splits the `srcset` attribute naively on `,`, but INNOQ uses Cloudinary URLs that contain commas *inside* their transformation parameters (`c_limit,f_auto,q_auto,w_2800`). Naive split shreds the URLs into fragments. Fix: split on `,\s+(?=https?://)` to only break on actual srcset candidate separators. ~10 lines of Python + 4 new tests. NOT a local-mirroring issue — Cloudinary continues to serve assets, just needs us to emit correct absolute URLs.
+
+---
+
 ## 2026-06-02 10:28 -- Work session ended
 
 **Type:** Work / Session end

@@ -724,6 +724,16 @@ def parse_german_date(text: str | None) -> str | None:
     return f"{year}-{month}-{day.zfill(2)}"
 
 
+# Srcset candidate separator. HTML5 says candidates are separated by `,`
+# optionally followed by whitespace, but Cloudinary's transformation URLs
+# embed commas *inside* the path (`c_limit,f_auto,q_auto,w_NNN`), which
+# the spec doesn't anticipate. Splitting on `,\s+(?=https?://)` only
+# breaks at a comma followed by whitespace and a URL scheme — i.e. at a
+# real candidate boundary — so Cloudinary's URL-internal commas survive
+# intact. See infra-010 / ADR-0006.
+_SRCSET_CANDIDATE_SEPARATOR = re.compile(r",\s+(?=https?://)")
+
+
 def largest_src_from_srcset(srcset: str | None) -> str:
     """Pick the largest-width URL out of a `srcset` attribute.
 
@@ -732,19 +742,25 @@ def largest_src_from_srcset(srcset: str | None) -> str:
     one before conversion.
 
     Behaviour:
-    - Empty / None → returns "".
+    - Empty / None / whitespace-only → returns "".
     - Single URL with no descriptor → returns it as-is.
     - Mix of width-descriptors (`400w`, `1200w`) → returns the URL with
       the largest `w`.
     - Density-descriptors (`1x`, `2x`) → returns the first URL. (We don't
       have to compare them; any sensible image is fine.)
+    - Cloudinary candidate URLs containing commas in transformation
+      parameters (`c_limit,f_auto,q_auto,w_NNN`) are preserved intact —
+      the candidate splitter only breaks on `,\\s+` followed by a URL
+      scheme. See infra-010.
     """
-    if not srcset:
+    if not srcset or not srcset.strip():
         return ""
     candidates: list[tuple[int, str]] = []
     fallback: str = ""
-    for raw_entry in srcset.split(","):
-        entry = raw_entry.strip()
+    for raw_entry in _SRCSET_CANDIDATE_SEPARATOR.split(srcset.strip()):
+        # Defensive: strip a trailing `,` left over when the regex didn't
+        # consume it (e.g. last candidate had no trailing whitespace).
+        entry = raw_entry.strip().rstrip(",").strip()
         if not entry:
             continue
         parts = entry.split()

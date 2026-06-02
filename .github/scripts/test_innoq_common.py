@@ -547,6 +547,48 @@ class SrcsetTests(unittest.TestCase):
         out = ic.largest_src_from_srcset(srcset)
         self.assertTrue(out.startswith("https://example.com/"))
 
+    def test_cloudinary_srcset_with_commas_in_urls(self):
+        """Cloudinary transformation URLs embed commas inside the path
+        (`c_limit,f_auto,q_auto,w_NNN`). Naive `split(",")` shreds them
+        into fragments and the largest-width pick becomes a relative path
+        fragment that 404s when rendered. The parser must only split on
+        the actual srcset candidate separator (`,\\s+` before a URL
+        scheme), preserving full absolute Cloudinary URLs. See infra-010.
+        """
+        base = (
+            "https://res.cloudinary.com/innoq/image/upload/"
+            "c_limit,f_auto,q_auto,w_{w}/v1/uploads-production/"
+            "e035w3dl0y0y28nu2prr5i7acmr4?_a=BACMTiAE"
+        )
+        widths = [400, 600, 800, 1000, 1200, 1600, 2000, 2400, 2800]
+        srcset = ", ".join(f"{base.format(w=w)} {w}w" for w in widths)
+        self.assertEqual(
+            ic.largest_src_from_srcset(srcset),
+            base.format(w=2800),
+        )
+
+    def test_srcset_two_candidates_simple(self):
+        """Regression guard for non-Cloudinary srcsets (no commas inside
+        the URL). The new parser must still handle the plain HTML5 shape.
+        """
+        srcset = (
+            "https://example.com/img-400.png 400w, "
+            "https://example.com/img-800.png 800w"
+        )
+        self.assertEqual(
+            ic.largest_src_from_srcset(srcset),
+            "https://example.com/img-800.png",
+        )
+
+    def test_empty_srcset_falls_back_to_empty(self):
+        """No srcset → existing contract returns "" (sentinel for "no
+        image URL"); callers fall back to the original `src` themselves.
+        """
+        self.assertEqual(ic.largest_src_from_srcset(""), "")
+        self.assertEqual(ic.largest_src_from_srcset(None), "")
+        # Whitespace-only string is also a no-image case.
+        self.assertEqual(ic.largest_src_from_srcset("   "), "")
+
 
 class GermanDateTests(unittest.TestCase):
     def test_full_german_date(self):
