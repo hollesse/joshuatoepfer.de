@@ -64,6 +64,18 @@ so the Fazit appears in the synced post. Empty headings (e.g. INNOQ's
 empty `conclusion-subheadline` styling hook) are stripped during the
 cleanup pass so they don't leak in as bare `##` markers. See infra-009.
 
+**Cloudinary srcset parsing** (body images): INNOQ body `<img>` tags carry
+no `src`, only a `srcset` with multiple Cloudinary candidate URLs. Each
+URL embeds commas *inside* its transformation segment
+(`c_limit,f_auto,q_auto,w_NNN/...`), which the HTML5 srcset spec didn't
+anticipate. `largest_src_from_srcset` splits candidates on
+`,\s+(?=https?://)` (comma + whitespace + URL scheme) instead of on `,`
+alone, so Cloudinary's URL-internal commas survive intact and the picked
+largest-width URL is a full absolute Cloudinary URL — not a relative
+fragment. Both sync and backfill route through this helper before
+markdownify, so both workflows benefit. INNOQ/Cloudinary continue to
+serve assets; nothing is mirrored locally (per ADR-0006). See infra-010.
+
 **Filter chain** (a feed entry must pass all four to become a PR):
 1. `<author><email>joshua.toepfer@innoq.com</email></author>`
 2. `<content xml:lang="de">`
