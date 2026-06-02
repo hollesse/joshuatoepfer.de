@@ -50,7 +50,13 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install --quiet pyyaml beautifulsoup4
+        # innoq_common.py top-level-imports `markdownify` (article HTML→MD
+        # converter, used by the sibling sync-innoq / backfill-innoq workflows).
+        # Even though talks-sync doesn't call into the converter functionally,
+        # importing innoq_common would fail without it on the runner. Match
+        # the article workflows' install set so the three INNOQ workflows
+        # stay consistent.
+        run: pip install --quiet feedparser markdownify pyyaml beautifulsoup4
 
       - name: Run talks sync
         id: run-sync
