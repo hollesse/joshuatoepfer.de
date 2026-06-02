@@ -4,6 +4,8 @@ layout: default
 {%- assign published_posts = site.posts | where_exp: "p", "p.published != false" -%}
 {%- assign latest_posts = published_posts | slice: 0, 5 -%}
 {%- assign upcoming_talks = site.data.talks | where: "status", "upcoming" | sort: "date" -%}
+{%- assign past_talks_desc = site.data.talks | where: "status", "past" | sort: "date" | reverse -%}
+{%- assign recent_past_talks = past_talks_desc | slice: 0, 3 -%}
 {%- assign focus = site.data.focus -%}
 
 <section class="hero v1-hero">
@@ -62,6 +64,18 @@ layout: default
   </div>
   <div>
     {% for t in upcoming_talks %}
+      {% include talk-card.html talk=t variant="home" %}
+    {% endfor %}
+  </div>
+</section>
+{% elsif recent_past_talks.size > 0 %}
+<section>
+  <div class="v1-section-head">
+    <h2 class="mono"><span class="em-prefix">—</span>&nbsp;&nbsp;ZULETZT AUF DER BÜHNE</h2>
+    <a href="{{ '/talks/' | relative_url }}" class="link mono more-link">Alle Talks →</a>
+  </div>
+  <div>
+    {% for t in recent_past_talks %}
       {% include talk-card.html talk=t variant="home" %}
     {% endfor %}
   </div>

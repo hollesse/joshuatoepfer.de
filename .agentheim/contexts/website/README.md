@@ -96,7 +96,11 @@ All pages share the chrome from `_layouts/default.html`: `topnav.html` + skip-li
 - **Layout:** `home` (`_layouts/home.html`)
 - **Data sources:**
   - `site.posts` filtered to `published != false`, sliced to first 5 (newest posts)
-  - `site.data.talks` filtered to `status: upcoming`, sorted by date
+  - `site.data.talks` filtered to `status: upcoming`, sorted by date; if
+    that filter is empty, falls back to the **3 most recent past talks**
+    (sorted descending by date), rendered under the heading "ZULETZT AUF
+    DER BÜHNE" instead of "KOMMENDE TALKS". The section is hidden only if
+    both sets are empty.
   - `site.data.focus` (the three focus-area cards)
   - `site.portrait_image` (config; portrait at `assets/images/portrait.jpg`)
 - **Includes used:** `post-card.html` (style `compact`), `talk-card.html` (variant `home`)
