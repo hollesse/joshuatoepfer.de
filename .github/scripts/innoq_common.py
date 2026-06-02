@@ -26,9 +26,12 @@ from __future__ import annotations
 import os
 import re
 import subprocess
+import time
+import urllib.error
+import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
+from typing import Callable, Iterable
 
 import yaml
 from bs4 import BeautifulSoup
@@ -47,6 +50,19 @@ PR_LABEL = "sync-innoq"
 # `/de/written/?by=...` archive returns DE-only `/de/articles/...` URLs and
 # excludes talks/podcasts — cleanest input for the scraper.
 BACKFILL_DISCOVERY_URL = "https://www.innoq.com/de/written/?by=joshua-toepfer"
+
+# HTTP politeness primitives shared by `backfill_innoq` (articles, infra-005)
+# and `sync_innoq_talks` (talks, infra-011). The incremental article sync
+# (infra-004) uses `feedparser` against `/de/feed.atom` and doesn't go through
+# this primitive — but every scrape-based fetch does. See ADR-0006/0007 §1.
+INNOQ_USER_AGENT = (
+    "joshuatoepfer.de-sync/0.1 "
+    "(+https://github.com/joshuatoepfer/joshuatoepfer.de; "
+    "contact: joshua.toepfer@innoq.com)"
+)
+REQUEST_DELAY_SECONDS = 2.0
+BACKOFF_SCHEDULE = (5, 30, 120)  # 5s → 30s → 2min, total 3 attempts on 5xx.
+REQUEST_TIMEOUT_SECONDS = 30
 
 
 @dataclass
@@ -732,6 +748,73 @@ def parse_german_date(text: str | None) -> str | None:
 # real candidate boundary — so Cloudinary's URL-internal commas survive
 # intact. See infra-010 / ADR-0006.
 _SRCSET_CANDIDATE_SEPARATOR = re.compile(r",\s+(?=https?://)")
+
+
+# ---------------------------------------------------------------------------
+# HTTP politeness (shared by backfill + talks-sync; ADR-0007 §1)
+# ---------------------------------------------------------------------------
+
+
+def fetch_with_retry(
+    url: str,
+    *,
+    sleep_fn: Callable[[float], None] = time.sleep,
+    urlopen_fn: Callable[..., object] = urllib.request.urlopen,
+) -> str:
+    """GET an INNOQ URL politely.
+
+    Posture:
+      - 2 s delay before every request (`REQUEST_DELAY_SECONDS`)
+      - identifying User-Agent (`INNOQ_USER_AGENT`)
+      - 5xx → exponential backoff per `BACKOFF_SCHEDULE` (5 s → 30 s → 2 min,
+        3 retries on top of the initial attempt)
+      - 4xx (other than 429) → raise immediately, no retry
+      - 429 → honour `Retry-After` if present (default 300 s), retry once
+        per encountered 429
+
+    `sleep_fn` and `urlopen_fn` are injectable so unit tests can drive
+    the politeness contract without touching the network or wall-clock.
+
+    Returns the response body decoded as UTF-8 (with replacement on
+    decode errors). Raises `RuntimeError` on permanent failure with the
+    upstream exception in the message.
+    """
+    sleep_fn(REQUEST_DELAY_SECONDS)
+    last_exc: Exception | None = None
+    for attempt, backoff in enumerate([0, *BACKOFF_SCHEDULE]):
+        if backoff:
+            sleep_fn(backoff)
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": INNOQ_USER_AGENT,
+                "Accept": "text/html",
+                "Accept-Language": "de,en;q=0.5",
+            },
+        )
+        try:
+            with urlopen_fn(req, timeout=REQUEST_TIMEOUT_SECONDS) as resp:
+                return resp.read().decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as exc:
+            if exc.code == 429:
+                retry_after = exc.headers.get("Retry-After") if exc.headers else None
+                wait = int(retry_after) if retry_after and retry_after.isdigit() else 300
+                sleep_fn(wait)
+                last_exc = exc
+                continue
+            if 500 <= exc.code < 600:
+                last_exc = exc
+                continue
+            # 4xx (other than 429): do not retry.
+            raise RuntimeError(
+                f"HTTP {exc.code} fetching {url} — refusing to retry on 4xx"
+            ) from exc
+        except (urllib.error.URLError, TimeoutError) as exc:
+            last_exc = exc
+            continue
+    raise RuntimeError(
+        f"Failed to fetch {url} after {len(BACKOFF_SCHEDULE) + 1} attempts: {last_exc!r}"
+    )
 
 
 def largest_src_from_srcset(srcset: str | None) -> str:

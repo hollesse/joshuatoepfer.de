@@ -172,6 +172,99 @@ so one filter shows everything from INNOQ.
 User-Agent; exponential backoff (5 s → 30 s → 2 min, 3 attempts) on 5xx;
 `Retry-After`-aware on 429; no retry on 4xx (skip + fail-loud).
 
+## Talks sync workflow (innoq.com → PR)
+
+The talks sync runs from `.github/workflows/sync-innoq-talks.yml`, backed
+by `.github/scripts/sync_innoq_talks.py`, `.github/scripts/innoq_talks.py`
+(parse + diff/merge), and the shared module
+`.github/scripts/innoq_common.py` (HTTP politeness primitives, after
+infra-011's extraction). See ADR-0007 for the architecture and infra-011
+for this workflow's task spec.
+
+**What it syncs:** the talks listing at
+`https://www.innoq.com/de/talks/?all=true&by=joshua-toepfer` (and every
+`<a rel="next">` follow-up page from `nav.paginator`) into
+`_data/talks.yml`. For each listing entry the workflow also fetches the
+talk's detail page to pick up `city` (from `<dl> "Ort"` last comma
+segment), `abstract` (from the `<article>` paragraphs before `<dl>`), the
+slides URL (`a.btn[href*="fl_attachment:"]`), and the duration fallback
+(`<dl> "Uhrzeit"`).
+
+**Schedule:** weekly cron, Sundays 04:00 UTC (`0 4 * * 0`), staggered an
+hour after the article sync's daily 03:00 UTC slot. `workflow_dispatch`
+is always available with a `dry_run` boolean input.
+
+**Identity (URL-keyed):** every entry sourced from INNOQ carries
+`source: innoq` plus `source_url: <canonical talk URL>`. Cross-run
+matching is by `source_url` exact string equality, so cosmetic edits to
+`what` / `where` on innoq.com don't break identity. The fallback
+matcher (composite key `(what, where, date)`) runs only on the first
+sync to surface candidate matches against existing `source: manual`
+entries — the worker never silently merges; ambiguous matches are
+listed in the PR body.
+
+**Source marker (hand-edit coexistence):** every entry in
+`_data/talks.yml` carries either `source: innoq` or `source: manual`.
+
+| Marker | Behaviour |
+|---|---|
+| `source: innoq` | Sync overwrites INNOQ-authoritative fields (`date`, `what`, `where`, `city`, `type`, `duration`, `abstract`, `slides`, `status`) on every run. `video` and `source` are preserved. |
+| `source: manual` | Read-skip + write-passthrough. The sync never touches manual entries. Flip an entry to `manual` to lock in a permanent local override. |
+
+The PR body spells this out so the reviewer is reminded that cosmetic
+edits to `source: innoq` entries will be overwritten on the next run.
+
+**Update semantics:** INNOQ-authoritative fields are *re-derived and
+overwritten* every sync — there is no "smart merge". The only fields
+safe to hand-edit on a `source: innoq` entry are `video` (not derivable
+from INNOQ markup) and `source` itself. `status` is computed from
+`date` vs. `today_utc` on every run; never read from INNOQ.
+
+**Type label mapping** (`div.type-label.primary` text → schema value):
+
+| INNOQ label | `type:` value |
+|---|---|
+| `Vortrag` | `talk` |
+| `Workshop` | `workshop` |
+| `Keynote` | `keynote` |
+| anything else | `talk` + WARN log |
+
+**Diff & PR shape:** one PR per sync run on
+`sync/innoq-talks/<YYYY-MM-DD>`, labelled `sync-innoq` (shared with the
+article workflows). PR body summarises the diff in three or four
+buckets — **New talks**, **Status transitions**, **Field updates**,
+optional **Ambiguous matches** for the first-sync composite-key
+fallback. Draft PR, same posture as the article syncs (the workflow
+proposes, Joshua decides).
+
+**Close-prior-then-open-new dedup** (ADR-0007 §8): branch namespace
+`sync/innoq-talks/*` is scoped enough that we don't need GitHub's
+PR-history dedup. Before opening a fresh sync PR, the worker closes
+any *open* PR on a `sync/innoq-talks/*` branch (with a comment
+linking to the new PR). Merged or closed PRs are ignored. This keeps
+the PR list small while preserving an audit trail.
+
+**Politeness:** identical posture to the article workflows — 2 s delay
+between INNOQ requests, identifying User-Agent
+(`joshuatoepfer.de-sync/0.1`), exponential backoff (5 s → 30 s → 2 min,
+3 attempts) on 5xx, `Retry-After`-aware on 429, no retry on 4xx (skip
++ fail-loud). The politeness primitive (`fetch_with_retry`) lives in
+`innoq_common.py` and is shared with `backfill_innoq.py`.
+
+**Empty-discovery guard:** if the listing URL ever returns zero
+entries (INNOQ template drift, accidental author-filter change), the
+worker raises and fails the run loudly instead of silently rewriting
+`_data/talks.yml` to a state that would erase every `source: innoq`
+entry on subsequent runs.
+
+**Migration note (infra-011, first sync):** the existing
+`_data/talks.yml` entries were migrated to `source: manual` by default
+on the same PR that introduced this workflow (ADR-0007 §9). The first
+real sync run will therefore discover INNOQ's talks as fresh
+`source: innoq` entries; the composite-key fallback surfaces candidate
+matches against the manual entries so Joshua can merge duplicates on
+PR review.
+
 ## Accessibility checks
 
 Automated WCAG 2.1 AA audits run from `.github/workflows/accessibility.yml`,

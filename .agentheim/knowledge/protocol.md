@@ -5,6 +5,48 @@ Newest entries on top.
 
 ---
 
+## 2026-06-02 14:10 -- Task verified and completed: infra-011 - INNOQ talks sync workflow
+
+**Type:** Work / Task completion
+**Task:** infra-011 - INNOQ talks sync workflow (scrape `/de/talks/?all=true&by=joshua-toepfer` → PR)
+**Summary:** Shipped the INNOQ talks-sync pipeline per ADR-0007: weekly GHA workflow (`sync-innoq-talks.yml`, `0 4 * * 0`) that scrapes the per-author talks listing, follows pagination, fetches each detail page, and opens one draft PR per run with the merged `_data/talks.yml` on `sync/innoq-talks/<YYYY-MM-DD>`. Introduces the `source: innoq | manual` marker with read-skip + write-passthrough semantics (existing 10 entries migrated to `source: manual`), URL-keyed identity via `source_url`, per-field authority table (INNOQ-authoritative fields overwritten every sync; `video` + `source` preserved as Joshua-authoritative), close-prior-then-open-new PR dedup, three-bucket diff summary in the PR body (New / Status transitions / Field updates, plus optional Ambiguous matches for first-sync composite-key fallback). Refactor: extracted `fetch_with_retry` HTTP politeness primitive from `backfill_innoq` into `innoq_common` so the new talks workflow reuses it; `backfill_innoq._fetch_html` is now a shim. Schema extension to `_data/talks.yml` documented in `website/README.md` (ADR-0007 §10 cross-BC exception); layouts untouched. Test suite grew 89 → 154 (+65).
+**Verification:** PASS (iteration 1)
+**Commit:** (pending)
+**Files changed:** 10 worker files + INDEX + protocol + ADR-0007 + research file
+**Tests added:** 65 (total: 154)
+**ADRs written:** none (ADR-0007 was authored during refinement)
+
+---
+
+## 2026-06-02 13:40 -- Batch started: [infra-011]
+
+**Type:** Work / Batch start
+**Tasks:** infra-011 - INNOQ talks sync workflow (scrape `/de/talks/?all=true&by=joshua-toepfer` → PR)
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-06-02 13:30 -- Model / Refined + Promoted: infra-011 - INNOQ talks sync workflow
+
+**Type:** Model / Refine + Promote
+**BC:** infrastructure
+**Status after:** todo
+**Summary:** Orchestrator routed to researcher (live-fetched the INNOQ talks listing + 3 detail pages: confirmed server-rendered, no talks feed, 25/page pagination, per-talk detail page carries city/abstract/slides URL; selectors documented per-field with confidence levels) and architect (ADR-0007: scrape-only with URL identity via `source_url`, per-field authority table making INNOQ-authoritative fields overwritten every sync while `video` and `source` stay Joshua-authoritative, `source: innoq | manual` marker for hand-edit coexistence with a one-time migration of today's `_data/talks.yml` as the worker's first commit, one PR per sync run on `sync/innoq-talks/<YYYY-MM-DD>`, weekly Sundays 04:00 UTC, close-prior-then-open-new dedup, new `innoq_talks.py` module while `innoq_common.py` stays generic). The seven original open questions are now resolved; acceptance criteria are concrete and testable across migration / workflow+module / discovery+parsing / diff+merge / PR-shape+scheduling / politeness+docs.
+**Split into:** none (single-task refinement)
+**ADRs written:** 0007
+**Research filed:** innoq-talks-page-2026-06-02
+
+---
+
+## 2026-06-02 13:00 -- Model / Captured: infra-011 - INNOQ talks sync workflow
+
+**Type:** Model / Capture
+**BC:** infrastructure
+**Filed to:** backlog
+**Summary:** New sync workflow analogous to infra-004 (article incremental) and infra-005 (article backfill scrape), but for talks: scrape `https://www.innoq.com/de/talks/?all=true&by=joshua-toepfer`, diff against `_data/talks.yml`, open a PR on changes. Filed to backlog because key decisions are still open: full HTML structure of the talks page, field mapping to the YAML schema, diff & PR shape (talks live in one file, unlike articles), update-vs-additive semantics (talks change after creation — `upcoming` → `past`, slides/video added later), hand-edit coexistence. Refinement will likely spawn a research task on the talks-page HTML (analogue of `innoq-staff-page-scrape-2026-05-27` for talks).
+
+---
+
 ## 2026-06-02 12:18 -- Work session ended
 
 **Type:** Work / Session end

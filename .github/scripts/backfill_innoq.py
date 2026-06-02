@@ -69,11 +69,16 @@ from bs4 import BeautifulSoup
 
 from innoq_common import (
     BACKFILL_DISCOVERY_URL,
+    BACKOFF_SCHEDULE,
+    INNOQ_USER_AGENT,
+    REQUEST_DELAY_SECONDS,
+    REQUEST_TIMEOUT_SECONDS,
     ScrapedArticle,
     build_backfill_pr_body,
     build_backfill_pr_title,
     convert_html_to_markdown,
     existing_canonical_urls,
+    fetch_with_retry,
     largest_src_from_srcset,
     parse_german_date,
     pr_history_has_branch,
@@ -82,19 +87,14 @@ from innoq_common import (
     write_post_file,
 )
 
-USER_AGENT = (
-    "joshuatoepfer.de-backfill/0.1 "
-    "(+https://github.com/joshuatoepfer/joshuatoepfer.de; "
-    "contact: joshua.toepfer@innoq.com)"
-)
+# Re-exported for backwards-compat with any local test that still
+# references the module-level User-Agent constant. The canonical
+# definition lives in `innoq_common` (ADR-0007 §1).
+USER_AGENT = INNOQ_USER_AGENT
 
 INNOQ_HOST = "https://www.innoq.com"
 ARTICLE_PATH_PREFIX = "/de/articles/"
 SITE_TITLE_SUFFIX = " – INNOQ"  # en-dash variant emitted by innoq.com
-
-REQUEST_DELAY_SECONDS = 2.0
-BACKOFF_SCHEDULE = (5, 30, 120)  # 5s → 30s → 2min, total 3 attempts on 5xx.
-REQUEST_TIMEOUT_SECONDS = 30
 
 
 def _log(msg: str) -> None:
@@ -102,55 +102,20 @@ def _log(msg: str) -> None:
 
 
 # ---------------------------------------------------------------------------
-# HTTP
+# HTTP — thin wrapper around the shared primitive
 # ---------------------------------------------------------------------------
 
 
 def _fetch_html(url: str, *, sleep_fn=time.sleep) -> str:
-    """GET an INNOQ URL with politeness delay, custom UA, retries on 5xx.
+    """Backwards-compat shim — delegates to `innoq_common.fetch_with_retry`.
 
-    On 4xx (other than 429): raise immediately, do not retry (per task spec).
-    On 429: honour `Retry-After` if present, else wait 5 minutes, retry once.
-    On 5xx: exponential backoff per BACKOFF_SCHEDULE.
+    The politeness layer (2 s delay, identifying User-Agent, 5xx exp.
+    backoff, 4xx fail-loud, 429 Retry-After) lives in `innoq_common`
+    after infra-011 so the talks-sync workflow can reuse it. This
+    function preserves the local fetch-hook contract used inside
+    `backfill_innoq` (e.g. `build_plan(fetch_fn=_fetch_html)`).
     """
-    sleep_fn(REQUEST_DELAY_SECONDS)
-    last_exc: Exception | None = None
-    for attempt, backoff in enumerate([0, *BACKOFF_SCHEDULE]):
-        if backoff:
-            _log(f"  Backing off {backoff}s before retry {attempt}/{len(BACKOFF_SCHEDULE)} for {url}")
-            sleep_fn(backoff)
-        req = urllib.request.Request(
-            url,
-            headers={
-                "User-Agent": USER_AGENT,
-                "Accept": "text/html",
-                "Accept-Language": "de,en;q=0.5",
-            },
-        )
-        try:
-            with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT_SECONDS) as resp:
-                return resp.read().decode("utf-8", errors="replace")
-        except urllib.error.HTTPError as exc:
-            if exc.code == 429:
-                retry_after = exc.headers.get("Retry-After") if exc.headers else None
-                wait = int(retry_after) if retry_after and retry_after.isdigit() else 300
-                _log(f"  HTTP 429 from {url}; waiting {wait}s then retrying once")
-                sleep_fn(wait)
-                last_exc = exc
-                continue
-            if 500 <= exc.code < 600:
-                last_exc = exc
-                continue
-            # 4xx (other than 429): do not retry.
-            raise RuntimeError(
-                f"HTTP {exc.code} fetching {url} — refusing to retry on 4xx"
-            ) from exc
-        except (urllib.error.URLError, TimeoutError) as exc:
-            last_exc = exc
-            continue
-    raise RuntimeError(
-        f"Failed to fetch {url} after {len(BACKOFF_SCHEDULE) + 1} attempts: {last_exc!r}"
-    )
+    return fetch_with_retry(url, sleep_fn=sleep_fn)
 
 
 # ---------------------------------------------------------------------------

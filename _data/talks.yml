@@ -1,6 +1,17 @@
 # Talks — kommende und vergangene Vorträge / Workshops.
 # Fields: date (ISO), what, where, city, status (upcoming|past), type (talk|workshop|keynote),
-#         duration (minutes), abstract, slides (URL, optional), video (URL, optional)
+#         duration (minutes), abstract, slides (URL, optional), video (URL, optional),
+#         source (innoq|manual), source_url (URL, required when source: innoq).
+#
+# `source` marks who owns the entry. `source: innoq` entries are maintained by the
+# INNOQ talks sync workflow (.github/workflows/sync-innoq-talks.yml, infra-011) and
+# matched across runs by their `source_url`. INNOQ-authoritative fields (date, what,
+# where, city, type, duration, abstract, slides, status) are overwritten on every
+# sync; only `video` and the `source` field itself are safe to hand-edit on a
+# `source: innoq` entry.
+#
+# `source: manual` entries are owned by Joshua and are never touched by the sync.
+# Flip an entry to `source: manual` to lock in a local override.
 
 # ── Kommend ───────────────────────────────────────────────────────────
 - date: 2026-06-18
@@ -11,6 +22,7 @@
   type: talk
   duration: 45
   abstract: "Wie Neurodivergenz den Alltag im Team verändert — und welche kleinen Anpassungen einen großen Unterschied machen. Ein Vortrag aus der Praxis, ohne Heilsversprechen."
+  source: manual
 
 - date: 2026-08-20
   what: "Ensemble Programming: 8 Hirne, ein Editor"
@@ -20,6 +32,7 @@
   type: workshop
   duration: 180
   abstract: "Hands-on Session: wir programmieren zu acht an einem Problem, wechseln Rollen alle zehn Minuten und reflektieren danach gemeinsam, was passiert ist."
+  source: manual
 
 - date: 2026-10-21
   what: "Wie man im Ensemble nicht stört"
@@ -29,6 +42,7 @@
   type: talk
   duration: 30
   abstract: "Sechs ungeschriebene Regeln, die Ensemble-Sessions ruhiger machen — und warum das mehr Wirkung hat als die offiziellen Best Practices."
+  source: manual
 
 - date: 2027-02-04
   what: "Pairing mit dem ADHS-Brain"
@@ -38,6 +52,7 @@
   type: talk
   duration: 45
   abstract: "Vier konkrete Anpassungen, die Pairing für neurodivergente Brains erträglicher machen — und nebenbei auch für alle anderen besser."
+  source: manual
 
 # ── Vergangen ─────────────────────────────────────────────────────────
 - date: 2025-11-04
@@ -50,6 +65,7 @@
   abstract: "Wenn Refactoring sich wie Buße anfühlt, machen wir es seltener und schlechter. Ein Plädoyer für beiläufiges Aufräumen."
   slides: "#"
   video: "#"
+  source: manual
 
 - date: 2025-09-15
   what: "Ensemble-Anti-Patterns"
@@ -61,6 +77,7 @@
   abstract: "Driver-Tyrannen, Schweigemauern, Endlosdiskussionen. Was schief geht in Ensemble-Sessions — und was hilft."
   slides: "#"
   video: "#"
+  source: manual
 
 - date: 2025-06-12
   what: "Test-Strategien jenseits der Pyramide"
@@ -72,6 +89,7 @@
   abstract: "Die klassische Test-Pyramide ist ein guter Anfang, aber sie ignoriert Integrationspunkte, die in modernen Systemen entscheidend sind."
   slides: "#"
   video: "#"
+  source: manual
 
 - date: 2025-03-18
   what: "Mob Programming vs Ensemble — der Unterschied"
@@ -83,6 +101,7 @@
   abstract: "Eine begriffliche Klärung — und warum die Wortwahl mehr ausmacht als ich gedacht hätte."
   slides: "#"
   video: "#"
+  source: manual
 
 - date: 2024-11-20
   what: "ADHS als Produktivkraft"
@@ -94,6 +113,7 @@
   abstract: "Eine ehrliche Standortbestimmung: was ADHS in der IT bedeutet, was hilft, was nicht, und welche Narrative wir endlich begraben können."
   slides: "#"
   video: "#"
+  source: manual
 
 - date: 2024-09-05
   what: "Pair Programming, aber gut"
@@ -104,3 +124,5 @@
   duration: 180
   abstract: "Drei Stunden gemeinsames Pairen mit Reflexionsphasen. Was funktioniert, was scheitert, und wie man als Team eine eigene Praxis findet."
   slides: "#"
+  video: "#"
+  source: manual

@@ -631,5 +631,164 @@ class BackfillBranchPrefixTests(unittest.TestCase):
         self.assertEqual(ic.BACKFILL_BRANCH_PREFIX, "backfill/innoq")
 
 
+# ---------------------------------------------------------------------------
+# fetch_with_retry — shared HTTP politeness primitive (ADR-0007 §1)
+# ---------------------------------------------------------------------------
+
+
+class FetchWithRetryTests(unittest.TestCase):
+    """The HTTP politeness layer was duplicated inline in `backfill_innoq`
+    (`_fetch_html`). infra-011 extracts it into `innoq_common` as the
+    single source of truth used by both backfill and talks-sync.
+
+    These tests exercise the politeness contract:
+      - 2 s delay between requests (calls `sleep_fn` before each fetch)
+      - identifying User-Agent header on every request
+      - 5xx → exponential backoff per BACKOFF_SCHEDULE
+      - 4xx (other than 429) → fail loudly, no retry
+      - 429 → honour Retry-After (with sensible default), retry once
+    """
+
+    def test_has_user_agent_constant(self):
+        self.assertTrue(hasattr(ic, "INNOQ_USER_AGENT"))
+        self.assertIn("joshuatoepfer.de", ic.INNOQ_USER_AGENT)
+
+    def test_has_request_delay_constant(self):
+        self.assertEqual(ic.REQUEST_DELAY_SECONDS, 2.0)
+
+    def test_has_backoff_schedule(self):
+        # 5 s → 30 s → 2 min, 3 attempts total on 5xx.
+        self.assertEqual(ic.BACKOFF_SCHEDULE, (5, 30, 120))
+
+    def test_polite_delay_called_before_fetch(self):
+        sleeps: list[float] = []
+        calls: list[str] = []
+
+        def fake_urlopen(req, timeout):
+            calls.append(req.full_url)
+
+            class Resp:
+                def read(self_inner):
+                    return b"hello"
+
+                def __enter__(self_inner):
+                    return self_inner
+
+                def __exit__(self_inner, *args):
+                    return False
+
+            return Resp()
+
+        result = ic.fetch_with_retry(
+            "https://www.innoq.com/de/talks/",
+            sleep_fn=sleeps.append,
+            urlopen_fn=fake_urlopen,
+        )
+        self.assertEqual(result, "hello")
+        # At least one sleep, and the first is the politeness delay.
+        self.assertEqual(sleeps[0], ic.REQUEST_DELAY_SECONDS)
+
+    def test_user_agent_header_sent(self):
+        captured_headers: dict = {}
+
+        def fake_urlopen(req, timeout):
+            captured_headers.update(req.headers)
+
+            class Resp:
+                def read(self_inner):
+                    return b"x"
+
+                def __enter__(self_inner):
+                    return self_inner
+
+                def __exit__(self_inner, *args):
+                    return False
+
+            return Resp()
+
+        ic.fetch_with_retry(
+            "https://www.innoq.com/de/talks/",
+            sleep_fn=lambda _: None,
+            urlopen_fn=fake_urlopen,
+        )
+        # urllib.request.Request stores headers with Title-Cased keys.
+        self.assertIn("User-agent", captured_headers)
+        self.assertEqual(captured_headers["User-agent"], ic.INNOQ_USER_AGENT)
+
+    def test_4xx_raises_without_retry(self):
+        import urllib.error
+        call_count = [0]
+
+        def fake_urlopen(req, timeout):
+            call_count[0] += 1
+            raise urllib.error.HTTPError(req.full_url, 404, "Not Found", {}, None)
+
+        with self.assertRaises(RuntimeError) as cm:
+            ic.fetch_with_retry(
+                "https://www.innoq.com/de/missing/",
+                sleep_fn=lambda _: None,
+                urlopen_fn=fake_urlopen,
+            )
+        self.assertIn("404", str(cm.exception))
+        self.assertEqual(call_count[0], 1)  # No retries on 4xx.
+
+    def test_5xx_retries_per_backoff_schedule(self):
+        import urllib.error
+        call_count = [0]
+
+        def fake_urlopen(req, timeout):
+            call_count[0] += 1
+            raise urllib.error.HTTPError(req.full_url, 503, "Bad", {}, None)
+
+        sleeps: list[float] = []
+        with self.assertRaises(RuntimeError):
+            ic.fetch_with_retry(
+                "https://www.innoq.com/de/x/",
+                sleep_fn=sleeps.append,
+                urlopen_fn=fake_urlopen,
+            )
+        # 1 initial attempt + 3 retries per BACKOFF_SCHEDULE = 4 calls.
+        self.assertEqual(call_count[0], 4)
+        # Sleep schedule: politeness (2.0) + 5 + 30 + 120.
+        self.assertEqual(sleeps[0], ic.REQUEST_DELAY_SECONDS)
+        self.assertEqual(sleeps[1:], [5, 30, 120])
+
+    def test_429_honours_retry_after(self):
+        import urllib.error
+
+        responses = [("429", 30), ("ok", None)]
+
+        def fake_urlopen(req, timeout):
+            kind, _ = responses.pop(0)
+            if kind == "429":
+                # urllib HTTPError accepts an arbitrary mapping for headers.
+                err = urllib.error.HTTPError(
+                    req.full_url, 429, "Too Many", {"Retry-After": "30"}, None,
+                )
+                raise err
+
+            class Resp:
+                def read(self_inner):
+                    return b"yay"
+
+                def __enter__(self_inner):
+                    return self_inner
+
+                def __exit__(self_inner, *args):
+                    return False
+
+            return Resp()
+
+        sleeps: list[float] = []
+        result = ic.fetch_with_retry(
+            "https://www.innoq.com/de/x/",
+            sleep_fn=sleeps.append,
+            urlopen_fn=fake_urlopen,
+        )
+        self.assertEqual(result, "yay")
+        # Sleeps: politeness, 30 (Retry-After).
+        self.assertIn(30, sleeps)
+
+
 if __name__ == "__main__":
     unittest.main()

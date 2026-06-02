@@ -165,7 +165,16 @@ All pages share the chrome from `_layouts/default.html`: `topnav.html` + skip-li
 
 - **`_data/talks.yml`** — list of talks. Each entry: `date` (ISO), `what`, `where`,
   `city`, `status` (`upcoming` | `past`), `type` (`talk` | `workshop` | `keynote`),
-  `duration` (minutes), `abstract`, optional `slides` (URL), optional `video` (URL).
+  `duration` (minutes), `abstract`, optional `slides` (URL), optional `video` (URL),
+  `source` (`innoq` | `manual`), optional `source_url` (required when
+  `source: innoq`). The `source` marker distinguishes sync-maintained entries
+  from hand-edited ones — `source: innoq` entries are owned by the INNOQ
+  talks sync workflow (infrastructure BC, infra-011 / ADR-0007); `source: manual`
+  entries are read-skipped by the sync and survive across runs untouched.
+  `source_url` is the canonical INNOQ detail URL and acts as the cross-run
+  identity key. The layout (`_layouts/talks.html`) and card include
+  (`_includes/talk-card.html`) do not render `source` or `source_url`; they
+  are pure sync metadata.
 - **`_data/focus.yml`** — list of focus-area cards. Each entry: `key` (matches
   `post.topic`), `label`, `blurb`, `count`.
 - **`_data/about.yml`** — top-level key `quick_facts`: list of `{key, value}` pairs
