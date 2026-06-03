@@ -12,6 +12,47 @@ Newest entries on top.
 **Bounced:** 0
 **Failed:** 0
 **Escalated after verification:** 0
+**Commits:** 1 (83b086f)
+
+---
+
+## 2026-06-03 -- Task verified and completed: design-system-004 - Portrait styling
+
+**Type:** Work / Task completion
+**Task:** design-system-004 - Portrait styling: drop grayscale filter and tinted background for cutout PNG
+**Summary:** Removed `filter: grayscale(1) contrast(1.1) brightness(0.92)` and `background-color: color-mix(in oklab, var(--fg) 6%, transparent)` from `.jt .v1-portrait` and `.jt .about-portrait` in `_sass/_layout.scss`. Both selectors are now geometry-only. BC README's "Duotone (image slot)" vocabulary entry replaced by asset-agnostic "Portrait slot". Fixes the doubled-grayscale + visible-tinted-card effect on the new cutout portrait PNG from website-007.
+**Verification:** PASS (iteration 1) — verifier confirmed clean jekyll build (0.344s) and grep-confirmed no `grayscale` and no `color-mix` inside the two portrait rule blocks in the generated `_site/assets/css/main.css`.
+**Commit:** 83b086f
+**Files changed:** 3 (2 worker + moved task file)
+**Tests added:** 0 (CSS change; build-clean + grep is the test)
+**ADRs written:** none (refinement of an existing token under ADR-0005; no new architectural decision)
+
+---
+
+## 2026-06-03 -- Batch started: [design-system-004]
+
+**Type:** Work / Batch start
+**Tasks:** design-system-004 - Portrait styling: drop grayscale filter and tinted background for cutout PNG
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-06-03 -- Model / Captured: design-system-004 - Portrait styling: drop grayscale filter and tinted background
+
+**Type:** Model / Capture
+**BC:** design-system
+**Filed to:** todo (then doing — back-to-back capture+work in this session)
+**Summary:** Nach website-007 hat Joshua bemerkt, dass das frische Porträt grau und mit sichtbarem Rand erscheint. Ursache: `_sass/_layout.scss` setzt auf `.v1-portrait` und `.about-portrait` zusätzlich `filter: grayscale(1) contrast(1.1) brightness(0.92)` und `background-color: color-mix(in oklab, var(--fg) 6%, transparent)` — beides sinnvoll für ein rechteckiges Foto mit eigenem Hintergrund (Annahme aus website-001), aber falsch für das jetzt gelieferte freigestellte, bereits-grayscale Cutout-PNG. Joshua entscheidet: beide Properties an beiden Selektoren entfernen.
+
+---
+
+## 2026-06-03 -- Work session ended
+
+**Type:** Work / Session end
+**Completed:** 1 (first-try PASS: 1, re-dispatched: 0, skipped: 0)
+**Bounced:** 0
+**Failed:** 0
+**Escalated after verification:** 0
 **Commits:** 1 (2d39e35)
 
 ---

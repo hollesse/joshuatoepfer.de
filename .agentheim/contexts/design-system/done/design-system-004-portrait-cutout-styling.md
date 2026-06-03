@@ -6,7 +6,7 @@ type: refactor
 context: design-system
 created: 2026-06-03
 completed: 2026-06-03
-commit:
+commit: 83b086f
 depends_on: [website-007]
 blocks: []
 tags: [portrait, tokens, css, monochrome]
