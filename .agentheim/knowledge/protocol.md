@@ -5,6 +5,74 @@ Newest entries on top.
 
 ---
 
+## 2026-06-03 -- Task verified and completed: website-009 - Bot-resistant email contact
+
+**Type:** Work / Task completion
+**Task:** website-009 - Bot-resistant email contact
+**Summary:** Vier `mailto:hallo@joshuatoepfer.de`-Klartext-Vorkommen (Footer, About, Talks, Impressum) durch zwei Web Components ersetzt: `<jt-email-protected>` mit Stufe-4-Schutz (base64-Fragmente + Interaction-Gate ≥150 ms nach `pointermove`/`keydown`/`touchstart`/`scroll`/`focusin`) für `hallo@` in Footer/About/Talks, `<jt-email-readable>` mit CSS-Assembly für die opferbare Impressum-Adresse `impressum@joshuatoepfer.de` (JS-frei lesbar gemäß §5 DDG, kein `mailto:`-Link). ADR-0008 dokumentiert die Architektur, die 4-Stufen-Schutzskala und den bewusst akzeptierten CSS-Leak fürs Impressum.
+**Verification:** PASS (iteration 1) — Verifier hat `bundle exec jekyll build` sauber durchlaufen lassen und alle vier Grep-Hooks gegen `_site/` bestätigt: keine `hallo@joshuatoepfer.de` als Text, keine `mailto:hallo@…`/`mailto:impressum@…`, kein zusammenhängender `impressum@joshuatoepfer.de`-String (sogar besser als Spec — die Bestandteile sind in `style="--u:'impressum'; --d:'joshuatoepfer.de'"` per Quote/Semicolon getrennt). Code-Review der Custom-Element-Logik in `assets/js/email-elements.js` (Time-Gate, REVEAL_EVENTS, spoken-form aria-label) als Surrogat für nicht-vorhandene Browser-Test-Infra. BC-README mit drei neuen Vocabulary-Einträgen + Pages-Inventar-Updates. ADR-0008 wohlgeformt, 7 Alternativen explizit verworfen mit Begründung.
+**Commit:** eeed4fe
+**Files changed:** 9 (worker production files) + 1 (moved task file)
+**Tests added:** 0 (Browser-Custom-Element-Verhalten; Grep-Hooks auf `_site/` sind die testbare Surrogat-Assertion, vom Verifier ausgeführt)
+**ADRs written:** 0008-email-obfuscation-strategy.md (scope: website)
+
+---
+
+## 2026-06-03 -- Batch started: [website-009]
+
+**Type:** Work / Batch start
+**Tasks:** website-009 - Bot-resistant email contact
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-06-03 -- Model / Promoted: website-009 - Bot-resistant email contact
+
+**Type:** Model / Promote
+**BC:** website
+**From → To:** backlog → todo
+**Summary:** Promote-Kriterien erfüllt — konkrete Acceptance-Criteria mit Grep-Hooks im gerenderten `_site/`, klarer Scope (zwei Custom Elements, definierte Dateien), beide Dependencies erledigt (`design-system-001` und `infra-012` jetzt in `done/`). Bereit für Worker-Aufnahme.
+
+---
+
+## 2026-06-03 -- Model / Completed (out-of-band): infra-012 - Mail-Postfach impressum@
+
+**Type:** Model / Task completion (manual)
+**BC:** infrastructure
+**Status after:** backlog → done
+**Summary:** Joshua hat den Chore selbst erledigt: kein separates Postfach nötig, weil eine **Catchall-Adresse** auf `joshuatoepfer.de` aktiv ist — jede `*@joshuatoepfer.de`-Mail landet in Joshuas Posteingang. `impressum@` funktioniert damit automatisch. Nuance gegenüber dem ursprünglich gedachten "Postfach löschen"-Plan: im Spam-Notfall braucht es eine provider-seitige Reject-Regel auf den Local-Part `impressum` plus Local-Part-Wechsel auf der Impressum-Seite. Notiert in `website-009` und in den Task-Notes von `infra-012`. Kein Code-Commit (Provider-Konfig außerhalb des Repo). `website-009`-Blocker damit aufgelöst.
+
+---
+
+## 2026-06-03 -- Model / Refined: website-009 - Bot-resistant email contact
+
+**Type:** Model / Refine
+**BC:** website
+**Status after:** backlog
+**Summary:** Architektur-Refinement zu zwei Custom Elements mit asymmetrischem Schutz: `<jt-email-protected>` für `hallo@` (Footer/About/Talks) mit Interaction-Gate (≥150 ms nach Load + erstes `pointermove`/`keydown`/`touchstart`/`scroll`/`focusin`-Event), base64-Fragmente in `data-`-Attributen, kein `<noscript>`-Leak mit Adress-Bestandteilen; `<jt-email-readable>` für `impressum@` (Impressum) mit CSS-Assembly via inline-custom-properties, light-DOM-Span als no-JS-Fallback (§5 DDG verlangt Lesbarkeit ohne JS), bewusst kein `mailto:`-Link. Zwei Adressen → `impressum@` opferbar im Spam-Notfall, `hallo@` als sticky Primär-Adresse maximal geschützt. Verworfen mit Begründung: Kontaktformular (User-Wunsch sichtbare Adresse), Bild-Rendering (A11y + OCR), Cloudflare-Obfuscation (DNS-Eingriff), Honeypot-Decoys (Blacklist-Risiko), AES-JS (kein realer Mehrwert ggü. base64). Acceptance-Criteria mit konkreten Grep-Hooks für den Worker formuliert. ADR-Auftrag im Task notiert (`00XX-email-obfuscation-strategy`).
+**Split into:** infra-012 (Mail-Postfach `impressum@` einrichten — Provider-Konfig; harter Blocker)
+**ADRs written:** none (ADR wird beim Implementieren geschrieben, nicht jetzt)
+
+---
+
+## 2026-06-03 -- Model / Captured: infra-012 - Mail-Postfach impressum@ einrichten
+
+**Type:** Model / Capture
+**BC:** infrastructure
+**Filed to:** backlog
+**Summary:** Chore: bei Joshuas Mail-Provider ein Postfach (oder eine Weiterleitung) für `impressum@joshuatoepfer.de` anlegen. Dient `website-009` als opferbare Wegwerf-Adresse für die §5-DDG-Pflichtangabe im Impressum. Reiner Provider-Konfig-Eingriff, Joshua führt das selbst aus. `blocks: [website-009]`.
+
+---
+
+## 2026-06-03 -- Model / Captured: website-009 - Bot-resistant email contact
+
+**Type:** Model / Capture
+**BC:** website
+**Filed to:** backlog
+**Summary:** Joshua möchte die Kontakt-Adresse `hallo@joshuatoepfer.de` so darstellen, dass naïve Scraper sie nicht extrahieren können, ohne die Erreichbarkeit für Menschen zu verlieren. Heute steht die Adresse im Klartext + `mailto:` an vier Stellen (Footer, About, Talks, Impressum). Backlog statt Todo, weil drei echte Entscheidungen offen sind: Obfuskations-Technik (JS-rebuild vs. Entities vs. CSS vs. Kombination), Mailto vs. Netlify-Forms-Formular, und der Non-JS-Fallback fürs Impressum (Impressumspflicht). Out of scope: Adresse selbst ändern, `_config.yml`, eigenes Form-Backend.
+
+---
+
 ## 2026-06-03 -- Work session ended
 
 **Type:** Work / Session end

@@ -13,7 +13,7 @@ research touching this BC, and concept synthesis pages.
 - **Backlog:** 0
 - **Todo:** 0
 - **Doing:** 0
-- **Done:** 8
+- **Done:** 9
 <!-- task-counts:end -->
 
 ### Todo
@@ -26,6 +26,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **website-009** — Bot-resistant email contact — two custom elements (`<jt-email-protected>` interaction-gated for `hallo@`, `<jt-email-readable>` CSS-assembled for `impressum@`); ADR-0008 — 2026-06-03 — `done/website-009-bot-resistant-email-contact.md`
 - **website-008** — Focus card post count — derive from real posts instead of hardcoded number — 2026-06-03 — `done/website-008-focus-card-real-post-count.md`
 - **website-007** — Homepage portrait image — wire up joshua-toepfer-transparent.png — 2026-06-03 — `done/website-007-homepage-portrait-image.md`
 - **website-006** — Homepage talks fallback — recent past talks when none upcoming — 2026-06-02 — `done/website-006-homepage-talks-fallback.md`
@@ -43,6 +44,7 @@ research touching this BC, and concept synthesis pages.
 ## ADRs scoped to this BC
 
 <!-- adr-local:start -->
+- **0008** — Email obfuscation strategy: two-address architecture with asymmetric protection (interaction-gate JS-assembly for primary, CSS-assembly for legal) — 2026-06-03 — `../../knowledge/decisions/0008-email-obfuscation-strategy.md`
 <!-- adr-local:end -->
 
 ## Research touching this BC
