@@ -351,3 +351,16 @@
   slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-zuhause-aber-nicht-allein-slides/v1/uploads-production/rretlq2hdqv54u7idu5h0ewcw1sc?_a=BACMTiAE
   source: innoq
   source_url: https://www.innoq.com/de/talks/2023/11/remote-mob-programming-zuhause-aber-nicht-allein/
+- date: '2026-09-25'
+  what: ADHS in der IT - Vom Choas zum Code
+  where: JUG Saxony Day
+  city: Radebeul
+  status: upcoming
+  type: talk
+  duration: 60
+  abstract: 'ADHS ist mehr als nur das Bild des zappeligen Kindes — gerade in der IT-Branche sind viele Erwachsene betroffen, oft ohne es zu wissen. Doch ADHS kann sowohl Fluch als auch Segen sein: Die kreativen Höhenflüge und der tiefe Hyperfokus sind oft genauso präsent wie das chaotische Durcheinander und der ständige Kampf mit Prokrastination.
+
+
+    In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kollegen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen — egal, ob als Betroffene oder als Kollegen.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2026/09/adhs-in-der-it-vom-choas-zum-code-jug-saxony-day-2026/
