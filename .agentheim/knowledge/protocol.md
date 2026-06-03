@@ -11,7 +11,7 @@ Newest entries on top.
 **Task:** website-008 - Focus card post count — derive from real posts instead of hardcoded number
 **Summary:** `_layouts/home.html` leitet die Beitragszahl pro Focus-Card jetzt zur Build-Zeit aus `published_posts | where: "topic", f.key | size` ab statt aus hartkodierten Zahlen; `count` aus `_data/focus.yml` entfernt; BC-README aktualisiert (Ubiquitous Language "Focus area" + Data file shapes für `_data/focus.yml`). Singular/Plural-Polish mitgenommen (`{% if topic_count == 1 %}BEITRAG{% else %}BEITRÄGE{% endif %}`).
 **Verification:** PASS (iteration 1) — verifier bestätigte sauberen `bundle exec jekyll build` und im gerenderten `_site/index.html` die korrekten Zahlen `ensemble: 2 BEITRÄGE`, `adhs: 0 BEITRÄGE`, `softdev: 0 BEITRÄGE` (passend zu den zwei `topic: ensemble`-Posts).
-**Commit:** <pending>
+**Commit:** da6947e
 **Files changed:** 4 (3 worker + moved task file)
 **Tests added:** 0 (template change; build-clean + rendered-output-grep ist der Test)
 **ADRs written:** none (Zählweise war im Task-Notes bereits entschieden, keine neue Architektur-Entscheidung)

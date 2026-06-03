@@ -6,7 +6,7 @@ type: bug
 context: website
 created: 2026-06-03
 completed: 2026-06-03
-commit:
+commit: da6947e
 depends_on: []
 blocks: []
 tags: [homepage, focus, count, schwerpunkte]
