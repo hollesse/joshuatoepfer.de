@@ -12,6 +12,47 @@ Newest entries on top.
 **Bounced:** 0
 **Failed:** 0
 **Escalated after verification:** 0
+**Commits:** 1 (179f776)
+
+---
+
+## 2026-06-03 -- Task verified and completed: infra-013 - Doku-Konsistenz herstellen — GitHub Pages statt Netlify in operativer Doku
+
+**Type:** Work / Task completion
+**Task:** infra-013 - Doku-Konsistenz herstellen — GitHub Pages statt Netlify in operativer Doku
+**Summary:** Operative Doku (Context-Map + Infrastructure-BC-README + Top-Level Knowledge-Index) spiegelt jetzt GitHub Pages als heutigen Hoster wider; Netlify ist als geplante Migrations-Option per ADR-0001 explizit gekennzeichnet, statt als aktueller Zustand. ADRs (0001, 0004) und `netlify.toml` bleiben unverändert. Worker hat 2 Dateien geändert, der Orchestrator hat anschließend `.agentheim/knowledge/index.md` nachgezogen (BC-Beschreibung).
+**Verification:** PASS (iteration 1) — Verifier bestätigte: alle 3 verbleibenden Netlify-Treffer in den geänderten Dateien sind als geplante Migration / ADR-Referenz formuliert, kein „Netlify ist heutiger Hoster"-Statement übrig; ADR-0001 und ADR-0004 per `git diff` als unverändert verifiziert; `netlify.toml` und `_config.yml` unangetastet; Jekyll-Build `bundle exec jekyll build --quiet` exit 0; Top-Level `knowledge/index.md` korrekt vom Worker nicht editiert (orchestrator-owned).
+**Commit:** 179f776
+**Files changed:** 3 (2 worker + 1 orchestrator-owned `knowledge/index.md`)
+**Tests added:** 0 (reine Doku; Jekyll-Build + Grep-Hooks sind die testbare Surrogat-Assertion, vom Verifier ausgeführt)
+**ADRs written:** none
+
+---
+
+## 2026-06-03 -- Batch started: [infra-013]
+
+**Type:** Work / Batch start
+**Tasks:** infra-013 - Doku-Konsistenz herstellen — GitHub Pages statt Netlify in operativer Doku
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-06-03 -- Model / Captured: infra-013 - Doku-Konsistenz herstellen — GitHub Pages statt Netlify in operativer Doku
+
+**Type:** Model / Capture
+**BC:** infrastructure
+**Filed to:** todo (sofort direkt → doing/)
+**Summary:** Aus dem Datenschutz-Korrektur-Commit (`75d8ca8`) wurde sichtbar, dass mehrere operative Dokus (context-map, knowledge/index, infrastructure-BC-README) Netlify als heutigen Hoster beschreiben, obwohl ADR-0004 das auf GitHub Pages umgestellt hat. Reine Doku-Korrektur: aktuellen Zustand spiegeln, geplante Netlify-Migration als geplante Migration kennzeichnen, ADRs (historischer Record) und `netlify.toml` (Vorhalte-Konfig laut ADR-0004) explizit *nicht* anfassen. Verifikations-Hook: `grep -rE 'Netlify' …` zeigt nur noch historische/geplante Treffer.
+
+---
+
+## 2026-06-03 -- Work session ended
+
+**Type:** Work / Session end
+**Completed:** 1 (first-try PASS: 1, re-dispatched: 0, skipped: 0)
+**Bounced:** 0
+**Failed:** 0
+**Escalated after verification:** 0
 **Commits:** 2 (8b31dcd + ea32ab0)
 
 ---

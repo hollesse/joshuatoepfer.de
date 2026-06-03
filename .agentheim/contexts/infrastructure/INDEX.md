@@ -13,7 +13,7 @@ research touching this BC, and concept synthesis pages.
 - **Backlog:** 0
 - **Todo:** 0
 - **Doing:** 0
-- **Done:** 12
+- **Done:** 13
 <!-- task-counts:end -->
 
 ### Todo
@@ -26,6 +26,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **infra-013** — Doku-Konsistenz herstellen — GitHub Pages statt Netlify in operativer Doku (context-map + infrastructure README; ADRs bleiben historisch) — 2026-06-03 — `done/infra-013-doc-consistency-github-pages.md`
 - **infra-012** — Mail-Postfach `impressum@joshuatoepfer.de` — gelöst per Catchall-Adresse auf der Domain (alle `*@joshuatoepfer.de`) — 2026-06-03 — `done/infra-012-impressum-mail-postfach.md`
 - **infra-011** — INNOQ talks sync workflow (scrape `/de/talks/?all=true&by=joshua-toepfer` → PR) — 2026-06-02 — `done/infra-011-innoq-talks-sync.md`
 - **infra-010** — Fix srcset parser to handle Cloudinary commas-in-URL — 2026-06-02 — `done/infra-010-fix-srcset-parser-cloudinary-commas.md`
