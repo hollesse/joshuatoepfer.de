@@ -962,3 +962,19 @@
 .jt .legal-body {
   padding: 56px 80px 88px;
 }
+
+// ---- Bot-resistant email contact ------------------------------------------
+//
+// `.email-static` is the no-JS fallback inside <jt-email-readable> on the
+// Impressum page. The address is assembled at render-time from the inline
+// custom properties --u and --d on the span itself; without JS the span is
+// the only thing the user sees, with JS the custom element's shadow DOM
+// replaces it visually but the light-DOM span stays in the source as the
+// bewusst akzeptierte Lesbarkeits-Leak (§5 DDG requires JS-free legibility).
+
+.jt .email-static {
+  color: inherit;
+}
+.jt .email-static::before {
+  content: var(--u) "@" var(--d);
+}

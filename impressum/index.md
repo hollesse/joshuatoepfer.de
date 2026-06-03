@@ -13,7 +13,7 @@ Krischerstraße 100<br>
 
 ## Kontakt
 
-E-Mail: [hallo@joshuatoepfer.de](mailto:hallo@joshuatoepfer.de)
+E-Mail: <jt-email-readable user="impressum" domain="joshuatoepfer.de"><span class="email-static" style="--u:'impressum'; --d:'joshuatoepfer.de'" aria-label="E-Mail: impressum at joshuatoepfer punkt de"></span></jt-email-readable>
 
 ## Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV
 

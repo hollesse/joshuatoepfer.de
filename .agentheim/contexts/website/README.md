@@ -57,6 +57,25 @@ Core
   Software Dev); JS-driven via `assets/js/blog-filter.js`. Class `.filter-chip[data-topic]`
 - **Speaker profile** — the call-to-action block at the bottom of `/talks/` with
   topics, formats, and booking links. Class `.speaker-section` / `.speaker-block`
+- **Email-protected element** — bot-resistant rendering of the primary contact
+  address `hallo@joshuatoepfer.de` on Footer / About / Talks. Custom element
+  `<jt-email-protected user="…" domain="…">` with base64-encoded user/domain
+  attributes; renders a placeholder button and only assembles the live
+  `mailto:`-anchor after the first human input event (`pointermove`, `keydown`,
+  `touchstart`, `scroll`, or `focusin`) ≥150 ms after load. The `<noscript>`
+  slot carries only a JS-activation hint, never any address parts. Backed by
+  `assets/js/email-elements.js`. See ADR-0008 for the obfuscation strategy.
+- **Email-readable element** — JS-free legible rendering of the Impressum's
+  opferbare contact address `impressum@joshuatoepfer.de`. Custom element
+  `<jt-email-readable user="impressum" domain="joshuatoepfer.de">` wraps a
+  light-DOM `<span class="email-static" style="--u:'…'; --d:'…'">` whose
+  global CSS rule (`.email-static::before { content: var(--u) "@" var(--d) }`)
+  assembles the address visually even without JS — required by §5 DDG. No
+  `mailto:` link. Address parts are bewusst akzeptierter Leak: split across
+  CSS-custom-properties in inline `style`, never a contiguous string.
+- **`.email-static`** — the no-JS fallback span used inside `<jt-email-readable>`.
+  CSS-only address assembly via `::before` pseudo-element and the inline
+  `--u` / `--d` custom properties on the span itself.
 
 ## Aggregates
 - **Post** — title + date + source form the identity; syndicated posts must retain the
@@ -92,7 +111,12 @@ names follow ADR-0005 section 7.
 
 All pages share the chrome from `_layouts/default.html`: `topnav.html` + skip-link
 + `<main>` + `footer.html`, plus `head-canonical.html` and the theme-toggle script.
-`theme-toggle.html` is rendered inside the topnav.
+`theme-toggle.html` is rendered inside the topnav. `assets/js/email-elements.js`
+is also loaded globally (defer) to back the `<jt-email-protected>` and
+`<jt-email-readable>` custom elements wherever they appear. The shared footer
+(`_includes/footer.html`) surfaces the primary contact address
+`hallo@joshuatoepfer.de` via `<jt-email-protected>` (no more `mailto:` link
+in the static HTML).
 
 ### `/` — homepage
 - **Layout:** `home` (`_layouts/home.html`)
@@ -139,8 +163,9 @@ All pages share the chrome from `_layouts/default.html`: `topnav.html` + skip-li
 - **Includes used:** `talk-card.html` (variants `upcoming` and `past`)
 - **Component vocabulary:** `.talks-hero`, `.talks-section` (`--upcoming` / `--past`)
   with `.talks-section-head`, `.talks-row` (with `--past` modifier) + `.type-pill`,
-  `.speaker-section` + `.speaker-block` + `.topic-chips` + `.chip` + `.formats` +
-  `.downloads`, `.accent-mark`, `.label-eyebrow`
+  `.speaker-section` + `.speaker-block` (booking CTA renders the
+  `hallo@joshuatoepfer.de` contact via `<jt-email-protected>`) + `.topic-chips` +
+  `.chip` + `.formats` + `.downloads`, `.accent-mark`, `.label-eyebrow`
 
 ### `/ueber-mich/` — about
 - **Layout:** `about` (`_layouts/about.html`); source page is `ueber-mich/index.md`
@@ -149,7 +174,8 @@ All pages share the chrome from `_layouts/default.html`: `topnav.html` + skip-li
 - **Includes used:** none beyond the shared chrome
 - **Component vocabulary:** `.about-hero` (re-using `.hero`), `.about-portrait` (with
   `.v1-portrait--placeholder` fallback), `.about-body-layout` + `.about-body-grid` +
-  `.post-body` + `.quick-facts` (`<dl>`), `.contact-cta`, `.accent-mark`,
+  `.post-body` + `.quick-facts` (`<dl>`), `.contact-cta` (renders the
+  `hallo@joshuatoepfer.de` contact via `<jt-email-protected>`), `.accent-mark`,
   `.label-eyebrow`
 
 ### `/impressum/` — legal: imprint
@@ -158,7 +184,9 @@ All pages share the chrome from `_layouts/default.html`: `topnav.html` + skip-li
   `last_updated`) plus the markdown body
 - **Includes used:** none beyond the shared chrome
 - **Component vocabulary:** `.legal-hero` (with `.back-link`, optional `.updated`),
-  `.legal-body` + `.post-body`, `.accent-mark`
+  `.legal-body` + `.post-body`, `.accent-mark`. The Kontakt section embeds the
+  opferbare legal address `impressum@joshuatoepfer.de` via `<jt-email-readable>`
+  + `.email-static` (no `mailto:`; CSS-assembly stays JS-free per §5 DDG).
 
 ### `/datenschutz/` — legal: privacy
 - **Layout:** `page` (`_layouts/page.html`); source page is `datenschutz/index.md`
