@@ -1,17 +1,16 @@
 # Schwerpunkte — angezeigt auf der Startseite unter "MEINE SCHWERPUNKTE".
-# Fields: key (slug, matches post.topic), label, blurb, count
+# Fields: key (slug, matches post.topic), label, blurb
+# Hinweis: Der Post-Count pro Schwerpunkt wird im Layout aus `site.posts`
+# per `topic == key` abgeleitet (siehe `_layouts/home.html`).
 
 - key: ensemble
   label: "Ensemble Programming"
   blurb: "Code schreibt sich besser zu siebt. Wie man Sessions strukturiert, Rollen wechselt und das Driver/Navigator-Modell ad absurdum führt."
-  count: 14
 
 - key: adhs
   label: "ADHS in der IT"
   blurb: "Hyperfokus, Reizfilter, Exekutivfunktion: was Neurodivergenz mit Softwareentwicklung macht — und wie Teams davon profitieren."
-  count: 9
 
 - key: softdev
   label: "Software Development"
   blurb: "Architektur, Refactoring, Test-Strategien. Pragmatisch, kontextabhängig, ohne Dogma. Meistens in Java, manchmal in Kotlin."
-  count: 27

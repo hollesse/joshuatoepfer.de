@@ -31,7 +31,9 @@ Core
 - **Tag** — a fine-grained label on a Post (e.g., `ensemble-programming`, `adhs`); a
   post belongs to exactly one **topic** but may carry multiple tags
 - **Focus area (Schwerpunkt)** — one of the three topics presented as a card on the
-  homepage with label, blurb, and post count; canonical data in `_data/focus.yml`
+  homepage with label and blurb; canonical data in `_data/focus.yml`. The post count
+  shown on each card is derived in the layout from `site.posts` filtered by `topic`
+  (no longer stored in the data file).
 - **Quick fact** — a key/value pair shown in the sidebar on `/ueber-mich/`; canonical
   data in `_data/about.yml` under `quick_facts`
 - **Legal page** — a page rendered with the `page` layout, used for `/impressum/` and
@@ -180,7 +182,9 @@ All pages share the chrome from `_layouts/default.html`: `topnav.html` + skip-li
   (`_includes/talk-card.html`) do not render `source` or `source_url`; they
   are pure sync metadata.
 - **`_data/focus.yml`** — list of focus-area cards. Each entry: `key` (matches
-  `post.topic`), `label`, `blurb`, `count`.
+  `post.topic`), `label`, `blurb`. The card's post count is computed at build time
+  in `_layouts/home.html` (`site.posts | where: "topic", key | size`); it is not
+  stored as data.
 - **`_data/about.yml`** — top-level key `quick_facts`: list of `{key, value}` pairs
   for the about-page sidebar.
 

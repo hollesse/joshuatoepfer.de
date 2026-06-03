@@ -13,7 +13,7 @@ research touching this BC, and concept synthesis pages.
 - **Backlog:** 0
 - **Todo:** 0
 - **Doing:** 0
-- **Done:** 7
+- **Done:** 8
 <!-- task-counts:end -->
 
 ### Todo
@@ -26,6 +26,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **website-008** — Focus card post count — derive from real posts instead of hardcoded number — 2026-06-03 — `done/website-008-focus-card-real-post-count.md`
 - **website-007** — Homepage portrait image — wire up joshua-toepfer-transparent.png — 2026-06-03 — `done/website-007-homepage-portrait-image.md`
 - **website-006** — Homepage talks fallback — recent past talks when none upcoming — 2026-06-02 — `done/website-006-homepage-talks-fallback.md`
 - **website-005** — Syndicated post polish: visible source link at end + working TOC — 2026-06-01 — `done/website-005-syndicated-post-polish.md`

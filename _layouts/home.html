@@ -46,8 +46,9 @@ layout: default
   </h2>
   <div class="v1-focus">
     {% for f in focus %}
+      {%- assign topic_count = published_posts | where: "topic", f.key | size -%}
       <div class="focus-card">
-        <div class="count mono">{{ f.count }} BEITRÄGE</div>
+        <div class="count mono">{{ topic_count }} {% if topic_count == 1 %}BEITRAG{% else %}BEITRÄGE{% endif %}</div>
         <h3>{{ f.label }}</h3>
         <p>{{ f.blurb }}</p>
         <a href="{{ '/blog/?topic=' | append: f.key | relative_url }}" class="focus-link link">Posts lesen →</a>
