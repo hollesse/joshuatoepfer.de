@@ -20,13 +20,15 @@
 - **Key actors:** Joshua (sole designer/developer, signs off on the styleguide)
 
 ### infrastructure
-- **Purpose:** Everything that makes the site run and stay current — Netlify deployment
-  configuration, GitHub Actions CI/CD pipeline, and the automated sync workflows that
+- **Purpose:** Everything that makes the site run and stay current — GitHub Pages
+  deployment, GitHub Actions CI/CD pipeline, and the automated sync workflows that
   pull content from innoq.com and open pull requests. Owns globally-true operational
-  concerns; BC-local concerns stay in the originating BC.
+  concerns; BC-local concerns stay in the originating BC. A migration to Netlify
+  remains a planned future option per ADR-0001, but is not the current state
+  (ADR-0004 made GitHub Pages the initial deployment target).
 - **Core language:** build, deploy, sync workflow, sync PR, pipeline
 - **Classification:** supporting
-- **Key actors:** GitHub Actions (automated runner), Joshua (PR reviewer), Netlify (host)
+- **Key actors:** GitHub Actions (automated runner), Joshua (PR reviewer), GitHub Pages (host)
 
 ## Relationships
 

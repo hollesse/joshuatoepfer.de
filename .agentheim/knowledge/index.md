@@ -13,7 +13,7 @@ For BC-scoped artifacts, see each BC's `INDEX.md`.
 <!-- bc-list:start -->
 - **website** — The Jekyll site: content model, layouts, templates for posts and talks — `contexts/website/INDEX.md`
 - **design-system** — Visual identity: dark-mode theme, typography, color tokens, components — `contexts/design-system/INDEX.md`
-- **infrastructure** — Netlify deployment, GitHub Actions CI/CD, innoq.com content sync workflows — `contexts/infrastructure/INDEX.md`
+- **infrastructure** — GitHub Pages deployment, GitHub Actions CI/CD, innoq.com content sync workflows — `contexts/infrastructure/INDEX.md`
 <!-- bc-list:end -->
 
 ## Global ADRs (scope: global)
