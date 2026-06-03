@@ -1,0 +1,26 @@
+// =============================================================================
+// FONTS
+// Self-hosted Variable Fonts: Geist + Geist Mono (SIL OFL 1.1).
+// Files live under assets/fonts/ and ship through Jekyll as-is.
+// Loaded before _base.scss so .jt's font-family references resolve locally.
+// No third-party connection — replaces former Google Fonts CDN link (see
+// design-system-005).
+// =============================================================================
+
+@font-face {
+  font-family: "Geist";
+  src: url("../fonts/Geist-Variable.woff2") format("woff2-variations"),
+       url("../fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("../fonts/GeistMono-Variable.woff2") format("woff2-variations"),
+       url("../fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}

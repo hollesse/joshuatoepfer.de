@@ -20,7 +20,12 @@ Supporting
 - **Design tokens** — `_sass/_tokens.scss` (neutrals per mode + the
   amber/coral/blue/lime accent matrix in oklch)
 - **Typography** — `_sass/_typography.scss` (`.post-body` prose) and
-  `_sass/_base.scss` (`.jt` container, Geist/Geist Mono setup)
+  `_sass/_base.scss` (`.jt` container, Geist/Geist Mono setup);
+  `@font-face`-Deklarationen liegen in `_sass/_fonts.scss`
+- **Self-hosted fonts** — Geist und Geist Mono als Variable-WOFF2 unter
+  `assets/fonts/` (eingebunden via `_sass/_fonts.scss`, SIL OFL 1.1,
+  `OFL.txt` liegt daneben). Kein Google-Fonts-CDN-Aufruf mehr (siehe
+  design-system-005).
 - **Page layouts** — `_layouts/{default,home,blog,post,talks,about,page}.html`
   (the contract that website pages plug into)
 - **Components** — `_sass/_layout.scss` (`.topnav`, `.row`, `.chip`,
@@ -122,5 +127,7 @@ scratch-built decision.)
 - The light-mode accent variants are borderline for WCAG AA *body-text*
   contrast against `--bg: #f7f7f5` (4.5:1 threshold); tracked in
   `design-system-002`.
-- Geist/Geist Mono are currently loaded from Google Fonts CDN; Joshua's
-  preference for self-hosting (data-protection) is not yet implemented.
+- Geist/Geist Mono werden seit design-system-005 lokal als Variable-WOFF2
+  unter `assets/fonts/` ausgeliefert (kein Google-Fonts-CDN-Aufruf mehr,
+  keine Drittlandübermittlung). `@font-face`-Block in `_sass/_fonts.scss`,
+  Lizenz `OFL.txt` liegt neben den Font-Dateien.

@@ -59,26 +59,12 @@ Daten, keine Übertragung an mich oder Dritte.
 - **Löschung:** über die Storage-Verwaltung deines Browsers jederzeit
   möglich.
 
-## Schriftarten (Google Fonts)
+## Schriftarten
 
-Diese Seite bindet derzeit die Schriftarten **Geist** und **Geist Mono**
-über Google Fonts ein (Google LLC, 1600 Amphitheatre Parkway, Mountain
-View, CA 94043, USA). Beim Laden der Seite stellt dein Browser eine
-Verbindung zu `fonts.googleapis.com` und `fonts.gstatic.com` her und
-übermittelt dabei deine IP-Adresse sowie technische Metadaten an Google.
-
-- **Zweck:** einheitliche Darstellung der Typografie.
-- **Rechtsgrundlage:** Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse
-  an konsistenter visueller Darstellung).
-- **Drittlandübermittlung:** Übermittlung in die USA erfolgt auf
-  Grundlage des EU-US-Data-Privacy-Framework und ergänzender
-  Standardvertragsklauseln.
-- **Hinweis:** Eine Umstellung auf lokales Self-Hosting der
-  Schriftartdateien ist geplant, um diese Drittlandübermittlung
-  vollständig zu vermeiden. Bis dahin kannst du externe Schriften
-  über die Privatsphäre-Einstellungen deines Browsers blockieren —
-  die Seite fällt in dem Fall auf System-Schriftarten zurück und
-  bleibt vollständig lesbar.
+Die Schriftarten **Geist** und **Geist Mono** werden direkt von dieser
+Seite ausgeliefert (selbst gehostet, abgelegt unter `assets/fonts/`).
+Es findet **keine** Verbindung zu Google Fonts statt — beim Aufruf der
+Seite werden in diesem Zusammenhang keine Daten an Dritte übermittelt.
 
 ## Kontaktaufnahme per E-Mail
 
@@ -141,6 +127,10 @@ die deines gewöhnlichen Aufenthaltsorts.
 ## Änderungen dieser Datenschutzerklärung
 
 Diese Erklärung wird angepasst, wenn sich die Art der Datenverarbeitung
-auf dieser Seite ändert (etwa beim Umstieg auf lokales Self-Hosting
-der Schriftarten). Es gilt jeweils die zum Zeitpunkt deines Besuchs
-abrufbare Version, sichtbar am Datum unten in dieser Erklärung.
+auf dieser Seite ändert. Es gilt jeweils die zum Zeitpunkt deines
+Besuchs abrufbare Version, sichtbar am Datum unten in dieser Erklärung.
+
+- **2026-06-03:** Schriftarten werden ab sofort selbst gehostet
+  (Geist + Geist Mono als WOFF2 unter `assets/fonts/`); die
+  vorherige Einbindung über Google Fonts und die damit verbundene
+  Drittlandübermittlung an Google LLC entfallen.

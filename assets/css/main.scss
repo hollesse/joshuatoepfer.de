@@ -3,9 +3,11 @@
 // =============================================================================
 // MAIN STYLESHEET
 // Entry point — imports partials in dependency order.
-// Geist + Geist Mono are loaded via <link> in _layouts/default.html.
+// Geist + Geist Mono are self-hosted Variable WOFF2s under assets/fonts/
+// and declared via @font-face in _sass/_fonts.scss (see design-system-005).
 // =============================================================================
 
+@use "fonts";
 @use "tokens";
 @use "base";
 @use "typography";
