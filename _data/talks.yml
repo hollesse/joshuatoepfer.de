@@ -336,6 +336,7 @@
   duration: 40
   abstract: Das ganze Team sitzt in einem Online-Meeting und entwickelt gemeinsam. Einer tippt den Code, die anderen diskutieren. Klingt ungewöhnlich? Das ist Remote Mob Programming, eine spannende Arbeitsweise für verteilte Teams. Seit über 3 Jahren arbeitet Joshua Töpfer Vollzeit in einem Remote Mob und möchte nicht mehr anders arbeiten. Was es damit auf sich hat, was die Vor- und Nachteile dieser Methodik sind und wie ihr herausfinden könnt, ob diese Methodik etwas für euer Team ist, erfahrt ihr in diesem Vortrag.
   slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-die-besondere-art-des-teamworks-slides/v1/uploads-production/72tpq7wwlgrsjaol5v0sd9vu5rct?_a=BACMTiAE
+  video: https://www.youtube.com/watch?v=Oblh2OE-z1c
   source: innoq
   source_url: https://www.innoq.com/de/talks/2023/12/remote-mob-programming-die-besondere-art-des-teamworks/
 - date: '2023-11-15'
