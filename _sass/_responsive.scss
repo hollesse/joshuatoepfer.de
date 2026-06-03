@@ -205,7 +205,8 @@
     font-size: 36px !important;
     letter-spacing: -0.022em !important;
   }
-  .jt .contact-cta a { font-size: 18px !important; }
+  .jt .contact-cta a,
+  .jt .contact-cta jt-email-protected { font-size: 18px !important; }
 
   // Legal page
   .jt .legal-hero { padding: 56px 22px 0 !important; }

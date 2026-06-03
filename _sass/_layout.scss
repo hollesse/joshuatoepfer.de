@@ -914,7 +914,8 @@
   max-width: 18ch;
   text-wrap: balance;
 }
-.jt .contact-cta a {
+.jt .contact-cta a,
+.jt .contact-cta jt-email-protected {
   font-size: 24px;
   color: var(--accent);
   letter-spacing: -0.01em;
