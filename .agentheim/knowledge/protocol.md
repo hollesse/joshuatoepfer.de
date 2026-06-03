@@ -5,6 +5,47 @@ Newest entries on top.
 
 ---
 
+## 2026-06-03 -- Work session ended
+
+**Type:** Work / Session end
+**Completed:** 1 (first-try PASS: 1, re-dispatched: 0, skipped: 0)
+**Bounced:** 0
+**Failed:** 0
+**Escalated after verification:** 0
+**Commits:** 1 (2d39e35)
+
+---
+
+## 2026-06-03 -- Task verified and completed: website-007 - Homepage portrait image
+
+**Type:** Work / Task completion
+**Task:** website-007 - Homepage portrait image — wire up joshua-toepfer-transparent.png
+**Summary:** Wired up `site.portrait_image` in `_config.yml` to `assets/images/joshua-toepfer-transparent.png`; homepage (and consequently `/ueber-mich/`) now renders the portrait via the existing `.v1-portrait` background-image slot instead of the placeholder. Corrected the stale portrait path in the website BC README's pages inventory.
+**Verification:** PASS (iteration 1) — verifier ran `bundle exec jekyll build` (clean, 0.391s) and confirmed `_site/index.html` contains `.v1-portrait` with `background-image: url('/assets/images/joshua-toepfer-transparent.png')` and no `--placeholder` fallback.
+**Commit:** 2d39e35
+**Files changed:** 4 (2 worker + image asset + moved task file)
+**Tests added:** 0 (config change; build-clean + grep is the test)
+**ADRs written:** none
+
+---
+
+## 2026-06-03 -- Batch started: [website-007]
+
+**Type:** Work / Batch start
+**Tasks:** website-007 - Homepage portrait image — wire up joshua-toepfer-transparent.png
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-06-03 -- Model / Captured: website-007 - Homepage portrait image
+
+**Type:** Model / Capture
+**BC:** website
+**Filed to:** todo
+**Summary:** Joshua hat `assets/images/joshua-toepfer-transparent.png` ergänzt und will es auf der Startseite einbinden. Der Layout-Slot (`site.portrait_image` in `_layouts/home.html`) existiert seit website-001 — fehlt nur der Eintrag in `_config.yml`. Direkt nach `todo/` geschrieben, weil Scope minimal ist (ein Config-Key + README-Path-Korrektur). Hinweis im Task: dieselbe Variable wird auch von `_layouts/about.html` konsumiert, das Bild taucht damit ebenfalls auf `/ueber-mich/` auf — bei Bedarf vorher klären.
+
+---
+
 ## 2026-06-02 15:00 -- Backfill: website-006 - Homepage talks fallback
 
 **Type:** Backfill / Capture-as-done

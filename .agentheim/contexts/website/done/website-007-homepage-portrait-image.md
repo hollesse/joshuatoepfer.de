@@ -6,7 +6,7 @@ type: feature
 context: website
 created: 2026-06-03
 completed: 2026-06-03
-commit:
+commit: 2d39e35
 depends_on: []
 blocks: []
 tags: [homepage, portrait, image, config]
