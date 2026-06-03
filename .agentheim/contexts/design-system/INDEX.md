@@ -11,14 +11,13 @@ research touching this BC, and concept synthesis pages.
 
 <!-- task-counts:start -->
 - **Backlog:** 0
-- **Todo:** 1
+- **Todo:** 0
 - **Doing:** 0
-- **Done:** 4
+- **Done:** 5
 <!-- task-counts:end -->
 
 ### Todo
 <!-- todo-list:start -->
-- **design-system-005** — Self-host fonts (Geist + Geist Mono) for DSGVO compliance — remove `fonts.googleapis.com` from chrome, ship WOFF2 variable fonts under `assets/fonts/`, drop Google-Fonts section from `datenschutz/index.md` — `todo/design-system-005-self-host-fonts.md`
 <!-- todo-list:end -->
 
 ### Doing
@@ -27,6 +26,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **design-system-005** — Self-host fonts (Geist + Geist Mono) for DSGVO compliance — Variable-WOFF2 unter `assets/fonts/`, eingebunden via `_sass/_fonts.scss`; Google-Fonts-CDN-Calls vollständig entfernt — 2026-06-03 — `done/design-system-005-self-host-fonts.md`
 - **design-system-004** — Portrait styling: drop grayscale filter and tinted background for cutout PNG — 2026-06-03 — `done/design-system-004-portrait-cutout-styling.md`
 - **design-system-002** — WCAG AA fix — route text-bearing elements to AA-passing tokens — 2026-05-28 — `done/design-system-002-wcag-aa-token-audit.md`
 - **design-system-003** — Document redesigned visual system (Geist + oklch + multi-accent + container queries) — 2026-05-27 — `done/design-system-003-document-redesign.md`

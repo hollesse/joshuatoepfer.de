@@ -5,6 +5,27 @@ Newest entries on top.
 
 ---
 
+## 2026-06-03 -- Task verified and completed: design-system-005 - Self-host fonts (Geist + Geist Mono) for DSGVO compliance
+
+**Type:** Work / Task completion
+**Task:** design-system-005 - Self-host fonts (Geist + Geist Mono) for DSGVO compliance
+**Summary:** Geist und Geist Mono werden ab sofort als selbst gehostete Variable-WOFF2 unter `assets/fonts/` ausgeliefert (eingebunden via neuem `_sass/_fonts.scss`-Partial mit `font-display: swap`); die `<link>`-Einträge zu `fonts.googleapis.com`/`fonts.gstatic.com` sind aus `_layouts/default.html` entfernt, die Datenschutzerklärung dokumentiert den Wegfall der Drittlandübermittlung, und der `OFL.txt` (SIL Open Font License 1.1) liegt als Pflicht-Attribution neben den Font-Dateien.
+**Verification:** PASS (iteration 1) — Verifier bestätigte saubereren `bundle exec jekyll build`, null Treffer für `fonts.googleapis.com`/`fonts.gstatic.com` im `_site/`, beide WOFF2 + OFL.txt korrekt durchkopiert nach `_site/assets/fonts/`, beide `@font-face`-Blöcke mit lokalen `../fonts/`-URLs im kompilierten `main.css`, `font-family: "Geist"`/`"Geist Mono"`-Referenzen auf `.jt`/`.label-eyebrow`/`.post-body code` intakt, ADR-0005 unverändert. OFL.txt verifiziert als echte SIL Open Font License 1.1 mit Copyright-Attribution.
+**Commit:** 8b31dcd
+**Files changed:** 8 (worker production files) + 1 (moved task file)
+**Tests added:** 0 (pure config/data migration; jekyll-build + 5 Grep-Hooks im `_site/` sind die testbare Surrogat-Assertion, vom Verifier ausgeführt)
+**ADRs written:** none (ADR-0005's "Consequences > Negative"-Bullet zur Google-Fonts-Abhängigkeit bleibt als historischer Kontext stehen; kein neuer ADR erforderlich)
+
+---
+
+## 2026-06-03 -- Batch started: [design-system-005]
+
+**Type:** Work / Batch start
+**Tasks:** design-system-005 - Self-host fonts (Geist + Geist Mono) for DSGVO compliance
+**Parallel:** no (1 worker)
+
+---
+
 ## 2026-06-03 -- Model / Captured: design-system-005 - Self-host fonts (Geist + Geist Mono) for DSGVO compliance
 
 **Type:** Model / Capture

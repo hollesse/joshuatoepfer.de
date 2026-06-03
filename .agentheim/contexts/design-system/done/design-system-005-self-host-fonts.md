@@ -1,12 +1,12 @@
 ---
 id: design-system-005
 title: Self-host fonts (Geist + Geist Mono) for DSGVO compliance
-status: todo
+status: done
 type: bug
 context: design-system
 created: 2026-06-03
-completed:
-commit:
+completed: 2026-06-03
+commit: 8b31dcd
 depends_on: [design-system-001]
 blocks: []
 tags: [typography, privacy, dsgvo, fonts, self-hosting]
@@ -158,3 +158,47 @@ als separaten kleinen Folge-Task aufnehmen, nicht hier reinpressen.
   Header). Auf Netlify-Bandwidth-Budget vernachlässigbar.
 - **Build-Zeit** bleibt identisch — Jekyll kopiert die Dateien aus
   `assets/` einfach durch.
+
+## Outcome
+
+Geist und Geist Mono werden ab sofort lokal ausgeliefert — der Datenfluss
+zu Google LLC, der den DSGVO-Verstoß ausgelöst hat, ist beseitigt.
+
+Umsetzung:
+- `assets/fonts/Geist-Variable.woff2` (68 KB) und
+  `assets/fonts/GeistMono-Variable.woff2` (70 KB) ins Repo aufgenommen,
+  direkt aus dem offiziellen Vercel-Repo
+  (`github.com/vercel/geist-font`, SIL OFL 1.1).
+- `assets/fonts/OFL.txt` beigelegt (Lizenz-Attribution).
+- Neues SCSS-Partial `_sass/_fonts.scss` enthält die `@font-face`-
+  Deklarationen für beide Familien (Variable, Weight-Range 100–900,
+  `font-display: swap`).
+- `assets/css/main.scss` importiert `fonts` als ersten Partial,
+  vor `tokens` und `base`.
+- `_layouts/default.html`: drei Zeilen entfernt (zwei `preconnect`-
+  Links zu Google + Stylesheet-Link zu `fonts.googleapis.com`).
+- `datenschutz/index.md`: "Schriftarten (Google Fonts)"-Abschnitt
+  entfernt und durch eine kurze "Schriftarten"-Sektion ersetzt
+  (selbst gehostet, keine Drittübermittlung); Eintrag unter
+  "Änderungen dieser Datenschutzerklärung" zum 2026-06-03 ergänzt.
+- BC-README aktualisiert (Typography-Inventory + Notes/future-direction
+  Hinweis zu Self-Hosting).
+
+Verifikation:
+- `bundle exec jekyll build --quiet` läuft sauber durch.
+- `grep -rE 'fonts\.(googleapis|gstatic)\.com' _site/` → 0 Treffer.
+- `_site/assets/fonts/` enthält beide WOFF2 + `OFL.txt`.
+- `_site/assets/css/main.css` enthält genau zwei `@font-face`-Blöcke
+  mit lokalen URLs (`url("../fonts/Geist-Variable.woff2")` und
+  `url("../fonts/GeistMono-Variable.woff2")`).
+- `_site/index.html` enthält keinerlei `preconnect`- oder
+  Google-Fonts-Links mehr.
+
+Key files:
+- `_sass/_fonts.scss` (new)
+- `assets/fonts/Geist-Variable.woff2`, `assets/fonts/GeistMono-Variable.woff2`,
+  `assets/fonts/OFL.txt` (new)
+- `assets/css/main.scss` (import order)
+- `_layouts/default.html` (Google-Fonts-Links entfernt)
+- `datenschutz/index.md` (Sektion umformuliert + Änderungs-Eintrag)
+- `.agentheim/contexts/design-system/README.md` (Typography-Inventory)
