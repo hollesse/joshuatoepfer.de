@@ -19,25 +19,28 @@ Voraussetzungen nach Art. 37 DSGVO nicht erfüllt sind.
 
 ## Hosting und Server-Logs
 
-Diese Seite wird bei **Netlify, Inc.** (44 Montgomery Street, Suite 300,
-San Francisco, CA 94104, USA) gehostet. Beim Aufruf erhebt Netlify
-technisch notwendige Daten in Server-Logs: aufgerufene URL, Zeitpunkt
-des Aufrufs, Browser- und Betriebssystem-Kennung (User-Agent),
-Referrer-URL und IP-Adresse.
+Diese Seite wird bei **GitHub Pages** gehostet, einem Dienst der
+**GitHub, Inc.** (88 Colin P. Kelly Jr. Street, San Francisco, CA 94107,
+USA), einer Tochtergesellschaft der Microsoft Corporation. Beim Aufruf
+erhebt GitHub technisch notwendige Daten in Server-Logs: aufgerufene
+URL, Zeitpunkt des Aufrufs, Browser- und Betriebssystem-Kennung
+(User-Agent), Referrer-URL und IP-Adresse.
 
 - **Zweck:** Sicherstellung des stabilen Betriebs, Auslieferung der
   Inhalte, Erkennung und Abwehr von Angriffen.
 - **Rechtsgrundlage:** Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse
   am sicheren Betrieb dieser Website).
-- **Speicherdauer:** Netlify-Logs werden nach Angaben des Anbieters nur
-  kurzzeitig vorgehalten und nicht mit anderen Datenquellen
-  zusammengeführt.
-- **Drittlandübermittlung:** Netlify hat seinen Sitz in den USA. Die
-  Übermittlung erfolgt auf Grundlage des EU-US-Data-Privacy-Framework
-  (Angemessenheitsbeschluss der EU-Kommission vom 10.07.2023) sowie
-  ergänzend auf Basis von Standardvertragsklauseln gemäß Art. 46 Abs. 2
-  lit. c DSGVO. Mit Netlify besteht ein Auftragsverarbeitungsvertrag
-  nach Art. 28 DSGVO.
+- **Speicherdauer:** GitHub gibt an, Access-Logs in der Regel **bis zu
+  30 Tage** vorzuhalten. Eine Zusammenführung mit anderen Datenquellen
+  findet nach Angaben des Anbieters nicht statt.
+- **Drittlandübermittlung:** GitHub hat seinen Sitz in den USA. Die
+  Übermittlung erfolgt auf Grundlage des **EU-US-Data-Privacy-Framework**
+  (Angemessenheitsbeschluss der EU-Kommission vom 10.07.2023; GitHub ist
+  DPF-zertifiziert) sowie ergänzend auf Basis von Standardvertragsklauseln
+  gemäß Art. 46 Abs. 2 lit. c DSGVO. Es gilt das
+  **GitHub Data Protection Addendum** (DPA) als Auftragsverarbeitungs­
+  vereinbarung nach Art. 28 DSGVO. Details zur Datenverarbeitung durch
+  GitHub: <https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement>.
 
 ## Cookies
 
@@ -134,3 +137,8 @@ Besuchs abrufbare Version, sichtbar am Datum unten in dieser Erklärung.
   (Geist + Geist Mono als WOFF2 unter `assets/fonts/`); die
   vorherige Einbindung über Google Fonts und die damit verbundene
   Drittlandübermittlung an Google LLC entfallen.
+- **2026-06-03:** Korrektur der Hosting-Angabe — diese Seite wird
+  bei GitHub Pages (GitHub, Inc., USA) gehostet, nicht bei Netlify.
+  Frühere Versionen dieser Erklärung nannten Netlify; das war eine
+  Verwechslung mit einer geplanten, aber nicht umgesetzten
+  Migration.
