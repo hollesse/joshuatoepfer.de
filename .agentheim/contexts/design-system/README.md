@@ -75,9 +75,15 @@ original design brief and will be deleted.
   canonical-source note). Selector `.post-hero .meta-line`.
 - **Subtitle** — the sub-headline beneath a hero H1
   (`.post-hero .subtitle`).
-- **Duotone (image slot)** — image presentation pattern applied to
-  portraits: `filter: grayscale(1) contrast(1.1) brightness(0.92)`.
-  Used by `.v1-portrait` (home) and `.about-portrait` (about).
+- **Portrait slot** — fixed-size image box used for Joshua's portrait
+  on home (`.v1-portrait`, 460×620) and about (`.about-portrait`,
+  460×580). Geometry only: `background-size: cover`,
+  `background-position: center`, `border-radius: 2px`. The slot is
+  asset-agnostic — no `filter` or `background-color` is applied at
+  the CSS layer; any duotone/grayscale treatment lives in the image
+  asset itself (current asset:
+  `assets/images/joshua-toepfer-transparent.png`, a pre-grayscale
+  cutout PNG; see design-system-004).
 - **Year-divider** — large mono year label between year groups on the
   blog index page (`.blog-year-divider`).
 - **Filter-chip** — interactive chip in the blog filter bar
