@@ -5,6 +5,15 @@ Newest entries on top.
 
 ---
 
+## 2026-06-03 -- Model / Captured: design-system-005 - Self-host fonts (Geist + Geist Mono) for DSGVO compliance
+
+**Type:** Model / Capture
+**BC:** design-system
+**Filed to:** todo
+**Summary:** Direkt nach dem Datenschutz-Rewrite (`f29989b`) sichtbar geworden: Google Fonts wird live aus `fonts.googleapis.com` geladen, beim Seitenaufruf wird die Besucher-IP an Google LLC (USA) übermittelt. Seit LG München I 20 O 17493/20 (20.01.2022) ein abmahnbarer DSGVO-Verstoß (~€100 Schadensersatz typisch). Fix-Pfad konkret: Geist + Geist Mono als Variable-Fonts (WOFF2) unter `assets/fonts/` ablegen, per `@font-face` aus SCSS-Partial einbinden, `<link>`- und `preconnect`-Einträge zu Google aus `_layouts/default.html` entfernen, "Schriftarten (Google Fonts)"-Sektion aus `datenschutz/index.md` herausnehmen. Routing zu `design-system` weil Typografie deren Ubiquitous Language ist; der `_layouts/default.html`-Touch ist der website-BC-Berührungspunkt, explizit in den Task-Notes festgehalten. Direkt nach `todo/` mit Grep-Verifikations-Hooks für den Worker.
+
+---
+
 ## 2026-06-03 -- Work session ended
 
 **Type:** Work / Session end

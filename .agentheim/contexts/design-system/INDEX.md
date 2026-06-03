@@ -11,13 +11,14 @@ research touching this BC, and concept synthesis pages.
 
 <!-- task-counts:start -->
 - **Backlog:** 0
-- **Todo:** 0
+- **Todo:** 1
 - **Doing:** 0
 - **Done:** 4
 <!-- task-counts:end -->
 
 ### Todo
 <!-- todo-list:start -->
+- **design-system-005** — Self-host fonts (Geist + Geist Mono) for DSGVO compliance — remove `fonts.googleapis.com` from chrome, ship WOFF2 variable fonts under `assets/fonts/`, drop Google-Fonts section from `datenschutz/index.md` — `todo/design-system-005-self-host-fonts.md`
 <!-- todo-list:end -->
 
 ### Doing
