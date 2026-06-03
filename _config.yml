@@ -7,6 +7,11 @@ author:
   name: "Joshua Töpfer"
   email: "joshua.toepfer@innoq.com"
 
+# Portrait image used by the home and about layouts (rendered as background-image
+# of the .v1-portrait / .about-portrait box). Path is relative to site root; the
+# layouts apply `relative_url` to prepend baseurl.
+portrait_image: assets/images/joshua-toepfer-transparent.png
+
 # Jekyll settings
 markdown: kramdown
 permalink: /posts/:year/:month/:day/:title/

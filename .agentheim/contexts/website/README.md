@@ -102,7 +102,7 @@ All pages share the chrome from `_layouts/default.html`: `topnav.html` + skip-li
     DER BÜHNE" instead of "KOMMENDE TALKS". The section is hidden only if
     both sets are empty.
   - `site.data.focus` (the three focus-area cards)
-  - `site.portrait_image` (config; portrait at `assets/images/portrait.jpg`)
+  - `site.portrait_image` (config; portrait at `assets/images/joshua-toepfer-transparent.png`)
 - **Includes used:** `post-card.html` (style `compact`), `talk-card.html` (variant `home`)
 - **Component vocabulary:** `.v1-hero`, `.v1-portrait` (with `--placeholder` fallback),
   `.v1-section-head`, `.v1-focus` + `.focus-card`, `.v1-talk`, `.accent-mark`,
