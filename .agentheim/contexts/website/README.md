@@ -116,7 +116,11 @@ is also loaded globally (defer) to back the `<jt-email-protected>` and
 `<jt-email-readable>` custom elements wherever they appear. The shared footer
 (`_includes/footer.html`) surfaces the primary contact address
 `hallo@joshuatoepfer.de` via `<jt-email-protected>` (no more `mailto:` link
-in the static HTML).
+in the static HTML). `_includes/head-canonical.html` also emits a global
+`<meta name="robots" content="noindex, nofollow">` tag on every page — this is
+**intentional and temporary**: search-engine indexing is blocked until the site
+launch (task website-010). To lift the block, remove that line from
+`head-canonical.html` and delete the root-level `robots.txt`.
 
 ### `/` — homepage
 - **Layout:** `home` (`_layouts/home.html`)
@@ -215,6 +219,15 @@ in the static HTML).
   stored as data.
 - **`_data/about.yml`** — top-level key `quick_facts`: list of `{key, value}` pairs
   for the about-page sidebar.
+
+### Site-wide files
+
+- **`robots.txt`** (repo root) — static file copied verbatim to `_site/robots.txt`
+  by Jekyll. Currently serves `User-agent: * / Disallow: /` to block all crawlers
+  while the site is pre-launch (task website-010). Paired with the global
+  `<meta name="robots" content="noindex, nofollow">` in `head-canonical.html`
+  for defensive layering, because GitHub Pages does not allow custom HTTP
+  headers like `X-Robots-Tag`. Delete this file once the launch block is lifted.
 
 ### Note on legacy `/posts/`
 The earlier `/posts/` listing (introduced in website-002) has been removed; the blog

@@ -1,0 +1,4 @@
+# Site under construction — block indexing until launch.
+# Reverse: delete this file when ready to go live. See task website-010.
+User-agent: *
+Disallow: /
