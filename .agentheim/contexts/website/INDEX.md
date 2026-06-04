@@ -13,7 +13,7 @@ research touching this BC, and concept synthesis pages.
 - **Backlog:** 0
 - **Todo:** 0
 - **Doing:** 0
-- **Done:** 9
+- **Done:** 10
 <!-- task-counts:end -->
 
 ### Todo
@@ -26,6 +26,7 @@ research touching this BC, and concept synthesis pages.
 
 ### Done (most recent first; older entries kept for prior-art search)
 <!-- done-list:start -->
+- **website-010** — Block search-engine indexing until launch — `robots.txt` (`Disallow: /`) + globales `<meta name="robots" content="noindex, nofollow">` via `head-canonical.html` — 2026-06-04 — `done/website-010-block-search-engine-indexing.md`
 - **website-009** — Bot-resistant email contact — two custom elements (`<jt-email-protected>` interaction-gated for `hallo@`, `<jt-email-readable>` CSS-assembled for `impressum@`); ADR-0008 — 2026-06-03 — `done/website-009-bot-resistant-email-contact.md`
 - **website-008** — Focus card post count — derive from real posts instead of hardcoded number — 2026-06-03 — `done/website-008-focus-card-real-post-count.md`
 - **website-007** — Homepage portrait image — wire up joshua-toepfer-transparent.png — 2026-06-03 — `done/website-007-homepage-portrait-image.md`

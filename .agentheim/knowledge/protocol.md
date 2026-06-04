@@ -5,6 +5,47 @@ Newest entries on top.
 
 ---
 
+## 2026-06-04 -- Work session ended
+
+**Type:** Work / Session end
+**Completed:** 1 (first-try PASS: 1, re-dispatched: 0, skipped: 0)
+**Bounced:** 0
+**Failed:** 0
+**Escalated after verification:** 0
+**Commits:** 1 (d51ac0b)
+
+---
+
+## 2026-06-04 -- Task verified and completed: website-010 - Block search-engine indexing until launch
+
+**Type:** Work / Task completion
+**Task:** website-010 - Block search-engine indexing until launch
+**Summary:** Defensive Indexierungs-Blockade verdrahtet: `robots.txt` an Site-Root mit `User-agent: * / Disallow: /` plus globales `<meta name="robots" content="noindex, nofollow">` via `_includes/head-canonical.html` auf jeder gerenderten Seite. `jekyll-seo-tag` und `jekyll-sitemap` bleiben aktiv (Sitemap wird weiter generiert, Bots, die noindex respektieren, indexieren auch von dort nicht). Reverse-Anleitung im BC-README und in den Task-Notes festgehalten.
+**Verification:** PASS (iteration 1) — Verifier bestätigte: `_site/robots.txt` mit `User-agent: * / Disallow: /`; alle 9 gerenderten HTML-Seiten enthalten den `<meta name="robots">`-Tag (`grep -rL` leer); `_site/sitemap.xml` weiter generiert; `_config.yml` unangetastet; `bundle exec jekyll build --quiet` exit 0; BC-README mit Inline-Note in Shared-Chrome + neuer „Site-wide files"-Subsektion korrekt aktualisiert, beides mit Hinweis auf website-010 und Reverse-Prozedur.
+**Commit:** d51ac0b
+**Files changed:** 3 (worker production files) + 1 (moved task file)
+**Tests added:** 0 (reine Statik-/Konfig-Änderung; Jekyll-Build + Per-Page-Grep auf das Meta-Tag sind die testbare Surrogat-Assertion, vom Verifier ausgeführt)
+**ADRs written:** none
+
+---
+
+## 2026-06-04 -- Batch started: [website-010]
+
+**Type:** Work / Batch start
+**Tasks:** website-010 - Block search-engine indexing until launch
+**Parallel:** no (1 worker)
+
+---
+
+## 2026-06-04 -- Model / Captured: website-010 - Block search-engine indexing until launch
+
+**Type:** Model / Capture
+**BC:** website
+**Filed to:** todo
+**Summary:** Joshua möchte verhindern, dass Google & andere Suchmaschinen die Seite indexieren, solange sie noch im Aufbau ist (laufende Doku-/Datenschutz-/Visual-Korrekturen, Talks-Listing noch im Übergang). Zwei sich ergänzende Mechanismen: `robots.txt` mit `User-agent: * / Disallow: /` an der Site-Root + globales `<meta name="robots" content="noindex, nofollow">` im `<head>`. Defensiv geschichtet, weil GitHub Pages keine eigenen HTTP-Header (z. B. `X-Robots-Tag`) erlaubt. Direkt nach `todo/`, weil Scope und Umsetzungspfad eindeutig sind. Reverse-Anleitung in den Task-Notes festgehalten — keine separate Folge-Task in Backlog, die sonst nur als Hängematte rumliegen würde.
+
+---
+
 ## 2026-06-03 -- Work session ended
 
 **Type:** Work / Session end
