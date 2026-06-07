@@ -55,8 +55,8 @@
     This talk is for anyone curious about Ensemble Programming or already practicing it and seeking fresh insights.'
   slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:four-years-one-ensemble-challenges-aha-moments-and-true-team-transformation-slides/v1/uploads-production/0juwsmmi0inhx157dfjzuwh5b0f6?_a=BACMTiAE
   source: innoq
-  video: https://www.youtube.com/watch?v=dfIk-qnRtQ0
   source_url: https://www.innoq.com/de/talks/2026/03/four-years-one-ensemble-challenges-aha-moments-and-true-team-transformation/
+  video: https://www.youtube.com/watch?v=dfIk-qnRtQ0
 - date: '2025-10-08'
   what: 'ADHS in der IT: Vom Chaos zum Code'
   where: Berlin Expert Days (BED-Con 2025)
@@ -336,9 +336,9 @@
   duration: 40
   abstract: Das ganze Team sitzt in einem Online-Meeting und entwickelt gemeinsam. Einer tippt den Code, die anderen diskutieren. Klingt ungewöhnlich? Das ist Remote Mob Programming, eine spannende Arbeitsweise für verteilte Teams. Seit über 3 Jahren arbeitet Joshua Töpfer Vollzeit in einem Remote Mob und möchte nicht mehr anders arbeiten. Was es damit auf sich hat, was die Vor- und Nachteile dieser Methodik sind und wie ihr herausfinden könnt, ob diese Methodik etwas für euer Team ist, erfahrt ihr in diesem Vortrag.
   slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-die-besondere-art-des-teamworks-slides/v1/uploads-production/72tpq7wwlgrsjaol5v0sd9vu5rct?_a=BACMTiAE
-  video: https://www.youtube.com/watch?v=Oblh2OE-z1c
   source: innoq
   source_url: https://www.innoq.com/de/talks/2023/12/remote-mob-programming-die-besondere-art-des-teamworks/
+  video: https://www.youtube.com/watch?v=Oblh2OE-z1c
 - date: '2023-11-15'
   what: Remote Mob Programming — Zuhause, aber nicht allein
   where: c't web dev
@@ -366,3 +366,16 @@
     In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kollegen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen — egal, ob als Betroffene oder als Kollegen.'
   source: innoq
   source_url: https://www.innoq.com/de/talks/2026/09/adhs-in-der-it-vom-choas-zum-code-jug-saxony-day-2026/
+- date: '2026-09-25'
+  what: ADHS in der IT - Vom Chaos zum Code
+  where: JUG Saxony Day
+  city: Radebeul
+  status: upcoming
+  type: talk
+  duration: 60
+  abstract: 'ADHS ist mehr als nur das Bild des zappeligen Kindes — gerade in der IT-Branche sind viele Erwachsene betroffen, oft ohne es zu wissen. Doch ADHS kann sowohl Fluch als auch Segen sein: Die kreativen Höhenflüge und der tiefe Hyperfokus sind oft genauso präsent wie das chaotische Durcheinander und der ständige Kampf mit Prokrastination.
+
+
+    In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kollegen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen — egal, ob als Betroffene oder als Kollegen.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2026/09/adhs-in-der-it-vom-chaos-zum-code-jug-saxony-day-2026/
