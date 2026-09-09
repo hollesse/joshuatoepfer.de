@@ -13,6 +13,10 @@ davon in Teams, nicht alleine. Das ist kein Zufall: Ich glaube, dass die
 besten Systeme dort entstehen, wo mehrere Köpfe gleichzeitig auf das
 gleiche Problem schauen dürfen.
 
+Geschrieben habe ich schon deutlich länger als programmiert: Mein erster
+Blog hieß *Tech Fire* und startete um 2011 — lange bevor Software mein
+Beruf wurde.
+
 Mein Schwerpunkt ist **Ensemble Programming** — eine
 Variante des Pair Programmings mit mehr als zwei Beteiligten. Klingt nach
 Overhead, ist aber das Gegenteil: weniger Wartezeit, schnelleres
@@ -41,6 +45,6 @@ universelle Lösung — aber an sehr gute Praktiken im richtigen Kontext.
 
 ## Außerhalb des Editors
 
-Ich lese viel (zur Zeit vor allem zu Neurowissenschaft und Pädagogik),
-koche gerne und versuche, mit meinem Hund mindestens einmal am Tag
-raus zu gehen — Variable Pomodoro-Technik mit vier Pfoten.
+Ich singe in zwei Männerchören und einem Männervokalensemble, koche
+gerne und versuche, mit meinem Hund mindestens einmal am Tag raus zu
+gehen — Variable Pomodoro-Technik mit vier Pfoten.
