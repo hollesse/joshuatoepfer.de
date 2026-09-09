@@ -45,6 +45,6 @@ universelle Lösung — aber an sehr gute Praktiken im richtigen Kontext.
 
 ## Außerhalb des Editors
 
-Ich singe in zwei Männerchören und einem Männervokalensemble und gehe
-mit unserem Hund raus. Sonst spiele ich gerne mit ihm und meiner
-Tochter.
+Meine freie Zeit gehört vor allem meiner Tochter — meistens beim
+Spielen. Dazu kommt unser Hund, mit dem ich viel draußen unterwegs bin,
+und das Singen in zwei Männerchören und einem Männervokalensemble.
