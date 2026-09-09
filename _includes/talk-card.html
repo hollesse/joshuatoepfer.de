@@ -32,7 +32,12 @@ Params:
     </div>
     <div>
       <h3>{{ t.what }}</h3>
-      {% if t.abstract %}<p>{{ t.abstract }}</p>{% endif %}
+      {% if t.abstract %}
+        <details class="talk-abstract">
+          <summary class="mono"><span class="talk-abstract-toggle" data-closed="Beschreibung anzeigen" data-open="Beschreibung ausblenden"></span></summary>
+          <p>{{ t.abstract }}</p>
+        </details>
+      {% endif %}
       {% if t.slides or t.video %}
         <div class="links">
           {% if t.slides %}<a href="{{ t.slides }}" class="link mono" rel="noopener">↗ Slides</a>{% endif %}
@@ -55,7 +60,12 @@ Params:
     </div>
     <div>
       <h3>{{ t.what }}</h3>
-      {% if t.abstract %}<p>{{ t.abstract }}</p>{% endif %}
+      {% if t.abstract %}
+        <details class="talk-abstract">
+          <summary class="mono"><span class="talk-abstract-toggle" data-closed="Beschreibung anzeigen" data-open="Beschreibung ausblenden"></span></summary>
+          <p>{{ t.abstract }}</p>
+        </details>
+      {% endif %}
     </div>
     <div class="extras">
       <span class="type-pill type-pill--accent">{{ t.type | default: "talk" | replace: "talk", "Vortrag" | replace: "workshop", "Workshop" | replace: "keynote", "Keynote" }}</span>

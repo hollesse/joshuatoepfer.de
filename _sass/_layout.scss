@@ -685,6 +685,40 @@
   font-size: 14.5px;
   margin: 10px 0 14px;
 }
+.jt .talks-row .talk-abstract {
+  margin-top: 12px;
+}
+.jt .talks-row--past .talk-abstract {
+  margin: 10px 0 14px;
+}
+.jt .talks-row .talk-abstract p {
+  margin: 10px 0 0;
+}
+.jt .talks-row .talk-abstract summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  user-select: none;
+}
+.jt .talks-row .talk-abstract summary::-webkit-details-marker { display: none; }
+.jt .talks-row .talk-abstract summary::before {
+  content: "+";
+  font-weight: 500;
+  width: 1ch;
+}
+.jt .talks-row .talk-abstract[open] summary::before { content: "−"; }
+.jt .talks-row .talk-abstract summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.jt .talks-row .talk-abstract-toggle::after { content: attr(data-closed); }
+.jt .talks-row .talk-abstract[open] .talk-abstract-toggle::after { content: attr(data-open); }
 .jt .talks-row .extras {
   text-align: right;
 }
