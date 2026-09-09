@@ -36,13 +36,6 @@ Es heißt, dass es eine andere Bauart von Aufmerksamkeit ist — und dass
 Teams, die das verstehen, mit dieser Bauart sehr produktiv
 zusammenarbeiten können.
 
-## Was ich technisch mache
-
-Java und Kotlin, manchmal TypeScript. Microservices, Refactoring,
-Test-Strategien jenseits der klassischen Pyramide. Pragmatisch,
-kontextabhängig, ohne Dogma. Ich glaube nicht an „Best Practices" als
-universelle Lösung — aber an sehr gute Praktiken im richtigen Kontext.
-
 ## Außerhalb des Editors
 
 Meine freie Zeit gehört vor allem meiner Tochter — meistens beim

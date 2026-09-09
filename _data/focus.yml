@@ -13,4 +13,4 @@
 
 - key: softdev
   label: "Software Development"
-  blurb: "Architektur, Refactoring, Test-Strategien. Pragmatisch, kontextabhängig, ohne Dogma. Meistens in Java, manchmal in Kotlin."
+  blurb: "Architektur, Refactoring, Test-Strategien. Pragmatisch, kontextabhängig, ohne Dogma."
