@@ -685,40 +685,33 @@
   font-size: 14.5px;
   margin: 10px 0 14px;
 }
-.jt .talks-row .talk-abstract {
-  margin-top: 12px;
-}
-.jt .talks-row--past .talk-abstract {
-  margin: 10px 0 14px;
-}
-.jt .talks-row .talk-abstract p {
-  margin: 10px 0 0;
-}
-.jt .talks-row .talk-abstract summary {
+.jt .talk-abstract { margin-top: 10px; }
+.jt .talk-abstract summary {
+  display: inline-block;
   list-style: none;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  font-family: "Geist Mono", monospace;
   font-size: 12px;
+  color: var(--accent);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--accent);
-  user-select: none;
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100%;
+  background-size: 0 1px;
+  transition: background-size 0.2s ease;
 }
-.jt .talks-row .talk-abstract summary::-webkit-details-marker { display: none; }
-.jt .talks-row .talk-abstract summary::before {
-  content: "+";
-  font-weight: 500;
-  width: 1ch;
-}
-.jt .talks-row .talk-abstract[open] summary::before { content: "−"; }
-.jt .talks-row .talk-abstract summary:focus-visible {
+.jt .talk-abstract summary::-webkit-details-marker { display: none; }
+.jt .talk-abstract summary:hover { background-size: 100% 1px; }
+.jt .talk-abstract summary:focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 4px;
+  outline-offset: 3px;
 }
-.jt .talks-row .talk-abstract-toggle::after { content: attr(data-closed); }
-.jt .talks-row .talk-abstract[open] .talk-abstract-toggle::after { content: attr(data-open); }
+.jt .talk-abstract .talk-abstract__close { display: none; }
+.jt .talk-abstract[open] .talk-abstract__open { display: none; }
+.jt .talk-abstract[open] .talk-abstract__close { display: inline; }
+.jt .talk-abstract p { margin-top: 12px; }
+.jt .talks-row--past .talk-abstract p { margin-bottom: 0; }
+.jt .talks-row--past .talk-abstract + .links { margin-top: 14px; }
+
 .jt .talks-row .extras {
   text-align: right;
 }
@@ -795,6 +788,38 @@
   color: var(--fg-dim);
   margin: 0 0 20px;
   max-width: 44ch;
+}
+.jt .speaker-block .speaker-description {
+  margin: 0 0 20px;
+  max-width: 44ch;
+}
+.jt .speaker-block .speaker-description summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  user-select: none;
+}
+.jt .speaker-block .speaker-description summary::-webkit-details-marker { display: none; }
+.jt .speaker-block .speaker-description summary::before {
+  content: "+";
+  font-weight: 500;
+  width: 1ch;
+}
+.jt .speaker-block .speaker-description[open] summary::before { content: "−"; }
+.jt .speaker-block .speaker-description summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.jt .speaker-block .speaker-description-toggle::after { content: attr(data-closed); }
+.jt .speaker-block .speaker-description[open] .speaker-description-toggle::after { content: attr(data-open); }
+.jt .speaker-block .speaker-description .lead {
+  margin: 16px 0 0;
 }
 .jt .speaker-block .tail {
   font-size: 16px;

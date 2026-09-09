@@ -34,7 +34,7 @@ Params:
       <h3>{{ t.what }}</h3>
       {% if t.abstract %}
         <details class="talk-abstract">
-          <summary class="mono"><span class="talk-abstract-toggle" data-closed="Beschreibung anzeigen" data-open="Beschreibung ausblenden"></span></summary>
+          <summary class="mono"><span class="talk-abstract__open">+ Beschreibung</span><span class="talk-abstract__close">− Beschreibung</span></summary>
           <p>{{ t.abstract }}</p>
         </details>
       {% endif %}
@@ -62,7 +62,7 @@ Params:
       <h3>{{ t.what }}</h3>
       {% if t.abstract %}
         <details class="talk-abstract">
-          <summary class="mono"><span class="talk-abstract-toggle" data-closed="Beschreibung anzeigen" data-open="Beschreibung ausblenden"></span></summary>
+          <summary class="mono"><span class="talk-abstract__open">+ Beschreibung</span><span class="talk-abstract__close">− Beschreibung</span></summary>
           <p>{{ t.abstract }}</p>
         </details>
       {% endif %}
