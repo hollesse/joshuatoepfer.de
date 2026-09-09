@@ -45,6 +45,6 @@ universelle Lösung — aber an sehr gute Praktiken im richtigen Kontext.
 
 ## Außerhalb des Editors
 
-Ich singe in zwei Männerchören und einem Männervokalensemble, koche
-gerne und versuche, mit meinem Hund mindestens einmal am Tag raus zu
-gehen — Variable Pomodoro-Technik mit vier Pfoten.
+Ich singe in zwei Männerchören und einem Männervokalensemble und
+versuche, mit meinem Hund mindestens einmal am Tag raus zu gehen —
+Variable Pomodoro-Technik mit vier Pfoten.
