@@ -2,9 +2,9 @@
 layout: post
 title: Dein Team braucht Kollaboration, nicht mehr Kommunikation
 subtitle: Mehr Meetings haben noch kein Team gerettet. Was ich in vier Jahren Remote Ensemble stattdessen gelernt habe.
-date: '2025-04-23'
+date: '2026-09-22'
 topic: ensemble
-published: false
+published: true
 render_with_liquid: false
 ---
 
@@ -24,9 +24,9 @@ Kollaboration ist das Gegenteil davon. Nicht reden über die Arbeit, sondern die
 
 ## Ein Screen-Share, eine Tastatur, ein Team
 
-Seit gut vier Jahren arbeite ich in einem Remote Ensemble. Wer das noch nicht kennt: Eine Person teilt den Bildschirm und tippt. Alle anderen denken mit und sagen, was getippt werden soll. Nach ein paar Minuten wechselt die Tastatur. Das war's. Kein besonders cleveres Konzept, ehrlich gesagt.
+Seit gut vier Jahren arbeite ich in einem Remote Ensemble. Wer das noch nicht kennt: Eine Person teilt den Bildschirm und tippt. Alle anderen denken mit und sagen, was getippt werden soll. Nach ein paar Minuten wechselt die Tastatur. Das war's.
 
-Was mich daran am Anfang irritiert hat: Wir reden dabei permanent. Deutlich mehr als in jedem Team davor. Und trotzdem haben wir fast keine Meetings. Kein Daily, weil jeder weiß, was gestern passiert ist. Er war dabei. Kein Code Review, das drei Tage auf jemanden wartet, weil das Review parallel zum Schreiben passiert. Keine Frage im Channel „weiß jemand, wie das Deployment funktioniert?“, weil es niemanden gibt, der es als Einziger weiß.
+Was mich daran am Anfang irritiert hat: Wir reden dabei permanent. Deutlich mehr als in jedem Team davor. Und trotzdem haben wir fast keine Meetings. Kein Daily, weil jeder weiß, was gestern passiert ist. Sie waren dabei. Kein Code Review, das drei Tage auf jemanden wartet, weil das Review parallel zum Coden passiert. Keine Frage im Channel „weiß jemand, wie das Deployment funktioniert?“, weil es niemanden gibt, der es als Einziger weiß.
 
 Ich habe lange gebraucht, um zu verstehen, warum sich das so anders anfühlt, obwohl wir doch offensichtlich „mehr kommunizieren“. Die Antwort ist, glaube ich, banal: Es ist eine andere Sorte Reden. Kein Statusbericht. Ein gemeinsamer Gedanke, der laut ausgesprochen wird, während er entsteht.
 
@@ -36,7 +36,7 @@ Das Reflex-Meeting, das nach jeder Retro dazukommt, ist im Kern ein Reparaturver
 
 Ein Ensemble geht das Problem von der anderen Seite an. Wenn alle von Anfang an am selben Ding arbeiten, entsteht das Silo gar nicht. Man muss keine Brücke bauen, wenn kein Graben da ist.
 
-Und ja, ich weiß, was jetzt kommt. „Sechs Leute an einem Rechner, das kann sich doch niemand leisten.“ Ich habe diese Diskussion oft genug geführt. Meine ehrliche Antwort: Ich habe die Rechnung nie so genau aufgemacht, dass ich sie in einem Business Case verteidigen könnte. Was ich habe, sind vier Jahre, in denen kein Wissen mit einer Kündigung das Team verlassen hat, in denen kein Pull Request eine Woche lag und in denen niemand zurück aus dem Urlaub kam und erstmal zwei Tage brauchte, um wieder reinzukommen. Ob das die sechs Gehälter aufwiegt, kann ich nicht beweisen. Ich weiß nur, dass die Gegenrechnung, also parallele Einzelarbeit plus Kommunikations-Overhead, auch nie jemand aufmacht. Ihre Kosten stehen nur nicht im Kalender.
+Und ja, ich weiß, was jetzt kommt. „Sechs Leute an einem Rechner, das kann sich doch niemand leisten.“ Ich habe diese Diskussion oft genug geführt. Meine ehrliche Antwort: Ich habe die Rechnung nie so genau aufgemacht, dass ich sie in einem Business Case verteidigen könnte. Was ich habe, sind vier Jahre, in denen kein Wissen mit einer Kündigung das Team verlassen hat, in denen kein Pull Request eine Woche lag und in denen niemand zurück aus dem Urlaub kam und erstmal zwei Tage brauchte, um wieder reinzukommen. Ob das die sechs Gehälter aufwiegt, kann ich nicht beweisen. Ich weiß nur, dass die Gegenrechnung, also parallele Einzelarbeit plus Kommunikations-Overhead, auch nie jemand aufmacht. Ihre Kosten sind nur nicht so offensichtlich.
 
 Was ich nicht behaupte: dass das für jedes Team funktioniert. Es gibt Leute, für die permanentes Zusammenarbeiten anstrengend ist, und ich kann das aus eigener Erfahrung nachvollziehen. Es gibt Aufgaben, bei denen es Quatsch ist. Und es gibt Tage, an denen ich einfach allein sein will. Das Ensemble ist kein Allheilmittel. Es ist nur eine ziemlich gute Antwort auf eine Frage, die die meisten Teams falsch stellen.
 
