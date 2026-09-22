@@ -65,7 +65,7 @@ layout: default
   </div>
   <div>
     {% for t in upcoming_talks %}
-      {% include talk-card.html talk=t variant="home" %}
+      {% include talk-card.html talk=t variant="upcoming" %}
     {% endfor %}
   </div>
 </section>
@@ -77,7 +77,7 @@ layout: default
   </div>
   <div>
     {% for t in recent_past_talks %}
-      {% include talk-card.html talk=t variant="home" %}
+      {% include talk-card.html talk=t variant="past" %}
     {% endfor %}
   </div>
 </section>
