@@ -366,3 +366,47 @@
     In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kolleg:innen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler:innen, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen – egal, ob als Betroffene oder als Kollegen.'
   source: innoq
   source_url: https://www.innoq.com/de/talks/2026/11/adhs-in-der-it-vom-chaos-zum-code-technology-day/
+- date: '2026-12-09'
+  what: Vier Jahre Ensemble Programming – Was ich lange übersehen habe
+  where: IT Tage Frankfurt
+  city: Frankfurt am Main
+  status: upcoming
+  type: talk
+  duration: 45
+  abstract: 'Ensemble Programming verändert, wie Teams arbeiten. Das ist keine These, das ist Erfahrung. Wer einmal erlebt hat, wie sich Wissen, Vertrauen und Qualität im Ensemble entwickeln, will selten zurück. Diese Überzeugung hat sich nach mehr als vier Jahren nicht verändert.
+
+
+    Was sich verändert hat: der Blick.
+
+
+    Denn rückblickend wird sichtbar, was im Alltag unsichtbar blieb. Muster, die sich still einschleichen. Dinge, die driften, ohne Entscheidung, ohne den Moment, in dem jemand sagt: So wollen wir das nicht. Dinge, die man nicht sieht, obwohl man jeden Tag dabei ist.
+
+
+    Dieser Vortrag ist kein Best-of. Er ist ein ehrlicher Bericht von jemandem, der mehr als vier Jahre vollzeit als Entwickler im Ensemble gearbeitet hat. Eine Einladung, aus dem zu lernen, was lange übersehen wurde.
+
+
+    Für Teams, die Ensemble Programming kennen, und für alle, die tiefer verstehen wollen, was diese Arbeitsweise wirklich mit einem Team macht.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2026/12/vier-jahre-ensemble-programming-was-ich-lange-uebersehen-habe-it-tage-2026/
+- date: '2026-12-09'
+  what: 'Vergiss den Tech-Stack: Das Geheimnis erfolgreicher Teams liegt woanders!'
+  where: IT Tage Frankfurt
+  city: Frankfurt am Main
+  status: upcoming
+  type: talk
+  duration: 45
+  abstract: 'Das Team hat geliefert. Architektur gut durchdacht, der Code elegant, alles nach Plan. Und dann: Backlog leer. Keine To-dos mehr. Keine klaren Anforderungen. Nur eine unerwartete Frage: „Was machen wir jetzt?”
+
+
+    Was als Leerlauf begann, wurde zum Wendepunkt – und stellte alles in Frage, worauf wir bis dahin stolz waren.
+
+
+    Was bringt die beste Technik, wenn niemand sie bemerkt?
+
+
+    In diesem Vortrag geht es nicht um das nächste Framework, sondern um etwas Tieferes: Was unterscheidet Teams, die einfach nur Software bauen, von solchen, deren Arbeit echten Unterschied macht?
+
+
+    Es geht um datenbasierte Entscheidungen, Nutzerkontakt, Hypothesen, Irrtümer – und darum, wie aus einem klassischen Dev-Team ein produktfokussiertes, lernendes Team wurde.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2026/12/vergiss-den-tech-stack-das-geheimnis-erfolgreicher-teams-liegt-woanders-it-tage-2026/
