@@ -789,6 +789,40 @@ class FetchWithRetryTests(unittest.TestCase):
         # Sleeps: politeness, 30 (Retry-After).
         self.assertIn(30, sleeps)
 
+class FootnoteTests(unittest.TestCase):
+    """INNOQ footnotes → kramdown footnote syntax.
+
+    markdownify drops `id` attributes, so `<a href="#fn:1">` links were
+    kept while their `<li id="fn:1">` / `id="fnref:1"` anchors vanished.
+    pa11y flags such dangling in-page links. kramdown regenerates the
+    same ids from `[^1]` / `[^1]: …`.
+    """
+
+    HTML = (
+        '<article><p>Zitat.“ <a href="#fn:1" id="fnref:1" title="siehe Fußnote" '
+        'class="footnote">[1]</a> Weiter im Text.</p>'
+        '<foot-notes class="footnotes"><ol class="footnotes__list">'
+        '<li id="fn:1"><p><a href="https://example.org/x">Quelle</a> '
+        '<a href="#fnref:1" title="zurück zum Text" class="reversefootnote"> ↩︎</a></p></li>'
+        "</ol></foot-notes></article>"
+    )
+
+    def test_reference_becomes_kramdown_marker(self):
+        md = ic.convert_html_to_markdown(self.HTML)
+        self.assertIn("Zitat.“ [^1] Weiter im Text.", md)
+        self.assertNotIn("#fn:1", md)
+
+    def test_definition_appended(self):
+        md = ic.convert_html_to_markdown(self.HTML)
+        self.assertTrue(md.rstrip().endswith("[^1]: [Quelle](https://example.org/x)"), md)
+        self.assertNotIn("#fnref:1", md)
+        self.assertNotIn("↩", md)
+
+    def test_no_footnotes_unchanged(self):
+        md = ic.convert_html_to_markdown("<p>Plain</p>")
+        self.assertEqual(md, "Plain\n")
+
+
 
 if __name__ == "__main__":
     unittest.main()

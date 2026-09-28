@@ -252,6 +252,12 @@ def convert_html_to_markdown(html: str) -> str:
       `<article>` element. When such a structure is present in the input
       HTML, the conclusion content is merged into the article so the
       Fazit appears in the converted Markdown. See infra-009.
+    - INNOQ footnotes (`<a href="#fn:N" id="fnref:N">` references and a
+      `<foot-notes>` / `.footnotes` block with `<li id="fn:N">` entries)
+      are rewritten to kramdown footnote syntax (`[^N]` / `[^N]: …`).
+      markdownify drops `id` attributes, which previously left dangling
+      `#fn:N` / `#fnref:N` links and failed the pa11y anchor check.
+      kramdown regenerates exactly those ids, so in-page links work.
     - Empty headings (no non-whitespace text content) are stripped during
       a final cleanup pass — defensive against template-only heading
       hooks (e.g. INNOQ's empty `conclusion-subheadline`). See infra-009.
@@ -261,6 +267,7 @@ def convert_html_to_markdown(html: str) -> str:
     html = _merge_conclusion_section(html)
     html = _promote_heading_levels(html)
     html = _strip_empty_headings(html)
+    html, footnotes = _extract_footnotes(html)
     md = _markdownify(
         html,
         heading_style="ATX",
@@ -270,6 +277,8 @@ def convert_html_to_markdown(html: str) -> str:
     )
     # Normalise excessive blank lines that markdownify sometimes emits.
     md = re.sub(r"\n{3,}", "\n\n", md).strip()
+    if footnotes:
+        md += "\n\n" + "\n".join(footnotes)
     return md + "\n"
 
 
@@ -378,6 +387,42 @@ def _strip_empty_headings(html: str) -> str:
         if heading.get_text(strip=True) == "":
             heading.decompose()
     return str(soup)
+
+
+_FOOTNOTE_ID_RE = re.compile(r"^fn:(?P<n>[^\s]+)$")
+
+
+def _extract_footnotes(html: str) -> tuple[str, list[str]]:
+    """Rewrite INNOQ footnote markup into kramdown footnote syntax.
+
+    Returns the HTML with footnote references replaced by `[^N]` markers
+    and the footnote block removed, plus a list of `[^N]: …` definition
+    lines to append after the converted body. Reference-only or
+    definition-only input is passed through untouched apart from the
+    rewrite of whichever half is present.
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    definitions: list[str] = []
+
+    for li in soup.find_all("li", id=_FOOTNOTE_ID_RE):
+        number = _FOOTNOTE_ID_RE.match(li["id"]).group("n")
+        for back in li.find_all("a", href=f"#fnref:{number}"):
+            back.decompose()
+        inner = "".join(str(c) for c in li.contents)
+        body = _markdownify(inner, heading_style="ATX", bullets="-").strip()
+        body = re.sub(r"\s*\n\s*", " ", body)
+        definitions.append(f"[^{number}]: {body}")
+        container = li.find_parent(["foot-notes", "ol"])
+        li.decompose()
+        if container is not None and not container.find("li"):
+            outer = container.find_parent("foot-notes") or container
+            outer.decompose()
+
+    for ref in soup.find_all("a", href=re.compile(r"^#fn:")):
+        number = ref["href"][len("#fn:"):]
+        ref.replace_with(f"[^{number}]")
+
+    return str(soup), definitions
 
 
 def _code_language_from_class(tag) -> str:
