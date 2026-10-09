@@ -274,13 +274,24 @@ PR review.
 ## Accessibility checks
 
 Automated WCAG 2.1 AA audits run from `.github/workflows/accessibility.yml`,
-backed by `.pa11yci.json` at the repo root. See infra-006 for the task
-spec and ADR-0005 for the `data-mode` mechanism the workflow exploits.
+which simply calls `bin/a11y`. Configuration lives in `.pa11yci.json` at
+the repo root. See infra-006 for the original task spec and ADR-0005 for
+the `data-mode` mechanism the audit exploits.
 
-**What it does:** builds the Jekyll site, serves it locally, and runs
-`pa11y-ci` (pinned to `pa11y-ci@4.1.1`, ephemerally via `npx --yes`)
-against seven URLs in **both** dark mode and light mode. A single AA
-violation on any URL × mode combination fails the workflow.
+**What it does:** `bin/a11y` builds the Jekyll site, serves it locally,
+and runs `pa11y-ci` (pinned to `pa11y-ci@4.1.1`, ephemerally via
+`npx --yes`) against seven URLs in **both** dark mode and light mode.
+A single AA violation on any URL × mode combination fails the audit.
+
+**Runners:** pa11y-ci is configured with two runners (`"runners":
+["axe", "htmlcs"]` in `.pa11yci.json`):
+- **axe-core** — the engine behind axe DevTools, Lighthouse and most
+  browser accessibility plugins. It reports colour-contrast failures as
+  errors.
+- **HTML CodeSniffer** (pa11y's default) — reports contrast problems only
+  as *warnings* when it cannot resolve the background, which pa11y-ci
+  ignores by default. Running htmlcs alone is why the audit used to pass
+  while browser plugins flagged contrast issues (2026-10-09).
 
 **URLs covered (×2 modes = 14 audit passes):**
 - `/`
@@ -289,7 +300,7 @@ violation on any URL × mode combination fails the workflow.
 - `/ueber-mich/`
 - `/impressum/`
 - `/datenschutz/`
-- `/posts/2026/05/27/hello-welt/`
+- `/posts/2023/06/23/remote-mob-programming/`
 
 When new pages or representative posts ship, append them to the `urls`
 list in `.pa11yci.json`. There is no glob-based auto-discovery — explicit
@@ -301,67 +312,29 @@ opt-in keeps the audit fast and predictable.
 - `workflow_dispatch` — manual re-run for debugging.
 
 **Mode injection:** pa11y-ci's `actions` field does **not** support
-arbitrary JavaScript evaluation (its built-in actions are limited to
-navigate / click / set-field / wait / screen-capture). Instead, the
-workflow rewrites `_site/**/*.html` between passes:
-1. Dark-mode pass: `sed` sets `data-mode="dark"` and replaces the inline
-   boot script's `var saved = localStorage.getItem("jt-mode")` with
-   `var saved = "dark"`. This forces dark mode regardless of Chrome
-   headless's `prefers-color-scheme: light` default.
-2. Light-mode pass: same `sed` trick, with `light` instead of `dark`.
+arbitrary JavaScript evaluation. Instead, `bin/a11y` rewrites
+`_site/**/*.html` before each pass (via `perl -pi`, which is portable
+across macOS and GNU, unlike `sed -i`):
+1. sets `data-mode="<mode>"` on `<html>`, and
+2. replaces the inline boot script's
+   `var saved = localStorage.getItem("jt-mode")` with
+   `var saved = "<mode>"`, so Chrome headless's
+   `prefers-color-scheme: light` default cannot override the pass.
 
-`_site/` is `.gitignore`'d (per infra-001); the mutation is purely a
-CI-only artifact rewrite, the source tree is never touched.
+After the run the script restores `_site/` to its unforced state and
+stops the Jekyll server. `_site/` is `.gitignore`'d (per infra-001); the
+source tree is never touched.
 
 **How to run locally:**
 
 ```sh
-bundle exec jekyll build
-bundle exec jekyll serve --no-watch --skip-initial-build --detach
-# In another terminal — or after the server is up:
-npx --yes pa11y-ci@4.1.1
+bin/a11y                    # both modes (builds first)
+bin/a11y light              # single mode
+A11Y_SKIP_BUILD=1 bin/a11y  # reuse an existing _site/
 ```
 
-To exercise the light-mode pass locally, apply the same `sed` mutation
-to `_site/` before the second pa11y-ci run. On macOS use `sed -i ''`
-(empty backup suffix); on Linux/CI use `sed -i` (no suffix):
-
-```sh
-find _site -name '*.html' -print0 | xargs -0 sed -i '' \
-  -e 's/data-mode="dark"/data-mode="light"/g' \
-  -e 's|var saved = localStorage.getItem("jt-mode");|var saved = "light";|g'
-npx --yes pa11y-ci@4.1.1
-```
-
-A fresh `bundle exec jekyll build` restores `_site/` to its original
-(dark, localStorage-reading) state.
-
-**Known initial failure — hand-off to design-system-002:**
-
-The first run of this workflow is **expected to fail**. Both dark and
-light modes surface real WCAG 2.1 AA contrast violations on muted text
-(the `--text-muted` token against the page background and the accent
-arrow). Concrete error counts on the seed run:
-
-| URL | Dark errors | Light errors |
-| --- | ---: | ---: |
-| `/` | 15 | 15 |
-| `/blog/` | 11 | 11 |
-| `/talks/` | 29 | 29 |
-| `/ueber-mich/` | 16 | 16 |
-| `/impressum/` | 7 | 7 |
-| `/datenschutz/` | 7 | 7 |
-| `/posts/2026/05/27/hello-welt/` | 8 | 8 |
-
-Failing elements (distinct selectors):
-- `.arrow` (accent arrow in section CTA)
-- `.count.mono` ("N BEITRÄGE" counters on the index)
-- `.sep` (dot separators in post-list metadata)
-- footer `h4` headings (Kontakt / Anderswo / Site / Rechtliches)
-
-Dark-mode contrast ratio: 2.82:1 (need 4.5:1). Light-mode contrast
-ratio: 2.35:1 (need 4.5:1). The task `design-system-002` is the next
-step: it uses this concrete output to pick a token fix.
+Requires Ruby/bundler and Node (`npx`); pa11y-ci downloads its own
+Chromium on first run.
 
 ## Open questions
 - Should sync PRs be auto-merged on no-conflict, or always require manual review?

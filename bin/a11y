@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Accessibility audit (WCAG 2.1 AA) — identical locally and in CI.
+#
+# Builds the site, serves it on :4000, and runs pa11y-ci (axe-core +
+# HTML CodeSniffer, see .pa11yci.json) once in dark and once in light
+# mode. The mode is forced by rewriting _site/**/*.html between passes
+# (see infrastructure README → "Accessibility checks").
+#
+# Usage:
+#   bin/a11y                    # both modes, exit 1 on any violation
+#   bin/a11y dark               # single mode
+#   bin/a11y light
+#   A11Y_SKIP_BUILD=1 bin/a11y  # reuse existing _site/ (still rewrites it)
+#
+# Requires: bundler (Jekyll), node/npx (pa11y-ci is fetched ephemerally).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+PA11Y_CI="pa11y-ci@4.1.1"
+if [ $# -eq 0 ]; then MODES=(dark light); else MODES=("$@"); fi
+
+if [ -z "${A11Y_SKIP_BUILD:-}" ]; then
+  bundle exec jekyll build
+fi
+
+# Force a colour mode in the built HTML. Portable in-place rewrite via
+# perl, because `sed -i` differs between macOS and GNU.
+force_mode() {
+  find _site -name '*.html' -print0 | xargs -0 perl -pi -e "
+    s/data-mode=\"(?:light|dark)\"/data-mode=\"$1\"/g;
+    s/var saved = (?:localStorage\\.getItem\\(\"jt-mode\"\\)|\"(?:light|dark)\");/var saved = \"$1\";/g;
+  "
+}
+
+# Undo the forcing so a local `jekyll serve` behaves normally again.
+restore_mode() {
+  force_mode dark
+  find _site -name '*.html' -print0 | xargs -0 perl -pi -e \
+    's/var saved = "dark";/var saved = localStorage.getItem("jt-mode");/g'
+}
+
+bundle exec jekyll serve --no-watch --skip-initial-build --detach >/dev/null
+cleanup() {
+  pkill -f "jekyll serve --no-watch --skip-initial-build" >/dev/null 2>&1 || true
+  restore_mode
+}
+trap cleanup EXIT
+
+for i in $(seq 1 30); do
+  curl -sf http://localhost:4000/ >/dev/null && break
+  [ "$i" -eq 30 ] && { echo "Jekyll server did not come up within 30s" >&2; exit 1; }
+  sleep 1
+done
+
+status=0
+for mode in "${MODES[@]}"; do
+  echo "=== pa11y-ci: $mode mode ==="
+  force_mode "$mode"
+  npx --yes "$PA11Y_CI" || status=1
+done
+
+exit $status
