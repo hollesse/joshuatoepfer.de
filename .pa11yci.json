@@ -2,6 +2,7 @@
   "defaults": {
     "standard": "WCAG2AA",
     "runners": ["axe", "htmlcs"],
+    "levelCapWhenNeedsReview": "warning",
     "timeout": 30000,
     "wait": 500,
     "concurrency": 1,

@@ -293,6 +293,13 @@ A single AA violation on any URL × mode combination fails the audit.
   ignores by default. Running htmlcs alone is why the audit used to pass
   while browser plugins flagged contrast issues (2026-10-09).
 
+`levelCapWhenNeedsReview` is set to `"warning"`. pa11y's default
+(`"error"`) promotes axe's *incomplete* results — elements whose
+background axe cannot resolve, e.g. links with a gradient underline — to
+hard failures, which produced ~150 phantom contrast errors per mode.
+Browser plugins show these as "needs review", not as violations, and the
+audit now treats them the same way.
+
 **URLs covered (×2 modes = 14 audit passes):**
 - `/`
 - `/blog/`

@@ -151,18 +151,25 @@
     style.textContent =
       ":host { display: inline; }" +
       ".addr { color: inherit; }" +
-      ".addr::before { content: var(--u) \"@\" var(--d); }";
+      ".addr::before { content: var(--u) \"@\" var(--d); }" +
+      ".sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }";
     shadow.appendChild(style);
 
+    // Visual address via CSS ::before (keeps it out of the static HTML for
+    // scrapers); hidden from AT because aria-label is prohibited on a
+    // generic <span> (axe: aria-prohibited-attr). Screen readers get the
+    // spoken form from a visually-hidden sibling instead.
     var span = document.createElement("span");
     span.className = "addr";
     span.style.setProperty("--u", "'" + user + "'");
     span.style.setProperty("--d", "'" + domain + "'");
-    span.setAttribute(
-      "aria-label",
-      "E-Mail: " + user + " at " + domain.replace(/\./g, " punkt ")
-    );
+    span.setAttribute("aria-hidden", "true");
     shadow.appendChild(span);
+
+    var spoken = document.createElement("span");
+    spoken.className = "sr-only";
+    spoken.textContent = "E-Mail: " + user + " at " + domain.replace(/\./g, " punkt ");
+    shadow.appendChild(spoken);
 
     // The light-DOM fallback span is automatically hidden because shadow
     // content replaces the light-DOM children (no <slot> declared).

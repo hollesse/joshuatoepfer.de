@@ -12,6 +12,11 @@ author:
 # layouts apply `relative_url` to prepend baseurl.
 portrait_image: assets/images/joshua-toepfer-transparent.png
 
+# Accent colour palette. Options are defined in _sass/_tokens.scss ($accents):
+# amber | coral | blue | green | lime. Light-mode values are WCAG-AA tuned;
+# run `bin/a11y` after changing or adding a palette.
+accent: coral
+
 # Jekyll settings
 markdown: kramdown
 permalink: /posts/:year/:month/:day/:title/
