@@ -47,6 +47,8 @@ exclude:
   - Gemfile.lock
   - netlify.toml
   - .ruby-version
+  - bin
+  - test
 
 # iCalendar feeds (_plugins/ical_feed.rb). Subscribable at webcal://<host>/<path>.
 ical_feeds:
