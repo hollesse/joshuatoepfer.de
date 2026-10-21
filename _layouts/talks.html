@@ -15,12 +15,6 @@ layout: default
     IT und allem dazwischen. Wenn du mich für eine Konferenz oder ein
     internes Format buchen willst, schreib mir.
   </p>
-  {%- assign ics_url = '/talks.ics' | absolute_url -%}
-  <p class="mono">
-    <a href="{{ ics_url | webcal }}" class="link">↗ Termine im Kalender abonnieren</a>
-    &nbsp;·&nbsp;
-    <a href="{{ ics_url }}" class="link">.ics</a>
-  </p>
 </section>
 
 {% if upcoming.size > 0 %}
