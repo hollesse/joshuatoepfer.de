@@ -293,7 +293,7 @@
   where: Web Engineering Düsseldorf
   city: Düsseldorf
   status: past
-  type: workshop
+  type: talk
   duration: 240
   abstract: The whole team attends an online meeting and develops together. One person types the code, the others discuss it. Sounds unusual? That’s Remote Mob Programming, an exciting way of working for distributed teams. Joshua Töpfer has been working full-time in a remote mob for over 3 years and wouldn’t want to work any other way. In this talk, you’ll learn what it’s all about, what the pros and cons of this methodology are, and how you can find out if this methodology is something for your team.
   slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-at-home-but-not-alone-slides/v1/uploads-production/e0ftcl1hg2od50zk7pm63z3lffn1?_a=BACMTiAE
