@@ -125,7 +125,7 @@ re-derive each field and decide whether to overwrite or preserve. The rule:
 | `what` | INNOQ | Talk title comes from INNOQ. Cosmetic local edits would drift. |
 | `where` | INNOQ | Conference / event name comes from INNOQ. |
 | `city` | INNOQ | Parsed from `<dl> "Ort"` last-comma segment. |
-| `type` | INNOQ | From the `type-label` mapping (`Vortrag → talk`, `Workshop → workshop`, `Keynote → keynote`). Unknown labels default to `talk` with a WARN log. |
+| `type` | **derived** | From `duration`: longer than 60 minutes → `workshop`, otherwise (or no duration) → `talk`. INNOQ's `type-label` is ignored — a scrape on 2026-10-21 found all 4,122 INNOQ entries labelled `Vortrag`, workshops included. |
 | `duration` | INNOQ | Parsed from the listing subheadline (`/ HH:MM - HH:MM`) or the detail page's `<dl> "Uhrzeit"`. Omitted if absent on both. |
 | `abstract` | INNOQ | From the detail page `<article>` paragraphs before `<dl>`. |
 | `slides` | INNOQ | From the detail page `a.btn[href*="fl_attachment:"]`. Omitted if not on INNOQ. |

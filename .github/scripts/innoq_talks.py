@@ -23,7 +23,6 @@ Design references:
 from __future__ import annotations
 
 import datetime
-import logging
 import re
 import urllib.parse
 from dataclasses import dataclass
@@ -32,7 +31,6 @@ from typing import Any, Iterable
 import yaml
 from bs4 import BeautifulSoup
 
-LOGGER = logging.getLogger("innoq_talks")
 
 INNOQ_HOST = "https://www.innoq.com"
 TALKS_DISCOVERY_URL = (
@@ -41,18 +39,9 @@ TALKS_DISCOVERY_URL = (
 TALKS_BRANCH_PREFIX = "sync/innoq-talks"
 TALKS_PR_LABEL = "sync-innoq"
 
-# Type-label mapping (ADR-0007 §3 + research §2). Unknown labels default
-# to `talk` with a WARN log line; the worker decides whether to widen
-# the mapping after seeing logs from a real run.
-TYPE_LABEL_MAP = {
-    "Vortrag": "talk",
-    "Workshop": "workshop",
-    "Keynote": "keynote",
-}
-
-# INNOQ labels most of Joshua's workshops as "Vortrag". Anything longer
-# than this many minutes was in fact a workshop, so `talk` entries above
-# the threshold are reclassified.
+# INNOQ labels every entry "Vortrag", workshops included, so the type
+# label carries no information. `type` is derived from the duration
+# instead: anything longer than this many minutes was a workshop.
 WORKSHOP_MIN_DURATION_EXCLUSIVE = 60
 
 # INNOQ-authoritative field set (ADR-0007 §3). These are re-derived
@@ -84,7 +73,7 @@ class ListingEntry:
     """Per-talk extract from the listing-page `a.list-teaser-event`.
 
     Carries fields visible on the listing (date, title, event-name,
-    optional duration, type, slides-flag, detail URL). Detail-page
+    optional duration, slides-flag, detail URL). Detail-page
     fields (city, abstract, slides URL, duration fallback) are filled in
     by `parse_detail` after a follow-up fetch.
     """
@@ -94,7 +83,6 @@ class ListingEntry:
     what: str
     where: str
     duration: int | None
-    type: str
     slides_flag: bool
 
 
@@ -184,23 +172,19 @@ def parse_duration(text: str | None) -> int | None:
     return minutes if minutes > 0 else None
 
 
-def classify_type(type_value: str, duration: int | None) -> str:
-    """Reclassify `talk` entries longer than 60 minutes as `workshop`.
+def derive_type(duration: int | None) -> str:
+    """Return 'workshop' for entries longer than 60 minutes, else 'talk'.
 
-    >>> classify_type("talk", 90)
+    >>> derive_type(90)
     'workshop'
-    >>> classify_type("talk", 60)
+    >>> derive_type(60)
     'talk'
-    >>> classify_type("keynote", 90)
-    'keynote'
+    >>> derive_type(None)
+    'talk'
     """
-    if (
-        type_value == "talk"
-        and duration is not None
-        and duration > WORKSHOP_MIN_DURATION_EXCLUSIVE
-    ):
+    if duration is not None and duration > WORKSHOP_MIN_DURATION_EXCLUSIVE:
         return "workshop"
-    return type_value
+    return "talk"
 
 
 def derive_status(date_iso: str, *, today: datetime.date | None = None) -> str:
@@ -228,7 +212,6 @@ def parse_listing(html: str) -> list[ListingEntry]:
       - `time.event-date[datetime]` — ISO date (YYYY-MM-DD)
       - `h2.list-teaser-event__headline` — title
       - `p.list-teaser-event__subheadline` — event name + optional duration
-      - `div.type-label.primary` — German type label
       - `div.label.green` (text == "Folien verfügbar") — slides flag
     """
     soup = BeautifulSoup(html, "html.parser")
@@ -252,17 +235,6 @@ def parse_listing(html: str) -> list[ListingEntry]:
         sub_text = subheadline.get_text(" ", strip=True) if subheadline else ""
         where, duration = _split_subheadline(sub_text)
 
-        # Type label → mapped value (or default `talk` + WARN).
-        type_el = anchor.select_one("div.type-label.primary")
-        type_text = type_el.get_text(strip=True) if type_el else ""
-        type_value = TYPE_LABEL_MAP.get(type_text)
-        if type_value is None:
-            LOGGER.warning(
-                "Unknown type-label %r on %s — defaulting to 'talk'",
-                type_text, source_url,
-            )
-            type_value = "talk"
-
         # Slides flag.
         slides_label = anchor.select_one("div.label.green")
         slides_flag = (
@@ -277,7 +249,6 @@ def parse_listing(html: str) -> list[ListingEntry]:
                 what=what,
                 where=where,
                 duration=duration,
-                type=type_value,
                 slides_flag=slides_flag,
             )
         )
