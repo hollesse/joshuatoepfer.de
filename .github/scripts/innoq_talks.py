@@ -23,7 +23,6 @@ Design references:
 from __future__ import annotations
 
 import datetime
-import logging
 import re
 import urllib.parse
 from dataclasses import dataclass
@@ -32,7 +31,6 @@ from typing import Any, Iterable
 import yaml
 from bs4 import BeautifulSoup
 
-LOGGER = logging.getLogger("innoq_talks")
 
 INNOQ_HOST = "https://www.innoq.com"
 TALKS_DISCOVERY_URL = (
@@ -41,15 +39,6 @@ TALKS_DISCOVERY_URL = (
 TALKS_BRANCH_PREFIX = "sync/innoq-talks"
 TALKS_PR_LABEL = "sync-innoq"
 
-# Type-label mapping (ADR-0007 §3 + research §2). Unknown labels default
-# to `talk` with a WARN log line; the worker decides whether to widen
-# the mapping after seeing logs from a real run.
-TYPE_LABEL_MAP = {
-    "Vortrag": "talk",
-    "Workshop": "workshop",
-    "Keynote": "keynote",
-}
-
 # INNOQ-authoritative field set (ADR-0007 §3). These are re-derived
 # from the scrape every run and overwrite the on-disk YAML.
 INNOQ_AUTHORITATIVE_FIELDS = {
@@ -57,16 +46,19 @@ INNOQ_AUTHORITATIVE_FIELDS = {
     "what",
     "where",
     "city",
-    "type",
     "duration",
     "abstract",
     "slides",
 }
 
 # Fields the sync NEVER overwrites on a `source: innoq` entry: `video`
-# is Joshua-authoritative (not derivable from INNOQ markup), `source`
-# is a convention marker, `source_url` is identity (set once).
-INNOQ_PRESERVE_FIELDS = {"video", "source", "source_url"}
+# and `type` are Joshua-authoritative (INNOQ labels every entry
+# "Vortrag", workshops included), `source` is a convention marker,
+# `source_url` is identity (set once).
+INNOQ_PRESERVE_FIELDS = {"video", "type", "source", "source_url"}
+
+# `type` written on newly-discovered entries; Joshua flips it by hand.
+DEFAULT_TYPE = "talk"
 
 
 # ---------------------------------------------------------------------------
@@ -79,7 +71,7 @@ class ListingEntry:
     """Per-talk extract from the listing-page `a.list-teaser-event`.
 
     Carries fields visible on the listing (date, title, event-name,
-    optional duration, type, slides-flag, detail URL). Detail-page
+    optional duration, slides-flag, detail URL). Detail-page
     fields (city, abstract, slides URL, duration fallback) are filled in
     by `parse_detail` after a follow-up fetch.
     """
@@ -89,7 +81,6 @@ class ListingEntry:
     what: str
     where: str
     duration: int | None
-    type: str
     slides_flag: bool
 
 
@@ -122,7 +113,6 @@ class ScrapedTalk:
     what: str
     where: str
     city: str
-    type: str
     duration: int | None
     abstract: str
     slides: str | None
@@ -135,7 +125,7 @@ class ScrapedTalk:
             "where": self.where,
             "city": self.city,
             "status": derive_status(self.date, today=today),
-            "type": self.type,
+            "type": DEFAULT_TYPE,
         }
         if self.duration is not None:
             out["duration"] = self.duration
@@ -204,7 +194,6 @@ def parse_listing(html: str) -> list[ListingEntry]:
       - `time.event-date[datetime]` — ISO date (YYYY-MM-DD)
       - `h2.list-teaser-event__headline` — title
       - `p.list-teaser-event__subheadline` — event name + optional duration
-      - `div.type-label.primary` — German type label
       - `div.label.green` (text == "Folien verfügbar") — slides flag
     """
     soup = BeautifulSoup(html, "html.parser")
@@ -228,17 +217,6 @@ def parse_listing(html: str) -> list[ListingEntry]:
         sub_text = subheadline.get_text(" ", strip=True) if subheadline else ""
         where, duration = _split_subheadline(sub_text)
 
-        # Type label → mapped value (or default `talk` + WARN).
-        type_el = anchor.select_one("div.type-label.primary")
-        type_text = type_el.get_text(strip=True) if type_el else ""
-        type_value = TYPE_LABEL_MAP.get(type_text)
-        if type_value is None:
-            LOGGER.warning(
-                "Unknown type-label %r on %s — defaulting to 'talk'",
-                type_text, source_url,
-            )
-            type_value = "talk"
-
         # Slides flag.
         slides_label = anchor.select_one("div.label.green")
         slides_flag = (
@@ -253,7 +231,6 @@ def parse_listing(html: str) -> list[ListingEntry]:
                 what=what,
                 where=where,
                 duration=duration,
-                type=type_value,
                 slides_flag=slides_flag,
             )
         )
@@ -484,15 +461,11 @@ def _apply_scrape(
     """
     new_yaml = scraped.to_yaml_dict(today=today)
 
-    # Preserve Joshua-authoritative fields.
+    # Preserve Joshua-authoritative fields (`video`, `type`) and the
+    # source markers.
     for field in INNOQ_PRESERVE_FIELDS:
-        if field in existing and field not in new_yaml:
-            # `video` is preserved as-is; `source` and `source_url` are
-            # already in new_yaml from to_yaml_dict, so this only affects
-            # `video`.
+        if field in existing:
             new_yaml[field] = existing[field]
-    if "video" in existing:
-        new_yaml["video"] = existing["video"]
 
     changed_fields: set[str] = set()
     for field in INNOQ_AUTHORITATIVE_FIELDS:
@@ -555,9 +528,10 @@ _YAML_HEADER = """\
 # `source` marks who owns the entry. `source: innoq` entries are maintained by the
 # INNOQ talks sync workflow (.github/workflows/sync-innoq-talks.yml, infra-011) and
 # matched across runs by their `source_url`. INNOQ-authoritative fields (date, what,
-# where, city, type, duration, abstract, slides, status) are overwritten on every
-# sync; only `video` and the `source` field itself are safe to hand-edit on a
-# `source: innoq` entry.
+# where, city, duration, abstract, slides, status) are overwritten on every sync;
+# `type`, `video` and the `source` field itself are safe to hand-edit on a
+# `source: innoq` entry. The sync writes `type: talk` on new entries and never
+# changes an existing `type` — set it to `workshop` or `keynote` by hand.
 #
 # `source: manual` entries are owned by Joshua and are never touched by the sync.
 # Flip an entry to `source: manual` to lock in a local override.
@@ -628,11 +602,11 @@ def build_pr_body(diff: dict[str, list[str]]) -> str:
     lines.append("")
     lines.append(
         "**Heads-up:** INNOQ-authoritative fields (`date`, `what`, `where`, "
-        "`city`, `type`, `duration`, `abstract`, `slides`, `status`) are "
+        "`city`, `duration`, `abstract`, `slides`, `status`) are "
         "re-derived from innoq.com on every sync, so cosmetic local edits "
         "on `source: innoq` entries will be **overwritten** on the next run. "
-        "Only `video` and `source` are safe to hand-edit on a `source: innoq` "
-        "entry. To lock in a permanent local override, flip the entry to "
+        "Only `type`, `video` and `source` are safe to hand-edit on a "
+        "`source: innoq` entry. To lock in a permanent local override, flip the entry to "
         "`source: manual`."
     )
     lines.append("")

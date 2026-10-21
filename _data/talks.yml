@@ -6,9 +6,10 @@
 # `source` marks who owns the entry. `source: innoq` entries are maintained by the
 # INNOQ talks sync workflow (.github/workflows/sync-innoq-talks.yml, infra-011) and
 # matched across runs by their `source_url`. INNOQ-authoritative fields (date, what,
-# where, city, type, duration, abstract, slides, status) are overwritten on every
-# sync; only `video` and the `source` field itself are safe to hand-edit on a
-# `source: innoq` entry.
+# where, city, duration, abstract, slides, status) are overwritten on every sync;
+# `type`, `video` and the `source` field itself are safe to hand-edit on a
+# `source: innoq` entry. The sync writes `type: talk` on new entries and never
+# changes an existing `type` — set it to `workshop` or `keynote` by hand.
 #
 # `source: manual` entries are owned by Joshua and are never touched by the sync.
 # Flip an entry to `source: manual` to lock in a local override.
@@ -146,7 +147,7 @@
   where: BOB 2025
   city: Berlin
   status: past
-  type: talk
+  type: workshop
   duration: 90
   abstract: 'Stell dir vor, das gesamte Team sitzt zusammen vor einem Bildschirm und arbeitet zusammen – einer tippt, der Rest diskutiert und entscheidet. Das klingt nach einer ungewöhnlichen, aber höchst effektiven Arbeitsweise: Whole Team Ensemble Programming. Diese Methode geht weit über Pair Programming hinaus und ermöglicht es dem gesamten Team, gemeinsam zu denken, zu lernen und zu entwickeln. Dabei wird das Silodenken durchbrochen, Wissensinseln werden beseitigt, und der Fokus liegt auf maximalem Team-Engagement und schnelleren, besseren Entscheidungen.
 
@@ -200,7 +201,7 @@
   where: Software Architecture Summit
   city: Berlin
   status: past
-  type: talk
+  type: workshop
   duration: 180
   abstract: 'Die Arbeit von Softwarearchitekten findet in klassisch aufgestellten Teams oft abseits der Entwicklungsarbeit statt - sowohl räumlich als auch zeitlich getrennt. Dass das auch anders geht, zeigen Niko und Joshua in ihrem Workshop. Sie arbeiten seit mehr als 3 Jahren in einem Remote Mob, in dem das ganze Team bei Bedarf die Rolle des Architekten einnimmt. So wird die Arbeit an Domänen- und Lösungsarchitektur genauso vom ganzen Team gemeinsam durchgeführt, wie die Entwicklung und der Betrieb der Lösungen.Wir möchten euch vorstellen, wie ein Mob funktioniert und welche Veränderungen die synchrone Zusammenarbeit bei Architektur-Methoden mit sich bringt und gemeinsam mit euch die Architekturarbeit im Mob einmal ausprobieren.
 
@@ -279,7 +280,7 @@
   where: Software Architecture Summit 2024
   city: München
   status: past
-  type: talk
+  type: workshop
   duration: 210
   abstract: 'Die Arbeit von Softwarearchitekten findet in klassisch aufgestellten Teams oft abseits der Entwicklungsarbeit statt - sowohl räumlich als auch zeitlich getrennt. Dass das auch anders geht, zeigen Niko und Joshua in ihrem Workshop. Sie arbeiten seit mehr als 3 Jahren in einem Remote Mob, in dem das ganze Team bei Bedarf die Rolle des Architekten einnimmt. So wird die Arbeit an Domänen- und Lösungsarchitektur genauso vom ganzen Team gemeinsam durchgeführt, wie die Entwicklung und der Betrieb der Lösungen. Wir möchten euch vorstellen, wie ein Mob funktioniert und welche Veränderungen die synchrone Zusammenarbeit bei Architektur-Methoden mit sich bringt und gemeinsam mit euch die Architekturarbeit im Mob einmal ausprobieren.
 

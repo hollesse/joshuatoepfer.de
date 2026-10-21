@@ -110,53 +110,6 @@ LISTING_HTML_PAGE_2 = """
 </main>
 """
 
-LISTING_HTML_UNKNOWN_TYPE = """
-<main>
-  <a class="list-teaser-event" href="/de/talks/2026/01/some-podium/">
-    <div class="event-date-section">
-      <div class="type-label primary">Podiumsdiskussion</div>
-      <time datetime="2026-01-15">15 Jan 2026</time>
-    </div>
-    <div class="list-teaser__content">
-      <div class="list-teaser__body">
-        <h2 class="list-teaser-event__headline">Panel on Software</h2>
-        <p class="list-teaser-event__subheadline">SomeConf</p>
-      </div>
-    </div>
-  </a>
-</main>
-"""
-
-LISTING_HTML_WORKSHOP_KEYNOTE = """
-<main>
-  <a class="list-teaser-event" href="/de/talks/2026/05/workshop-x/">
-    <div class="event-date-section">
-      <div class="type-label primary">Workshop</div>
-      <time datetime="2026-05-04">4 Mai 2026</time>
-    </div>
-    <div class="list-teaser__content">
-      <div class="list-teaser__body">
-        <h2 class="list-teaser-event__headline">Workshop X</h2>
-        <p class="list-teaser-event__subheadline">SomeConf / 09:00 - 17:00</p>
-      </div>
-    </div>
-  </a>
-  <a class="list-teaser-event" href="/de/talks/2026/05/keynote-y/">
-    <div class="event-date-section">
-      <div class="type-label primary">Keynote</div>
-      <time datetime="2026-05-05">5 Mai 2026</time>
-    </div>
-    <div class="list-teaser__content">
-      <div class="list-teaser__body">
-        <h2 class="list-teaser-event__headline">Keynote Y</h2>
-        <p class="list-teaser-event__subheadline">SomeConf / 09:00 - 10:00</p>
-      </div>
-    </div>
-  </a>
-</main>
-"""
-
-
 # Detail-page fixture — shape verified per research §3.
 DETAIL_HTML_WITH_SLIDES = """
 <html>
@@ -281,10 +234,6 @@ class ParseListingTests(unittest.TestCase):
         # "Java Forum Nord" has no `/` separator → no duration on listing
         self.assertIsNone(entries[1].duration)
 
-    def test_maps_vortrag_to_talk(self):
-        entries = it.parse_listing(LISTING_HTML_PAGE_1)
-        self.assertEqual(entries[0].type, "talk")
-
     def test_slides_flag_set_when_label_green_present(self):
         entries = it.parse_listing(LISTING_HTML_PAGE_1)
         self.assertTrue(entries[0].slides_flag)
@@ -302,19 +251,6 @@ class ParseListingTests(unittest.TestCase):
     def test_paginator_next_link_absent_on_last_page(self):
         next_url = it.next_page_url(LISTING_HTML_PAGE_2)
         self.assertIsNone(next_url)
-
-    def test_unknown_type_defaults_to_talk_and_logs_warn(self):
-        with self.assertLogs("innoq_talks", level="WARNING") as cm:
-            entries = it.parse_listing(LISTING_HTML_UNKNOWN_TYPE)
-        self.assertEqual(entries[0].type, "talk")
-        joined = "\n".join(cm.output)
-        self.assertIn("Podiumsdiskussion", joined)
-        self.assertIn("/de/talks/2026/01/some-podium/", joined)
-
-    def test_workshop_and_keynote_mapped(self):
-        entries = it.parse_listing(LISTING_HTML_WORKSHOP_KEYNOTE)
-        self.assertEqual(entries[0].type, "workshop")
-        self.assertEqual(entries[1].type, "keynote")
 
 
 # ---------------------------------------------------------------------------
@@ -441,7 +377,6 @@ class MergeTalksFirstSyncTests(unittest.TestCase):
                 what="Four Years, One Ensemble",
                 where="Agile Meets Architecture",
                 city="Berlin",
-                type="talk",
                 duration=40,
                 abstract="Body.",
                 slides="https://res.cloudinary.com/innoq/image/upload/fl_attachment:s.pdf/v1/uploads/s.pdf",
@@ -462,6 +397,11 @@ class MergeTalksFirstSyncTests(unittest.TestCase):
         self.assertEqual(
             innoq[0]["source_url"], "https://www.innoq.com/de/talks/2026/03/x/"
         )
+
+    def test_new_innoq_entry_defaults_to_talk(self):
+        merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
+        innoq = [e for e in merged if e["source"] == "innoq"]
+        self.assertEqual(innoq[0]["type"], "talk")
 
     def test_innoq_entry_status_derived(self):
         merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
@@ -509,7 +449,6 @@ class MergeTalksUpdateInPlaceTests(unittest.TestCase):
                 what="New title from INNOQ",
                 where="Agile Meets Architecture",
                 city="Berlin",
-                type="talk",
                 duration=40,
                 abstract="New abstract from INNOQ.",
                 slides=None,
@@ -525,6 +464,17 @@ class MergeTalksUpdateInPlaceTests(unittest.TestCase):
     def test_video_field_preserved(self):
         merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
         self.assertEqual(merged[0]["video"], "https://youtube.com/watch?v=ABC123")
+
+    def test_hand_set_type_preserved(self):
+        self.existing[0]["type"] = "workshop"
+        merged, diff = it.merge_talks(self.existing, self.scraped, today=self.today)
+        self.assertEqual(merged[0]["type"], "workshop")
+        self.assertNotIn("type", "".join(diff["updates"]))
+
+    def test_missing_type_defaults_to_talk(self):
+        del self.existing[0]["type"]
+        merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
+        self.assertEqual(merged[0]["type"], "talk")
 
     def test_source_url_preserved(self):
         merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
@@ -608,7 +558,6 @@ class MergeTalksEmptyDiffTests(unittest.TestCase):
                 what="Four Years",
                 where="AMA",
                 city="Berlin",
-                type="talk",
                 duration=40,
                 abstract="Body.",
                 slides=None,
@@ -649,7 +598,6 @@ class MergeTalksCompositeFallbackTests(unittest.TestCase):
                 what="Ensemble-Anti-Patterns",
                 where="JCON",
                 city="Köln",
-                type="talk",
                 duration=30,
                 abstract="…",
                 slides=None,
