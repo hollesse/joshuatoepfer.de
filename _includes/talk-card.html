@@ -17,7 +17,7 @@ Params:
     <div class="v1-talk__meta">
       <div class="when mono">{{ full_date }}</div>
       <div class="where mono">
-        {{ t.where }} <span class="sep">·</span> {{ t.city }}
+        {{ t.where }}{% if t.city and t.city != "" %} <span class="sep">·</span> {{ t.city }}{% endif %}
       </div>
     </div>
     <h3 class="v1-talk__title">{{ t.what }}</h3>
@@ -27,7 +27,7 @@ Params:
     <div class="meta">
       <div class="when mono">{{ full_date }}</div>
       <div class="where mono">
-        {{ t.where }} <span class="sep">·</span> {{ t.city }}
+        {{ t.where }}{% if t.city and t.city != "" %} <span class="sep">·</span> {{ t.city }}{% endif %}
       </div>
     </div>
     <div>
@@ -55,7 +55,7 @@ Params:
     <div class="meta">
       <div class="when upcoming mono">{{ full_date }}</div>
       <div class="where mono">
-        {{ t.where }} <span class="sep">·</span> {{ t.city }}
+        {{ t.where }}{% if t.city and t.city != "" %} <span class="sep">·</span> {{ t.city }}{% endif %}
       </div>
     </div>
     <div>
@@ -68,7 +68,7 @@ Params:
       {% endif %}
     </div>
     <div class="extras">
-      <span class="type-pill type-pill--accent">{{ t.type | default: "talk" | replace: "talk", "Vortrag" | replace: "workshop", "Workshop" | replace: "keynote", "Keynote" }}</span>
+      <span class="type-pill">{{ t.type | default: "talk" | replace: "talk", "Vortrag" | replace: "workshop", "Workshop" | replace: "keynote", "Keynote" }}</span>
       {% if t.duration %}<div class="duration mono">{{ t.duration }} min</div>{% endif %}
     </div>
   </div>

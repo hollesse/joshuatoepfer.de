@@ -713,31 +713,34 @@ class BuildPrBodyTests(unittest.TestCase):
 
 
 class IntegrationLiveTalksYamlTests(unittest.TestCase):
-    """The migrated _data/talks.yml must load cleanly and every entry
-    must carry `source: manual` (per ADR-0007 §9 first-step migration).
+    """The live _data/talks.yml must load cleanly and every entry must be
+    owned by either the sync (`source: innoq`, identified by `source_url`)
+    or Joshua (`source: manual`).
     """
 
-    def test_live_talks_yaml_parseable(self):
+    def _load(self):
         import yaml
         repo_root = Path(__file__).resolve().parents[2]
         path = repo_root / "_data" / "talks.yml"
         with path.open() as fh:
-            data = yaml.safe_load(fh)
+            return yaml.safe_load(fh)
+
+    def test_live_talks_yaml_parseable(self):
+        data = self._load()
         self.assertIsInstance(data, list)
         self.assertGreater(len(data), 0)
 
-    def test_every_existing_entry_has_source_manual(self):
-        import yaml
-        repo_root = Path(__file__).resolve().parents[2]
-        path = repo_root / "_data" / "talks.yml"
-        with path.open() as fh:
-            data = yaml.safe_load(fh)
-        for entry in data:
-            self.assertIn("source", entry,
-                          f"Missing source on entry {entry.get('what')!r}")
-            self.assertEqual(entry["source"], "manual",
-                             f"Expected source=manual on {entry.get('what')!r}, "
-                             f"got {entry['source']!r}")
+    def test_every_entry_has_known_source(self):
+        for entry in self._load():
+            self.assertIn(entry.get("source"), {"innoq", "manual"},
+                          f"Unexpected source on {entry.get('what')!r}: "
+                          f"{entry.get('source')!r}")
+
+    def test_innoq_entries_have_source_url(self):
+        for entry in self._load():
+            if entry.get("source") == "innoq":
+                self.assertTrue(entry.get("source_url"),
+                                f"Missing source_url on {entry.get('what')!r}")
 
 
 # ---------------------------------------------------------------------------
