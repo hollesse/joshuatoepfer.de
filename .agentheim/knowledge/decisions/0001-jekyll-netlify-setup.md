@@ -19,14 +19,13 @@ low maintenance overhead, not cutting-edge build performance.
 
 Use **Jekyll 4.4.1** (latest stable) as the static site generator, **Netlify** for
 hosting, and **GitHub Actions** for CI. A build-and-deploy workflow triggers on every
-push to `main`. The Ruby version is pinned in `.ruby-version` (read by both `ruby/setup-ruby` and
-Netlify) to avoid build surprises across local environments and Netlify's build
+push to `main`. The Ruby version is pinned in `.ruby-version` (and mirrored in
+`netlify.toml`) to avoid build surprises across local environments and Netlify's build
 image.
 
 Build command: `bundle exec jekyll build`
 Publish directory: `_site`
-Ruby version: 3.4 (major.minor only, so CI and Netlify pick the latest available
-patch release; an exact patch pin broke CI once that patch was no longer offered)
+Ruby version: 3.4.2
 
 ## Consequences
 
