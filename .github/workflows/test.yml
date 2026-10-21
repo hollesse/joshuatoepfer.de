@@ -3,6 +3,8 @@ name: Tests
 # Unit tests for the local Jekyll plugins in _plugins/ (currently the
 # iCalendar feed generator, _plugins/ical_feed.rb). All logic lives in
 # bin/test so the exact same run works locally (`bin/test`).
+#
+# Plus the unit tests for the INNOQ sync scripts in .github/scripts/.
 
 on:
   pull_request:
@@ -31,3 +33,22 @@ jobs:
 
       - name: Run tests
         run: bin/test
+
+  sync-scripts:
+    name: Sync script tests (unittest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        # Same install set as the INNOQ sync workflows.
+        run: pip install --quiet feedparser markdownify pyyaml beautifulsoup4
+
+      - name: Run tests
+        run: python -m unittest discover -s .github/scripts -p 'test_*.py'
