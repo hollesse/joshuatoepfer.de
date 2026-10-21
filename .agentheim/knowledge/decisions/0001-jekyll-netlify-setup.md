@@ -25,7 +25,8 @@ image.
 
 Build command: `bundle exec jekyll build`
 Publish directory: `_site`
-Ruby version: 3.4.2
+Ruby version: 3.4 (major.minor only, so CI and Netlify pick the latest available
+patch release; an exact patch pin broke CI once that patch was no longer offered)
 
 ## Consequences
 
