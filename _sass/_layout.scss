@@ -748,10 +748,6 @@
   text-transform: uppercase;
   font-weight: 500;
 }
-.jt .type-pill--accent {
-  border-color: color-mix(in oklab, var(--accent) 40%, transparent);
-  color: var(--accent);
-}
 
 .jt .speaker-section {
   padding: 80px 80px 96px;
