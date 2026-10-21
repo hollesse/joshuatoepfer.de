@@ -19,7 +19,7 @@
 #         end: end                      # optional; else start + duration (timed) or + 1 day
 #         duration: duration            # minutes, only used for timed events
 #         title: title
-#         location: location            # a field name, or a list joined with ", "
+#         location: location
 #         description: description
 #         url: url                      # absolute or site-relative URL
 #         uid: url                      # stable key so clients update instead of duplicating
@@ -138,8 +138,8 @@ module JekyllIcalFeed
       finish = to_time_or_date(value(item, "end")) || default_end(item, start)
       lines = ["BEGIN:VEVENT", "UID:#{uid(item)}", "DTSTAMP:#{@stamp}", *dtline("DTSTART", start), *dtline("DTEND", finish)]
       lines << "SUMMARY:#{escape(value(item, "title"))}"
-      location = Array(@fields["location"]).filter_map { |f| item[f] }.join(", ")
-      lines << "LOCATION:#{escape(location)}" unless location.empty?
+      location = value(item, "location")
+      lines << "LOCATION:#{escape(location)}" if location
       description = description(item)
       lines << "DESCRIPTION:#{escape(description)}" unless description.empty?
       url = absolute(value(item, "url"))

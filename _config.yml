@@ -60,7 +60,7 @@ ical_feeds:
     transparent: true
     fields:
       title: "{{ where }}: {{ what }}"
-      location: [where, city]
+      location: "{{ where }}{% if city and city != empty %}, {{ city }}{% endif %}"
       description: abstract
       url: source_url
       uid: source_url
