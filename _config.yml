@@ -47,3 +47,24 @@ exclude:
   - Gemfile.lock
   - netlify.toml
   - .ruby-version
+  - bin
+  - test
+
+# iCalendar feeds (_plugins/ical_feed.rb). Subscribable at webcal://<host>/<path>.
+ical_feeds:
+  - path: talks.ics
+    source: data:talks
+    name: "Talks · Joshua Töpfer"
+    timezone: Europe/Berlin
+    refresh: PT12H
+    transparent: true
+    fields:
+      title: what
+      location: [where, city]
+      description: abstract
+      url: source_url
+      uid: source_url
+      links:
+        Slides: slides
+        Video: video
+        Mehr: source_url

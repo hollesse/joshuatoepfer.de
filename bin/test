@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Runs the tests for the local Jekyll plugins (_plugins/) — identical
+# locally and in CI.
+#
+# Usage:
+#   bin/test                      # all tests
+#   bin/test -n /webcal/          # only tests matching a name pattern
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+for f in test/*_test.rb; do
+  bundle exec ruby -Itest "$f" "$@"
+done

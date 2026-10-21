@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.4.2"
+ruby "~> 3.4.0"
 
 gem "jekyll", "~> 4.4.1"
 
@@ -22,3 +22,8 @@ gem "wdm", "~> 0.1", platforms: %i[mingw x64_mingw mswin]
 
 # Lock `http_parser.rb` gem to a specific version on JRuby builds
 gem "http_parser.rb", "~> 0.6.0", platforms: :jruby
+
+# Tests for local plugins (_plugins/), run with `bin/test`
+group :test do
+  gem "minitest", "~> 5.25"
+end
