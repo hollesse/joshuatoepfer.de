@@ -50,6 +50,11 @@ TYPE_LABEL_MAP = {
     "Keynote": "keynote",
 }
 
+# INNOQ labels most of Joshua's workshops as "Vortrag". Anything longer
+# than this many minutes was in fact a workshop, so `talk` entries above
+# the threshold are reclassified.
+WORKSHOP_MIN_DURATION_EXCLUSIVE = 60
+
 # INNOQ-authoritative field set (ADR-0007 §3). These are re-derived
 # from the scrape every run and overwrite the on-disk YAML.
 INNOQ_AUTHORITATIVE_FIELDS = {
@@ -177,6 +182,25 @@ def parse_duration(text: str | None) -> int | None:
     start_h, start_m, end_h, end_m = (int(g) for g in match.groups())
     minutes = (end_h * 60 + end_m) - (start_h * 60 + start_m)
     return minutes if minutes > 0 else None
+
+
+def classify_type(type_value: str, duration: int | None) -> str:
+    """Reclassify `talk` entries longer than 60 minutes as `workshop`.
+
+    >>> classify_type("talk", 90)
+    'workshop'
+    >>> classify_type("talk", 60)
+    'talk'
+    >>> classify_type("keynote", 90)
+    'keynote'
+    """
+    if (
+        type_value == "talk"
+        and duration is not None
+        and duration > WORKSHOP_MIN_DURATION_EXCLUSIVE
+    ):
+        return "workshop"
+    return type_value
 
 
 def derive_status(date_iso: str, *, today: datetime.date | None = None) -> str:

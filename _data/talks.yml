@@ -146,7 +146,7 @@
   where: BOB 2025
   city: Berlin
   status: past
-  type: talk
+  type: workshop
   duration: 90
   abstract: 'Stell dir vor, das gesamte Team sitzt zusammen vor einem Bildschirm und arbeitet zusammen – einer tippt, der Rest diskutiert und entscheidet. Das klingt nach einer ungewöhnlichen, aber höchst effektiven Arbeitsweise: Whole Team Ensemble Programming. Diese Methode geht weit über Pair Programming hinaus und ermöglicht es dem gesamten Team, gemeinsam zu denken, zu lernen und zu entwickeln. Dabei wird das Silodenken durchbrochen, Wissensinseln werden beseitigt, und der Fokus liegt auf maximalem Team-Engagement und schnelleren, besseren Entscheidungen.
 
@@ -200,7 +200,7 @@
   where: Software Architecture Summit
   city: Berlin
   status: past
-  type: talk
+  type: workshop
   duration: 180
   abstract: 'Die Arbeit von Softwarearchitekten findet in klassisch aufgestellten Teams oft abseits der Entwicklungsarbeit statt - sowohl räumlich als auch zeitlich getrennt. Dass das auch anders geht, zeigen Niko und Joshua in ihrem Workshop. Sie arbeiten seit mehr als 3 Jahren in einem Remote Mob, in dem das ganze Team bei Bedarf die Rolle des Architekten einnimmt. So wird die Arbeit an Domänen- und Lösungsarchitektur genauso vom ganzen Team gemeinsam durchgeführt, wie die Entwicklung und der Betrieb der Lösungen.Wir möchten euch vorstellen, wie ein Mob funktioniert und welche Veränderungen die synchrone Zusammenarbeit bei Architektur-Methoden mit sich bringt und gemeinsam mit euch die Architekturarbeit im Mob einmal ausprobieren.
 
@@ -279,7 +279,7 @@
   where: Software Architecture Summit 2024
   city: München
   status: past
-  type: talk
+  type: workshop
   duration: 210
   abstract: 'Die Arbeit von Softwarearchitekten findet in klassisch aufgestellten Teams oft abseits der Entwicklungsarbeit statt - sowohl räumlich als auch zeitlich getrennt. Dass das auch anders geht, zeigen Niko und Joshua in ihrem Workshop. Sie arbeiten seit mehr als 3 Jahren in einem Remote Mob, in dem das ganze Team bei Bedarf die Rolle des Architekten einnimmt. So wird die Arbeit an Domänen- und Lösungsarchitektur genauso vom ganzen Team gemeinsam durchgeführt, wie die Entwicklung und der Betrieb der Lösungen. Wir möchten euch vorstellen, wie ein Mob funktioniert und welche Veränderungen die synchrone Zusammenarbeit bei Architektur-Methoden mit sich bringt und gemeinsam mit euch die Architekturarbeit im Mob einmal ausprobieren.
 
@@ -292,7 +292,7 @@
   where: Web Engineering Düsseldorf
   city: Düsseldorf
   status: past
-  type: talk
+  type: workshop
   duration: 240
   abstract: The whole team attends an online meeting and develops together. One person types the code, the others discuss it. Sounds unusual? That’s Remote Mob Programming, an exciting way of working for distributed teams. Joshua Töpfer has been working full-time in a remote mob for over 3 years and wouldn’t want to work any other way. In this talk, you’ll learn what it’s all about, what the pros and cons of this methodology are, and how you can find out if this methodology is something for your team.
   slides: https://res.cloudinary.com/innoq/image/upload/fl_attachment:remote-mob-programming-at-home-but-not-alone-slides/v1/uploads-production/e0ftcl1hg2od50zk7pm63z3lffn1?_a=BACMTiAE
@@ -303,7 +303,7 @@
   where: INNOQ Technology Night Köln
   city: Köln
   status: past
-  type: talk
+  type: workshop
   duration: 180
   abstract: 'Willkommen zur ersten INNOQ Technology Night in unserem Büro in Köln! Wir freuen uns, euch zu einem Abend voller Vorträge und angeregter Diskussionen einzuladen. Unsere Gäste Nikolas Hermann von Breuninger und Joshua Töpfer von INNOQ werden spannende Einblicke in ihre Arbeit geben. Beginnen werden wir um 18:30 Uhr mit einem entspannten Get-together bei Snacks und Erfrischungen. Der erste Vortrag startet um 19:00 Uhr. Nutzt die Pausen und die Zeit nach den Präsentationen für Networking und Austausch. Wir freuen uns auf einen tollen Feierabend mit euch!
 
@@ -440,7 +440,7 @@
   where: Java User Group Darmstadt
   city: Darmstadt
   status: upcoming
-  type: talk
+  type: workshop
   duration: 120
   abstract: 'ADHS ist mehr als nur das Bild des zappeligen Kindes — gerade in der IT-Branche sind viele Erwachsene betroffen, oft ohne es zu wissen. Doch ADHS kann sowohl Fluch als auch Segen sein: Die kreativen Höhenflüge und der tiefe Hyperfokus sind oft genauso präsent wie das chaotische Durcheinander und der ständige Kampf mit Prokrastination.
 

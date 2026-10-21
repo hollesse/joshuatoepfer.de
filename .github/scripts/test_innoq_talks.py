@@ -394,6 +394,22 @@ class DeriveStatusTests(unittest.TestCase):
 # ---------------------------------------------------------------------------
 
 
+class ClassifyTypeTests(unittest.TestCase):
+    def test_talk_longer_than_60_minutes_is_workshop(self):
+        self.assertEqual(it.classify_type("talk", 61), "workshop")
+        self.assertEqual(it.classify_type("talk", 180), "workshop")
+
+    def test_talk_up_to_60_minutes_stays_talk(self):
+        self.assertEqual(it.classify_type("talk", 60), "talk")
+        self.assertEqual(it.classify_type("talk", 45), "talk")
+
+    def test_talk_without_duration_stays_talk(self):
+        self.assertEqual(it.classify_type("talk", None), "talk")
+
+    def test_keynote_is_never_reclassified(self):
+        self.assertEqual(it.classify_type("keynote", 90), "keynote")
+
+
 class DurationParserTests(unittest.TestCase):
     def test_parses_hhmm_window(self):
         self.assertEqual(it.parse_duration("10:30 - 11:10"), 40)

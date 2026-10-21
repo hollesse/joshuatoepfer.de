@@ -62,6 +62,7 @@ from innoq_talks import (
     TALKS_DISCOVERY_URL,
     TALKS_PR_LABEL,
     build_pr_body,
+    classify_type,
     merge_talks,
     next_page_url,
     parse_detail,
@@ -120,6 +121,7 @@ def scrape_all(
         _log(f"Fetching detail: {entry.source_url}")
         detail_html = fetch_fn(entry.source_url)
         detail: DetailFields = parse_detail(detail_html)
+        duration = entry.duration if entry.duration is not None else detail.duration
         talks.append(
             ScrapedTalk(
                 source_url=entry.source_url,
@@ -127,8 +129,8 @@ def scrape_all(
                 what=entry.what,
                 where=entry.where,
                 city=detail.city,
-                type=entry.type,
-                duration=entry.duration if entry.duration is not None else detail.duration,
+                type=classify_type(entry.type, duration),
+                duration=duration,
                 abstract=detail.abstract,
                 slides=detail.slides if entry.slides_flag else None,
             )
