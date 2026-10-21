@@ -39,11 +39,6 @@ TALKS_DISCOVERY_URL = (
 TALKS_BRANCH_PREFIX = "sync/innoq-talks"
 TALKS_PR_LABEL = "sync-innoq"
 
-# INNOQ labels every entry "Vortrag", workshops included, so the type
-# label carries no information. `type` is derived from the duration
-# instead: anything longer than this many minutes was a workshop.
-WORKSHOP_MIN_DURATION_EXCLUSIVE = 60
-
 # INNOQ-authoritative field set (ADR-0007 §3). These are re-derived
 # from the scrape every run and overwrite the on-disk YAML.
 INNOQ_AUTHORITATIVE_FIELDS = {
@@ -51,16 +46,19 @@ INNOQ_AUTHORITATIVE_FIELDS = {
     "what",
     "where",
     "city",
-    "type",
     "duration",
     "abstract",
     "slides",
 }
 
 # Fields the sync NEVER overwrites on a `source: innoq` entry: `video`
-# is Joshua-authoritative (not derivable from INNOQ markup), `source`
-# is a convention marker, `source_url` is identity (set once).
-INNOQ_PRESERVE_FIELDS = {"video", "source", "source_url"}
+# and `type` are Joshua-authoritative (INNOQ labels every entry
+# "Vortrag", workshops included), `source` is a convention marker,
+# `source_url` is identity (set once).
+INNOQ_PRESERVE_FIELDS = {"video", "type", "source", "source_url"}
+
+# `type` written on newly-discovered entries; Joshua flips it by hand.
+DEFAULT_TYPE = "talk"
 
 
 # ---------------------------------------------------------------------------
@@ -115,7 +113,6 @@ class ScrapedTalk:
     what: str
     where: str
     city: str
-    type: str
     duration: int | None
     abstract: str
     slides: str | None
@@ -128,7 +125,7 @@ class ScrapedTalk:
             "where": self.where,
             "city": self.city,
             "status": derive_status(self.date, today=today),
-            "type": self.type,
+            "type": DEFAULT_TYPE,
         }
         if self.duration is not None:
             out["duration"] = self.duration
@@ -170,21 +167,6 @@ def parse_duration(text: str | None) -> int | None:
     start_h, start_m, end_h, end_m = (int(g) for g in match.groups())
     minutes = (end_h * 60 + end_m) - (start_h * 60 + start_m)
     return minutes if minutes > 0 else None
-
-
-def derive_type(duration: int | None) -> str:
-    """Return 'workshop' for entries longer than 60 minutes, else 'talk'.
-
-    >>> derive_type(90)
-    'workshop'
-    >>> derive_type(60)
-    'talk'
-    >>> derive_type(None)
-    'talk'
-    """
-    if duration is not None and duration > WORKSHOP_MIN_DURATION_EXCLUSIVE:
-        return "workshop"
-    return "talk"
 
 
 def derive_status(date_iso: str, *, today: datetime.date | None = None) -> str:
@@ -479,15 +461,11 @@ def _apply_scrape(
     """
     new_yaml = scraped.to_yaml_dict(today=today)
 
-    # Preserve Joshua-authoritative fields.
+    # Preserve Joshua-authoritative fields (`video`, `type`) and the
+    # source markers.
     for field in INNOQ_PRESERVE_FIELDS:
-        if field in existing and field not in new_yaml:
-            # `video` is preserved as-is; `source` and `source_url` are
-            # already in new_yaml from to_yaml_dict, so this only affects
-            # `video`.
+        if field in existing:
             new_yaml[field] = existing[field]
-    if "video" in existing:
-        new_yaml["video"] = existing["video"]
 
     changed_fields: set[str] = set()
     for field in INNOQ_AUTHORITATIVE_FIELDS:
@@ -550,9 +528,10 @@ _YAML_HEADER = """\
 # `source` marks who owns the entry. `source: innoq` entries are maintained by the
 # INNOQ talks sync workflow (.github/workflows/sync-innoq-talks.yml, infra-011) and
 # matched across runs by their `source_url`. INNOQ-authoritative fields (date, what,
-# where, city, type, duration, abstract, slides, status) are overwritten on every
-# sync; only `video` and the `source` field itself are safe to hand-edit on a
-# `source: innoq` entry.
+# where, city, duration, abstract, slides, status) are overwritten on every sync;
+# `type`, `video` and the `source` field itself are safe to hand-edit on a
+# `source: innoq` entry. The sync writes `type: talk` on new entries and never
+# changes an existing `type` — set it to `workshop` or `keynote` by hand.
 #
 # `source: manual` entries are owned by Joshua and are never touched by the sync.
 # Flip an entry to `source: manual` to lock in a local override.
@@ -623,11 +602,11 @@ def build_pr_body(diff: dict[str, list[str]]) -> str:
     lines.append("")
     lines.append(
         "**Heads-up:** INNOQ-authoritative fields (`date`, `what`, `where`, "
-        "`city`, `type`, `duration`, `abstract`, `slides`, `status`) are "
+        "`city`, `duration`, `abstract`, `slides`, `status`) are "
         "re-derived from innoq.com on every sync, so cosmetic local edits "
         "on `source: innoq` entries will be **overwritten** on the next run. "
-        "Only `video` and `source` are safe to hand-edit on a `source: innoq` "
-        "entry. To lock in a permanent local override, flip the entry to "
+        "Only `type`, `video` and `source` are safe to hand-edit on a "
+        "`source: innoq` entry. To lock in a permanent local override, flip the entry to "
         "`source: manual`."
     )
     lines.append("")

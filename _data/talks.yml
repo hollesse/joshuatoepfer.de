@@ -6,9 +6,10 @@
 # `source` marks who owns the entry. `source: innoq` entries are maintained by the
 # INNOQ talks sync workflow (.github/workflows/sync-innoq-talks.yml, infra-011) and
 # matched across runs by their `source_url`. INNOQ-authoritative fields (date, what,
-# where, city, type, duration, abstract, slides, status) are overwritten on every
-# sync; only `video` and the `source` field itself are safe to hand-edit on a
-# `source: innoq` entry.
+# where, city, duration, abstract, slides, status) are overwritten on every sync;
+# `type`, `video` and the `source` field itself are safe to hand-edit on a
+# `source: innoq` entry. The sync writes `type: talk` on new entries and never
+# changes an existing `type` — set it to `workshop` or `keynote` by hand.
 #
 # `source: manual` entries are owned by Joshua and are never touched by the sync.
 # Flip an entry to `source: manual` to lock in a local override.
@@ -440,7 +441,7 @@
   where: Java User Group Darmstadt
   city: Darmstadt
   status: upcoming
-  type: workshop
+  type: talk
   duration: 120
   abstract: 'ADHS ist mehr als nur das Bild des zappeligen Kindes — gerade in der IT-Branche sind viele Erwachsene betroffen, oft ohne es zu wissen. Doch ADHS kann sowohl Fluch als auch Segen sein: Die kreativen Höhenflüge und der tiefe Hyperfokus sind oft genauso präsent wie das chaotische Durcheinander und der ständige Kampf mit Prokrastination.
 

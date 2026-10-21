@@ -330,19 +330,6 @@ class DeriveStatusTests(unittest.TestCase):
 # ---------------------------------------------------------------------------
 
 
-class DeriveTypeTests(unittest.TestCase):
-    def test_longer_than_60_minutes_is_workshop(self):
-        self.assertEqual(it.derive_type(61), "workshop")
-        self.assertEqual(it.derive_type(180), "workshop")
-
-    def test_up_to_60_minutes_is_talk(self):
-        self.assertEqual(it.derive_type(60), "talk")
-        self.assertEqual(it.derive_type(45), "talk")
-
-    def test_without_duration_is_talk(self):
-        self.assertEqual(it.derive_type(None), "talk")
-
-
 class DurationParserTests(unittest.TestCase):
     def test_parses_hhmm_window(self):
         self.assertEqual(it.parse_duration("10:30 - 11:10"), 40)
@@ -390,7 +377,6 @@ class MergeTalksFirstSyncTests(unittest.TestCase):
                 what="Four Years, One Ensemble",
                 where="Agile Meets Architecture",
                 city="Berlin",
-                type="talk",
                 duration=40,
                 abstract="Body.",
                 slides="https://res.cloudinary.com/innoq/image/upload/fl_attachment:s.pdf/v1/uploads/s.pdf",
@@ -411,6 +397,11 @@ class MergeTalksFirstSyncTests(unittest.TestCase):
         self.assertEqual(
             innoq[0]["source_url"], "https://www.innoq.com/de/talks/2026/03/x/"
         )
+
+    def test_new_innoq_entry_defaults_to_talk(self):
+        merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
+        innoq = [e for e in merged if e["source"] == "innoq"]
+        self.assertEqual(innoq[0]["type"], "talk")
 
     def test_innoq_entry_status_derived(self):
         merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
@@ -458,7 +449,6 @@ class MergeTalksUpdateInPlaceTests(unittest.TestCase):
                 what="New title from INNOQ",
                 where="Agile Meets Architecture",
                 city="Berlin",
-                type="talk",
                 duration=40,
                 abstract="New abstract from INNOQ.",
                 slides=None,
@@ -474,6 +464,17 @@ class MergeTalksUpdateInPlaceTests(unittest.TestCase):
     def test_video_field_preserved(self):
         merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
         self.assertEqual(merged[0]["video"], "https://youtube.com/watch?v=ABC123")
+
+    def test_hand_set_type_preserved(self):
+        self.existing[0]["type"] = "workshop"
+        merged, diff = it.merge_talks(self.existing, self.scraped, today=self.today)
+        self.assertEqual(merged[0]["type"], "workshop")
+        self.assertNotIn("type", "".join(diff["updates"]))
+
+    def test_missing_type_defaults_to_talk(self):
+        del self.existing[0]["type"]
+        merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
+        self.assertEqual(merged[0]["type"], "talk")
 
     def test_source_url_preserved(self):
         merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
@@ -557,7 +558,6 @@ class MergeTalksEmptyDiffTests(unittest.TestCase):
                 what="Four Years",
                 where="AMA",
                 city="Berlin",
-                type="talk",
                 duration=40,
                 abstract="Body.",
                 slides=None,
@@ -598,7 +598,6 @@ class MergeTalksCompositeFallbackTests(unittest.TestCase):
                 what="Ensemble-Anti-Patterns",
                 where="JCON",
                 city="Köln",
-                type="talk",
                 duration=30,
                 abstract="…",
                 slides=None,
@@ -808,7 +807,6 @@ class SyncEntryPointTests(unittest.TestCase):
         self.assertEqual(first.what, "Four Years, One Ensemble")
         self.assertEqual(first.where, "Agile Meets Architecture")
         self.assertEqual(first.duration, 40)
-        self.assertEqual(first.type, "talk")
         # From detail.
         self.assertEqual(first.city, "Berlin")
         self.assertIn("Ensemble Programming", first.abstract)
