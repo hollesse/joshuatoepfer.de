@@ -3,7 +3,6 @@
   publish   = "_site"
 
 [build.environment]
-  RUBY_VERSION = "3.4"
   JEKYLL_ENV   = "production"
 
 # Branch deploy settings (all non-main branches get a preview URL)
