@@ -254,6 +254,22 @@ class IcalFeedTest < Minitest::Test
     assert_equal "https://example.org/talks/x/", event["URL"]
   end
 
+  def test_field_mapping_accepts_liquid_templates
+    data("events", [{ "date" => "2026-11-05", "what" => "Talk", "where" => "Conf", "slug" => "talk" }])
+    build([feed(fields: { "title" => "{{ where }}: {{ what }}", "url" => "/talks/{{ slug | slugify }}/" })])
+
+    event = events.first
+    assert_equal "Conf: Talk", event["SUMMARY"]
+    assert_equal "https://example.org/talks/talk/", event["URL"]
+  end
+
+  def test_template_with_empty_result_counts_as_missing
+    data("events", [{ "date" => "2026-11-05", "title" => "A" }])
+    build([feed(fields: { "description" => "{% if abstract %}{{ abstract }}{% endif %}" })])
+
+    refute events.first.key?("DESCRIPTION")
+  end
+
   def test_optional_properties_are_omitted_when_empty
     data("events", [{ "date" => "2026-11-05", "title" => "A" }])
     build([feed])
