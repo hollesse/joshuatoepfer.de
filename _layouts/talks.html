@@ -17,7 +17,7 @@ layout: default
   </p>
   {%- assign ics_url = '/talks.ics' | absolute_url -%}
   <p class="mono">
-    <a href="{{ ics_url | replace_first: 'https://', 'webcal://' | replace_first: 'http://', 'webcal://' }}" class="link">↗ Termine im Kalender abonnieren</a>
+    <a href="{{ ics_url | webcal }}" class="link">↗ Termine im Kalender abonnieren</a>
     &nbsp;·&nbsp;
     <a href="{{ ics_url }}" class="link">.ics</a>
   </p>
