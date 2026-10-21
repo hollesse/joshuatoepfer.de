@@ -59,8 +59,8 @@ ical_feeds:
     refresh: PT12H
     transparent: true
     fields:
-      title: what
-      location: [where, city]
+      title: "{{ where }}: {{ what }}"
+      location: "{{ where }}{% if city and city != empty %}, {{ city }}{% endif %}"
       description: abstract
       url: source_url
       uid: source_url

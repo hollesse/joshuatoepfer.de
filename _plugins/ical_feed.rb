@@ -19,11 +19,15 @@
 #         end: end                      # optional; else start + duration (timed) or + 1 day
 #         duration: duration            # minutes, only used for timed events
 #         title: title
-#         location: location            # a field name, or a list joined with ", "
+#         location: location
 #         description: description
 #         url: url                      # absolute or site-relative URL
 #         uid: url                      # stable key so clients update instead of duplicating
 #         links: {}                     # { "Slides": slides } → appended to the description
+#
+# A field mapping can also be a Liquid template over the item's fields, e.g.
+#   title: "{{ where }}: {{ what }}"
+# An empty result counts as a missing value.
 #
 # In collections the fields are front matter (plus `url`, `content`).
 # Use the `webcal` filter to link a feed for one-click subscription:
@@ -134,8 +138,8 @@ module JekyllIcalFeed
       finish = to_time_or_date(value(item, "end")) || default_end(item, start)
       lines = ["BEGIN:VEVENT", "UID:#{uid(item)}", "DTSTAMP:#{@stamp}", *dtline("DTSTART", start), *dtline("DTEND", finish)]
       lines << "SUMMARY:#{escape(value(item, "title"))}"
-      location = Array(@fields["location"]).filter_map { |f| item[f] }.join(", ")
-      lines << "LOCATION:#{escape(location)}" unless location.empty?
+      location = value(item, "location")
+      lines << "LOCATION:#{escape(location)}" if location
       description = description(item)
       lines << "DESCRIPTION:#{escape(description)}" unless description.empty?
       url = absolute(value(item, "url"))
@@ -146,7 +150,15 @@ module JekyllIcalFeed
 
     def value(item, field)
       key = @fields[field]
-      key.is_a?(String) ? item[key] : nil
+      return nil unless key.is_a?(String)
+      return item[key] unless key.include?("{{") || key.include?("{%")
+
+      rendered = template(key).render!(item, registers: { site: @site }, filters: [Jekyll::Filters]).strip
+      rendered.empty? ? nil : rendered
+    end
+
+    def template(source)
+      (@templates ||= {})[source] ||= Liquid::Template.parse(source)
     end
 
     def to_time_or_date(raw)

@@ -243,7 +243,7 @@ class IcalFeedTest < Minitest::Test
       "abstract" => "About it", "slides" => "https://s.example/x", "page" => "/talks/x/",
     }])
     build([feed(fields: {
-      "start" => "day", "title" => "what", "location" => %w[where city],
+      "start" => "day", "title" => "what", "location" => "{{ where }}, {{ city }}",
       "description" => "abstract", "url" => "page", "links" => { "Slides" => "slides" },
     })])
 
@@ -252,6 +252,33 @@ class IcalFeedTest < Minitest::Test
     assert_equal "Conf\\, Köln", event["LOCATION"]
     assert_equal "About it\\n\\nSlides: https://s.example/x", event["DESCRIPTION"]
     assert_equal "https://example.org/talks/x/", event["URL"]
+  end
+
+  def test_field_mapping_accepts_liquid_templates
+    data("events", [{ "date" => "2026-11-05", "what" => "Talk", "where" => "Conf", "slug" => "talk" }])
+    build([feed(fields: { "title" => "{{ where }}: {{ what }}", "url" => "/talks/{{ slug | slugify }}/" })])
+
+    event = events.first
+    assert_equal "Conf: Talk", event["SUMMARY"]
+    assert_equal "https://example.org/talks/talk/", event["URL"]
+  end
+
+  def test_template_conditionals_skip_empty_and_missing_fields
+    data("events", [
+      { "date" => "2026-11-05", "title" => "A", "where" => "Conf", "city" => "Köln" },
+      { "date" => "2026-11-06", "title" => "B", "where" => "Online", "city" => "" },
+      { "date" => "2026-11-07", "title" => "C", "where" => "Remote" },
+    ])
+    build([feed(fields: { "location" => "{{ where }}{% if city and city != empty %}, {{ city }}{% endif %}" })])
+
+    assert_equal ["Conf\\, Köln", "Online", "Remote"], events.map { |e| e["LOCATION"] }
+  end
+
+  def test_template_with_empty_result_counts_as_missing
+    data("events", [{ "date" => "2026-11-05", "title" => "A" }])
+    build([feed(fields: { "description" => "{% if abstract %}{{ abstract }}{% endif %}" })])
+
+    refute events.first.key?("DESCRIPTION")
   end
 
   def test_optional_properties_are_omitted_when_empty
