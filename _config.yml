@@ -30,6 +30,7 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-ical-feed
 
 # Defaults
 defaults:
@@ -48,9 +49,8 @@ exclude:
   - netlify.toml
   - .ruby-version
   - bin
-  - test
 
-# iCalendar feeds (_plugins/ical_feed.rb). Subscribable at webcal://<host>/<path>.
+# iCalendar feeds (jekyll-ical-feed gem, github.com/hollesse/jekyll-ical-feed). Subscribable at webcal://<host>/<path>.
 ical_feeds:
   - path: talks.ics
     source: data:talks
