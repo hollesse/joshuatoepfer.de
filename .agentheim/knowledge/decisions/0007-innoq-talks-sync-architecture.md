@@ -144,6 +144,25 @@ no three-way diff) and matches Joshua's intent — the whole point of the sync i
 INNOQ stays the source of truth. The PR body will spell this out so a reviewer notices
 when their edit will be steamrolled.
 
+### 3a. Removal: entries delisted on INNOQ are dropped (amended 2026-11-05)
+
+INNOQ is the source of truth for `source: innoq` entries, including their existence.
+If an entry's `source_url` no longer appears in the scrape (typical case: Joshua
+cancelled a talk and INNOQ took it down), the merge engine **removes** it from
+`_data/talks.yml` and lists it in a **Removed talks** bucket in the PR body.
+
+The original implementation kept such entries ("safer to preserve than drop"), which
+left cancelled talks (IT-Tage 2026) on the site as `upcoming` with dead links.
+Safety now rests on:
+
+- the empty-discovery guard (§ "Empty-discovery guard" in the infrastructure README):
+  a scrape with zero listing entries fails the run instead of wiping every entry;
+- PR review: every removal is named in the PR body, nothing merges unreviewed;
+- the `source: manual` escape hatch: restore an entry with `source: manual` to keep a
+  talk INNOQ no longer lists.
+
+`source: manual` entries are never removed.
+
 ### 4. Hand-edit coexistence: `source: innoq | manual` marker
 
 Every entry in `_data/talks.yml` carries a `source:` field. Values:
@@ -168,10 +187,13 @@ This covers two important cases:
 ### 5. Diff and PR shape: one PR per sync run, overwriting the file
 
 When the merge step produces a YAML different from the on-disk file, the workflow opens
-**one PR** containing the full overwrite. The PR body summarises the diff in three
+**one PR** containing the full overwrite. The PR is a regular (non-draft) PR with a
+review requested from `hollesse`, so it lands in Joshua's review queue (amended
+2026-11-05; originally a draft PR). The PR body summarises the diff in these
 buckets:
 
 - **New talks** — entries present on INNOQ but absent from `_data/talks.yml`.
+- **Removed talks** — `source: innoq` entries no longer listed on INNOQ (§3a).
 - **Status transitions** — entries whose `status` flipped `upcoming` → `past` (or rarely
   the reverse, if INNOQ moved a future-dated talk earlier).
 - **Field updates** — entries where INNOQ-authoritative fields changed (slides added,

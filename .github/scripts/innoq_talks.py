@@ -358,8 +358,10 @@ def merge_talks(
     - `merged_entries` is the list ready to serialise back into
       `_data/talks.yml`. Order is preserved for unchanged entries; new
       INNOQ entries are appended at the end.
-    - `diff_summary` is a dict with four buckets:
+    - `diff_summary` is a dict with five buckets:
         - `new`: list of human-readable lines describing newly-discovered talks
+        - `removed`: lines describing `source: innoq` entries that are no
+          longer listed on INNOQ (e.g. a cancelled talk) and were dropped
         - `status_transitions`: lines describing `upcoming → past` etc.
         - `updates`: lines describing fields that changed in-place
         - `ambiguous`: lines describing composite-key matches (first-sync fallback,
@@ -371,6 +373,10 @@ def merge_talks(
       - INNOQ-authoritative fields are re-derived and overwrite on match.
       - `video` and the `source`/`source_url` fields are preserved.
       - `status` is computed from `date` vs. today on every run.
+      - `source: innoq` entries whose `source_url` is no longer in the
+        scrape are removed (INNOQ is the source of truth — a cancelled
+        talk disappears from the listing). They're listed in the
+        `removed` bucket so the PR reviewer sees every deletion.
 
     First-sync fallback: a scraped entry's (what, where, date) tuple is
     checked against any existing entry without a `source_url`. Matches are
@@ -382,6 +388,7 @@ def merge_talks(
 
     diff: dict[str, list[str]] = {
         "new": [],
+        "removed": [],
         "status_transitions": [],
         "updates": [],
         "ambiguous": [],
@@ -422,10 +429,16 @@ def merge_talks(
                         + ", ".join(sorted(changed_fields))
                     )
                 continue
-            # Innoq entry on disk but not in current scrape — keep
-            # (e.g. INNOQ took the page down or the URL changed; safer
-            # to preserve than drop).
-            merged.append(dict(entry))
+            # Innoq entry on disk but no longer on INNOQ (talk cancelled,
+            # page taken down, or URL changed) — drop it and surface the
+            # removal in the PR body. The empty-discovery guard in
+            # `scrape_all` keeps a broken scrape from wiping everything;
+            # to keep an entry INNOQ no longer lists, flip it to
+            # `source: manual`.
+            diff["removed"].append(
+                f"{entry.get('what', '?')} ({entry.get('date', '?')}, "
+                f"{entry.get('where', '?')}) — {url or '(no source_url)'}"
+            )
             continue
 
         # No source marker — treat as manual for safety. (Should not
@@ -558,8 +571,8 @@ def serialise_talks(entries: list[dict]) -> str:
 def build_pr_body(diff: dict[str, list[str]]) -> str:
     """Markdown body for the talks-sync PR.
 
-    Summarises the diff in up to four buckets (new / status / updates /
-    ambiguous). Empty buckets are omitted. Always carries the
+    Summarises the diff in up to five buckets (new / removed / status /
+    updates / ambiguous). Empty buckets are omitted. Always carries the
     INNOQ-authoritative-overwrite warning per ADR-0007 §3.
     """
     lines: list[str] = [
@@ -571,6 +584,18 @@ def build_pr_body(diff: dict[str, list[str]]) -> str:
         lines.append("### New talks")
         lines.append("")
         lines.extend(f"- {item}" for item in diff["new"])
+        lines.append("")
+
+    if diff.get("removed"):
+        lines.append("### Removed talks")
+        lines.append("")
+        lines.append(
+            "These `source: innoq` entries are no longer listed on innoq.com "
+            "(e.g. cancelled) and were removed. To keep one anyway, restore it "
+            "with `source: manual`."
+        )
+        lines.append("")
+        lines.extend(f"- {item}" for item in diff["removed"])
         lines.append("")
 
     if diff.get("status_transitions"):

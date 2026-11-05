@@ -17,6 +17,8 @@ Workflow contract (from `.github/workflows/sync-innoq-talks.yml`):
    for `source: innoq` entries; `source: manual` entries pass through
    untouched). INNOQ-authoritative fields are re-derived and overwrite;
    `video` and the `source` marker are preserved (ADR-0007 §3).
+   `source: innoq` entries no longer listed on INNOQ (cancelled talks)
+   are removed (ADR-0007 §3a).
 4. If the diff is non-empty, write the updated YAML, close any prior
    open `sync/innoq-talks/*` PR (with a comment linking to the new
    one), and let the GHA workflow open ONE PR per run on the
@@ -240,6 +242,7 @@ def main() -> int:
 
     has_changes = (
         bool(diff["new"])
+        or bool(diff["removed"])
         or bool(diff["status_transitions"])
         or bool(diff["updates"])
         or bool(diff["ambiguous"])
@@ -247,6 +250,7 @@ def main() -> int:
     )
 
     _log(f"Sync summary: new={len(diff['new'])} "
+         f"removed={len(diff['removed'])} "
          f"status_transitions={len(diff['status_transitions'])} "
          f"updates={len(diff['updates'])} ambiguous={len(diff['ambiguous'])}")
 

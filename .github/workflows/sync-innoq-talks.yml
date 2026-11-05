@@ -3,7 +3,8 @@ name: Sync talks from INNOQ
 # Weekly talks-sync workflow (infra-011). Scrapes
 # https://www.innoq.com/de/talks/?all=true&by=joshua-toepfer (and any
 # `<a rel=next>` follow-ups) plus each talk's detail page, then opens
-# one draft PR per run with the merged `_data/talks.yml`.
+# one PR per run with the merged `_data/talks.yml` and requests a review
+# from @hollesse so the PR shows up in the review queue / notifications.
 #
 # Sibling to:
 # - .github/workflows/sync-innoq.yml      (article incremental, infra-004)
@@ -72,7 +73,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ steps.run-sync.outputs.branch }}
           delete-branch: true
-          draft: true
+          reviewers: hollesse
           title: ${{ steps.run-sync.outputs.pr_title }}
           body: ${{ steps.run-sync.outputs.pr_body }}
           labels: sync-innoq

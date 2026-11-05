@@ -535,6 +535,89 @@ class MergeTalksManualNotTouchedTests(unittest.TestCase):
         self.assertEqual(merged[0]["what"], "Ensemble-Anti-Patterns")
 
 
+class MergeTalksRemovedFromInnoqTests(unittest.TestCase):
+    """`source: innoq` entries no longer listed on INNOQ are removed.
+
+    E.g. a cancelled talk disappears from the INNOQ listing; the sync
+    must drop it from `_data/talks.yml` and list it in the `removed`
+    bucket. Manual entries are never removed.
+    """
+
+    def setUp(self):
+        self.kept_url = "https://www.innoq.com/de/talks/2026/03/kept/"
+        self.gone_url = "https://www.innoq.com/de/talks/2026/12/cancelled-it-tage-2026/"
+        self.existing = [
+            {
+                "date": "2026-03-10",
+                "what": "Kept Talk",
+                "where": "AMA",
+                "city": "Berlin",
+                "status": "past",
+                "type": "talk",
+                "abstract": "Body.",
+                "source": "innoq",
+                "source_url": self.kept_url,
+            },
+            {
+                "date": "2026-12-09",
+                "what": "Cancelled Talk",
+                "where": "IT Tage",
+                "city": "Frankfurt am Main",
+                "status": "upcoming",
+                "type": "talk",
+                "abstract": "Body.",
+                "source": "innoq",
+                "source_url": self.gone_url,
+            },
+            {
+                "date": "2026-12-10",
+                "what": "Manual Talk",
+                "where": "Offsite",
+                "city": "",
+                "status": "upcoming",
+                "type": "talk",
+                "abstract": "…",
+                "source": "manual",
+            },
+        ]
+        self.scraped = [
+            it.ScrapedTalk(
+                source_url=self.kept_url,
+                date="2026-03-10",
+                what="Kept Talk",
+                where="AMA",
+                city="Berlin",
+                duration=None,
+                abstract="Body.",
+                slides=None,
+            )
+        ]
+        self.today = datetime.date(2026, 11, 5)
+
+    def test_delisted_innoq_entry_removed(self):
+        merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
+        urls = [e.get("source_url") for e in merged]
+        self.assertNotIn(self.gone_url, urls)
+        self.assertIn(self.kept_url, urls)
+
+    def test_manual_entry_not_removed(self):
+        merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
+        self.assertIn("Manual Talk", [e["what"] for e in merged])
+        self.assertEqual(len(merged), 2)
+
+    def test_removal_listed_in_diff(self):
+        _, diff = it.merge_talks(self.existing, self.scraped, today=self.today)
+        self.assertEqual(len(diff["removed"]), 1)
+        self.assertIn("Cancelled Talk", diff["removed"][0])
+        self.assertIn(self.gone_url, diff["removed"][0])
+
+    def test_removed_bucket_rendered_in_pr_body(self):
+        _, diff = it.merge_talks(self.existing, self.scraped, today=self.today)
+        body = it.build_pr_body(diff)
+        self.assertIn("Removed talks", body)
+        self.assertIn("Cancelled Talk", body)
+
+
 class MergeTalksEmptyDiffTests(unittest.TestCase):
     def test_no_changes_when_yaml_already_matches_scrape(self):
         existing = [
