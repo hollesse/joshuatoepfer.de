@@ -238,17 +238,19 @@ from INNOQ markup) and `source` itself. `status` is computed from
 **Diff & PR shape:** one PR per sync run on
 `sync/innoq-talks/<YYYY-MM-DD>`, labelled `sync-innoq` (shared with the
 article workflows). PR body summarises the diff in three or four
-buckets — **New talks**, **Removed talks**, **Status transitions**,
+buckets — **New talks**, **Deleted talks**, **Restored talks**, **Status transitions**,
 **Field updates**, optional **Ambiguous matches** for the first-sync
 composite-key fallback. Regular (non-draft) PR with a review requested
 from `hollesse` — same as the article syncs (the workflow proposes,
 Joshua decides).
 
-**Removal** (ADR-0007 §3a): a `source: innoq` entry whose `source_url`
-is no longer in the scrape (e.g. a cancelled talk) is dropped from
-`_data/talks.yml` and listed under **Removed talks**. `source: manual`
-entries are never removed; restore a talk as `source: manual` to keep
-it anyway.
+**Soft delete** (ADR-0007 §3a): a `source: innoq` entry whose
+`source_url` is no longer in the scrape (e.g. a cancelled talk) gets
+`deleted: true` and is listed under **Deleted talks**. It stays in
+`_data/talks.yml`; `_plugins/soft_delete.rb` hides it on the site. If it
+reappears on INNOQ, the sync clears the flag (**Restored talks**). To
+bring a deleted talk back by hand, remove `deleted` and set
+`source: manual`. `source: manual` entries are never touched.
 
 **Close-prior-then-open-new dedup** (ADR-0007 §8): branch namespace
 `sync/innoq-talks/*` is scoped enough that we don't need GitHub's

@@ -358,10 +358,13 @@ def merge_talks(
     - `merged_entries` is the list ready to serialise back into
       `_data/talks.yml`. Order is preserved for unchanged entries; new
       INNOQ entries are appended at the end.
-    - `diff_summary` is a dict with five buckets:
+    - `diff_summary` is a dict with six buckets:
         - `new`: list of human-readable lines describing newly-discovered talks
         - `removed`: lines describing `source: innoq` entries that are no
-          longer listed on INNOQ (e.g. a cancelled talk) and were dropped
+          longer listed on INNOQ (e.g. a cancelled talk) and were
+          soft-deleted (`deleted: true`)
+        - `restored`: lines describing soft-deleted entries that are listed
+          on INNOQ again and had `deleted` cleared
         - `status_transitions`: lines describing `upcoming → past` etc.
         - `updates`: lines describing fields that changed in-place
         - `ambiguous`: lines describing composite-key matches (first-sync fallback,
@@ -374,9 +377,12 @@ def merge_talks(
       - `video` and the `source`/`source_url` fields are preserved.
       - `status` is computed from `date` vs. today on every run.
       - `source: innoq` entries whose `source_url` is no longer in the
-        scrape are removed (INNOQ is the source of truth — a cancelled
-        talk disappears from the listing). They're listed in the
-        `removed` bucket so the PR reviewer sees every deletion.
+        scrape are soft-deleted: they stay in the file with
+        `deleted: true` (the site hides them), so a mistaken deletion is
+        recoverable. Each new soft-delete is listed in the `removed`
+        bucket; already-deleted entries pass through silently.
+      - A soft-deleted entry that shows up on INNOQ again is restored
+        (`deleted` cleared) and listed in the `restored` bucket.
 
     First-sync fallback: a scraped entry's (what, where, date) tuple is
     checked against any existing entry without a `source_url`. Matches are
@@ -389,6 +395,7 @@ def merge_talks(
     diff: dict[str, list[str]] = {
         "new": [],
         "removed": [],
+        "restored": [],
         "status_transitions": [],
         "updates": [],
         "ambiguous": [],
@@ -419,6 +426,10 @@ def merge_talks(
                     entry, scraped_match, today=today,
                 )
                 merged.append(new_entry)
+                if entry.get("deleted"):
+                    diff["restored"].append(
+                        f"{new_entry['what']} ({new_entry['date']}) — {url}"
+                    )
                 if status_transition:
                     diff["status_transitions"].append(
                         f"{new_entry['what']}: {status_transition}"
@@ -430,15 +441,17 @@ def merge_talks(
                     )
                 continue
             # Innoq entry on disk but no longer on INNOQ (talk cancelled,
-            # page taken down, or URL changed) — drop it and surface the
-            # removal in the PR body. The empty-discovery guard in
-            # `scrape_all` keeps a broken scrape from wiping everything;
-            # to keep an entry INNOQ no longer lists, flip it to
-            # `source: manual`.
-            diff["removed"].append(
-                f"{entry.get('what', '?')} ({entry.get('date', '?')}, "
-                f"{entry.get('where', '?')}) — {url or '(no source_url)'}"
-            )
+            # page taken down, or URL changed) — soft-delete it so the
+            # site hides it but the data stays recoverable. To bring it
+            # back, drop `deleted` and flip the entry to `source: manual`.
+            kept = dict(entry)
+            if not kept.get("deleted"):
+                kept["deleted"] = True
+                diff["removed"].append(
+                    f"{entry.get('what', '?')} ({entry.get('date', '?')}, "
+                    f"{entry.get('where', '?')}) — {url or '(no source_url)'}"
+                )
+            merged.append(kept)
             continue
 
         # No source marker — treat as manual for safety. (Should not
@@ -536,7 +549,8 @@ _YAML_HEADER = """\
 # Talks — kommende und vergangene Vorträge / Workshops.
 # Fields: date (ISO), what, where, city, status (upcoming|past), type (talk|workshop|keynote),
 #         duration (minutes), abstract, slides (URL, optional), video (URL, optional),
-#         source (innoq|manual), source_url (URL, required when source: innoq).
+#         source (innoq|manual), source_url (URL, required when source: innoq),
+#         deleted (true, optional — hidden on the site).
 #
 # `source` marks who owns the entry. `source: innoq` entries are maintained by the
 # INNOQ talks sync workflow (.github/workflows/sync-innoq-talks.yml, infra-011) and
@@ -548,6 +562,11 @@ _YAML_HEADER = """\
 #
 # `source: manual` entries are owned by Joshua and are never touched by the sync.
 # Flip an entry to `source: manual` to lock in a local override.
+#
+# `deleted: true` hides an entry on the site (soft delete) without losing it. The
+# sync sets it on `source: innoq` entries INNOQ no longer lists (e.g. a cancelled
+# talk) and clears it if the talk shows up on INNOQ again. To bring a deleted talk
+# back for good, remove `deleted` and set `source: manual`.
 
 """
 
@@ -571,8 +590,8 @@ def serialise_talks(entries: list[dict]) -> str:
 def build_pr_body(diff: dict[str, list[str]]) -> str:
     """Markdown body for the talks-sync PR.
 
-    Summarises the diff in up to five buckets (new / removed / status /
-    updates / ambiguous). Empty buckets are omitted. Always carries the
+    Summarises the diff in up to six buckets (new / deleted / restored /
+    status / updates / ambiguous). Empty buckets are omitted. Always carries the
     INNOQ-authoritative-overwrite warning per ADR-0007 §3.
     """
     lines: list[str] = [
@@ -587,15 +606,28 @@ def build_pr_body(diff: dict[str, list[str]]) -> str:
         lines.append("")
 
     if diff.get("removed"):
-        lines.append("### Removed talks")
+        lines.append("### Deleted talks")
         lines.append("")
         lines.append(
             "These `source: innoq` entries are no longer listed on innoq.com "
-            "(e.g. cancelled) and were removed. To keep one anyway, restore it "
-            "with `source: manual`."
+            "(e.g. cancelled) and were soft-deleted with `deleted: true` — "
+            "they stay in `_data/talks.yml` but the site no longer shows them. "
+            "To bring one back anyway, remove `deleted` and set "
+            "`source: manual` (otherwise the next sync deletes it again)."
         )
         lines.append("")
         lines.extend(f"- {item}" for item in diff["removed"])
+        lines.append("")
+
+    if diff.get("restored"):
+        lines.append("### Restored talks")
+        lines.append("")
+        lines.append(
+            "These soft-deleted entries are listed on innoq.com again; "
+            "`deleted` was cleared so the site shows them again."
+        )
+        lines.append("")
+        lines.extend(f"- {item}" for item in diff["restored"])
         lines.append("")
 
     if diff.get("status_transitions"):

@@ -1,7 +1,8 @@
 # Talks — kommende und vergangene Vorträge / Workshops.
 # Fields: date (ISO), what, where, city, status (upcoming|past), type (talk|workshop|keynote),
 #         duration (minutes), abstract, slides (URL, optional), video (URL, optional),
-#         source (innoq|manual), source_url (URL, required when source: innoq).
+#         source (innoq|manual), source_url (URL, required when source: innoq),
+#         deleted (true, optional — hidden on the site).
 #
 # `source` marks who owns the entry. `source: innoq` entries are maintained by the
 # INNOQ talks sync workflow (.github/workflows/sync-innoq-talks.yml, infra-011) and
@@ -13,6 +14,11 @@
 #
 # `source: manual` entries are owned by Joshua and are never touched by the sync.
 # Flip an entry to `source: manual` to lock in a local override.
+#
+# `deleted: true` hides an entry on the site (soft delete) without losing it. The
+# sync sets it on `source: innoq` entries INNOQ no longer lists (e.g. a cancelled
+# talk) and clears it if the talk shows up on INNOQ again. To bring a deleted talk
+# back for good, remove `deleted` and set `source: manual`.
 
 - date: '2026-03-13'
   what: 'ADHS in der IT: Vom Chaos zum Code'

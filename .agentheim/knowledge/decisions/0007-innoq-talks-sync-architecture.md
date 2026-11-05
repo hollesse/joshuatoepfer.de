@@ -144,24 +144,30 @@ no three-way diff) and matches Joshua's intent — the whole point of the sync i
 INNOQ stays the source of truth. The PR body will spell this out so a reviewer notices
 when their edit will be steamrolled.
 
-### 3a. Removal: entries delisted on INNOQ are dropped (amended 2026-11-05)
+### 3a. Removal: entries delisted on INNOQ are soft-deleted (amended 2026-11-05)
 
 INNOQ is the source of truth for `source: innoq` entries, including their existence.
 If an entry's `source_url` no longer appears in the scrape (typical case: Joshua
-cancelled a talk and INNOQ took it down), the merge engine **removes** it from
-`_data/talks.yml` and lists it in a **Removed talks** bucket in the PR body.
+cancelled a talk and INNOQ took it down), the merge engine sets **`deleted: true`** on
+it and lists it in a **Deleted talks** bucket in the PR body. The entry stays in
+`_data/talks.yml` with all its data; `_plugins/soft_delete.rb` drops `deleted: true`
+entries from `site.data.talks` before anything renders (homepage, `/talks/`,
+`talks.ics`).
 
-The original implementation kept such entries ("safer to preserve than drop"), which
-left cancelled talks (IT-Tage 2026) on the site as `upcoming` with dead links.
-Safety now rests on:
+- Already-deleted entries that are still missing pass through silently (no PR noise).
+- If a deleted entry shows up on INNOQ again, the sync clears `deleted` and lists it
+  under **Restored talks** — a temporary INNOQ glitch heals itself.
+- To bring back a talk INNOQ no longer lists (the deletion was wrong), remove
+  `deleted` and set `source: manual`; otherwise the next sync deletes it again.
+- `source: manual` entries are never touched. They may carry `deleted: true` by hand
+  to hide a talk.
 
-- the empty-discovery guard (§ "Empty-discovery guard" in the infrastructure README):
-  a scrape with zero listing entries fails the run instead of wiping every entry;
-- PR review: every removal is named in the PR body, nothing merges unreviewed;
-- the `source: manual` escape hatch: restore an entry with `source: manual` to keep a
-  talk INNOQ no longer lists.
-
-`source: manual` entries are never removed.
+The original implementation kept such entries untouched ("safer to preserve than
+drop"), which left cancelled talks (IT-Tage 2026) on the site as `upcoming` with dead
+links. A hard delete was considered and rejected: a soft delete makes a mistaken
+deletion (or an INNOQ hiccup) recoverable without digging through git history. The
+empty-discovery guard still fails a run whose scrape returns zero entries, so a broken
+scrape can't mass-delete.
 
 ### 4. Hand-edit coexistence: `source: innoq | manual` marker
 
@@ -193,7 +199,7 @@ review requested from `hollesse`, so it lands in Joshua's review queue (amended
 buckets:
 
 - **New talks** — entries present on INNOQ but absent from `_data/talks.yml`.
-- **Removed talks** — `source: innoq` entries no longer listed on INNOQ (§3a).
+- **Deleted talks** / **Restored talks** — soft-deletes and their reversal (§3a).
 - **Status transitions** — entries whose `status` flipped `upcoming` → `past` (or rarely
   the reverse, if INNOQ moved a future-dated talk earlier).
 - **Field updates** — entries where INNOQ-authoritative fields changed (slides added,
