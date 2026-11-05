@@ -395,6 +395,7 @@
     Für Teams, die Ensemble Programming kennen, und für alle, die tiefer verstehen wollen, was diese Arbeitsweise wirklich mit einem Team macht.'
   source: innoq
   source_url: https://www.innoq.com/de/talks/2026/12/vier-jahre-ensemble-programming-was-ich-lange-uebersehen-habe-it-tage-2026/
+  deleted: true
 - date: '2026-12-09'
   what: 'Vergiss den Tech-Stack: Das Geheimnis erfolgreicher Teams liegt woanders!'
   where: IT Tage
@@ -417,6 +418,7 @@
     Es geht um datenbasierte Entscheidungen, Nutzerkontakt, Hypothesen, Irrtümer – und darum, wie aus einem klassischen Dev-Team ein produktfokussiertes, lernendes Team wurde.'
   source: innoq
   source_url: https://www.innoq.com/de/talks/2026/12/vergiss-den-tech-stack-das-geheimnis-erfolgreicher-teams-liegt-woanders-it-tage-2026/
+  deleted: true
 - date: '2026-11-05'
   what: 'ADHS in der IT: Vom Chaos zum Code'
   where: code.talks 2026
