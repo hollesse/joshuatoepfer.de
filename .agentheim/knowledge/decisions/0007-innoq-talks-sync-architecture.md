@@ -144,6 +144,31 @@ no three-way diff) and matches Joshua's intent — the whole point of the sync i
 INNOQ stays the source of truth. The PR body will spell this out so a reviewer notices
 when their edit will be steamrolled.
 
+### 3a. Removal: entries delisted on INNOQ are soft-deleted (amended 2026-11-05)
+
+INNOQ is the source of truth for `source: innoq` entries, including their existence.
+If an entry's `source_url` no longer appears in the scrape (typical case: Joshua
+cancelled a talk and INNOQ took it down), the merge engine sets **`deleted: true`** on
+it and lists it in a **Deleted talks** bucket in the PR body. The entry stays in
+`_data/talks.yml` with all its data; `_plugins/soft_delete.rb` drops `deleted: true`
+entries from `site.data.talks` before anything renders (homepage, `/talks/`,
+`talks.ics`).
+
+- Already-deleted entries that are still missing pass through silently (no PR noise).
+- If a deleted entry shows up on INNOQ again, the sync clears `deleted` and lists it
+  under **Restored talks** — a temporary INNOQ glitch heals itself.
+- To bring back a talk INNOQ no longer lists (the deletion was wrong), remove
+  `deleted` and set `source: manual`; otherwise the next sync deletes it again.
+- `source: manual` entries are never touched. They may carry `deleted: true` by hand
+  to hide a talk.
+
+The original implementation kept such entries untouched ("safer to preserve than
+drop"), which left cancelled talks (IT-Tage 2026) on the site as `upcoming` with dead
+links. A hard delete was considered and rejected: a soft delete makes a mistaken
+deletion (or an INNOQ hiccup) recoverable without digging through git history. The
+empty-discovery guard still fails a run whose scrape returns zero entries, so a broken
+scrape can't mass-delete.
+
 ### 4. Hand-edit coexistence: `source: innoq | manual` marker
 
 Every entry in `_data/talks.yml` carries a `source:` field. Values:
@@ -168,10 +193,13 @@ This covers two important cases:
 ### 5. Diff and PR shape: one PR per sync run, overwriting the file
 
 When the merge step produces a YAML different from the on-disk file, the workflow opens
-**one PR** containing the full overwrite. The PR body summarises the diff in three
+**one PR** containing the full overwrite. The PR is a regular (non-draft) PR with a
+review requested from `hollesse`, so it lands in Joshua's review queue (amended
+2026-11-05; originally a draft PR). The PR body summarises the diff in these
 buckets:
 
 - **New talks** — entries present on INNOQ but absent from `_data/talks.yml`.
+- **Deleted talks** / **Restored talks** — soft-deletes and their reversal (§3a).
 - **Status transitions** — entries whose `status` flipped `upcoming` → `past` (or rarely
   the reverse, if INNOQ moved a future-dated talk earlier).
 - **Field updates** — entries where INNOQ-authoritative fields changed (slides added,

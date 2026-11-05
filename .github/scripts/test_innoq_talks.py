@@ -535,6 +535,134 @@ class MergeTalksManualNotTouchedTests(unittest.TestCase):
         self.assertEqual(merged[0]["what"], "Ensemble-Anti-Patterns")
 
 
+class MergeTalksSoftDeleteTests(unittest.TestCase):
+    """`source: innoq` entries no longer listed on INNOQ are soft-deleted.
+
+    E.g. a cancelled talk disappears from the INNOQ listing; the sync
+    keeps it in `_data/talks.yml` with `deleted: true` (hidden on the
+    site) and lists it in the `removed` bucket. Manual entries are never
+    touched; a deleted entry that reappears on INNOQ is restored.
+    """
+
+    def setUp(self):
+        self.kept_url = "https://www.innoq.com/de/talks/2026/03/kept/"
+        self.gone_url = "https://www.innoq.com/de/talks/2026/12/cancelled-it-tage-2026/"
+        self.existing = [
+            {
+                "date": "2026-03-10",
+                "what": "Kept Talk",
+                "where": "AMA",
+                "city": "Berlin",
+                "status": "past",
+                "type": "talk",
+                "abstract": "Body.",
+                "source": "innoq",
+                "source_url": self.kept_url,
+            },
+            {
+                "date": "2026-12-09",
+                "what": "Cancelled Talk",
+                "where": "IT Tage",
+                "city": "Frankfurt am Main",
+                "status": "upcoming",
+                "type": "talk",
+                "abstract": "Body.",
+                "source": "innoq",
+                "source_url": self.gone_url,
+            },
+            {
+                "date": "2026-12-10",
+                "what": "Manual Talk",
+                "where": "Offsite",
+                "city": "",
+                "status": "upcoming",
+                "type": "talk",
+                "abstract": "…",
+                "source": "manual",
+            },
+        ]
+        self.scraped = [
+            it.ScrapedTalk(
+                source_url=self.kept_url,
+                date="2026-03-10",
+                what="Kept Talk",
+                where="AMA",
+                city="Berlin",
+                duration=None,
+                abstract="Body.",
+                slides=None,
+            )
+        ]
+        self.today = datetime.date(2026, 11, 5)
+
+    def _by_url(self, merged):
+        return {e.get("source_url"): e for e in merged}
+
+    def test_delisted_innoq_entry_soft_deleted(self):
+        merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
+        by_url = self._by_url(merged)
+        self.assertIn(self.gone_url, by_url)
+        self.assertIs(by_url[self.gone_url]["deleted"], True)
+        # Data kept intact for recovery.
+        self.assertEqual(by_url[self.gone_url]["what"], "Cancelled Talk")
+        self.assertEqual(len(merged), 3)
+
+    def test_listed_entry_not_deleted(self):
+        merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
+        self.assertNotIn("deleted", self._by_url(merged)[self.kept_url])
+
+    def test_manual_entry_not_deleted(self):
+        merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
+        manual = [e for e in merged if e["source"] == "manual"]
+        self.assertEqual(len(manual), 1)
+        self.assertNotIn("deleted", manual[0])
+
+    def test_soft_delete_listed_in_diff(self):
+        _, diff = it.merge_talks(self.existing, self.scraped, today=self.today)
+        self.assertEqual(len(diff["removed"]), 1)
+        self.assertIn("Cancelled Talk", diff["removed"][0])
+        self.assertIn(self.gone_url, diff["removed"][0])
+
+    def test_already_deleted_entry_is_a_no_op(self):
+        merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
+        merged_again, diff = it.merge_talks(merged, self.scraped, today=self.today)
+        self.assertEqual(merged_again, merged)
+        self.assertEqual(diff["removed"], [])
+        self.assertEqual(diff["restored"], [])
+
+    def test_deleted_entry_restored_when_listed_again(self):
+        merged, _ = it.merge_talks(self.existing, self.scraped, today=self.today)
+        relisted = self.scraped + [
+            it.ScrapedTalk(
+                source_url=self.gone_url,
+                date="2026-12-09",
+                what="Cancelled Talk",
+                where="IT Tage",
+                city="Frankfurt am Main",
+                duration=None,
+                abstract="Body.",
+                slides=None,
+            )
+        ]
+        restored, diff = it.merge_talks(merged, relisted, today=self.today)
+        self.assertNotIn("deleted", self._by_url(restored)[self.gone_url])
+        self.assertEqual(len(diff["restored"]), 1)
+        self.assertIn("Cancelled Talk", diff["restored"][0])
+        self.assertEqual(len(restored), 3)
+
+    def test_deleted_and_restored_buckets_rendered_in_pr_body(self):
+        diff = {
+            "new": [], "removed": ["Cancelled Talk (2026-12-09)"],
+            "restored": ["Back Again (2026-12-10)"],
+            "status_transitions": [], "updates": [], "ambiguous": [],
+        }
+        body = it.build_pr_body(diff)
+        self.assertIn("Deleted talks", body)
+        self.assertIn("Cancelled Talk", body)
+        self.assertIn("Restored talks", body)
+        self.assertIn("Back Again", body)
+
+
 class MergeTalksEmptyDiffTests(unittest.TestCase):
     def test_no_changes_when_yaml_already_matches_scrape(self):
         existing = [

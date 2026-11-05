@@ -95,7 +95,7 @@ serve assets; nothing is mirrored locally (per ADR-0006). See infra-010.
    PR was opened for this article at some point — open, merged, or closed)
 
 **Two-step publish flow:**
-1. The workflow opens a draft PR with `published: false` and `topic:`
+1. The workflow opens a PR (review requested from `hollesse`) with `published: false` and `topic:`
    absent. Joshua reviews and merges the PR.
 2. Joshua separately edits the merged file: fills in `topic:`
    (`ensemble | adhs | softdev`) and flips `published: true`. Only then
@@ -170,7 +170,7 @@ infra-007).
 distinguishable in the PR list. Both still share the `sync-innoq` label
 so one filter shows everything from INNOQ.
 
-**Publish flow:** identical to the incremental sync — draft PR with
+**Publish flow:** identical to the incremental sync — PR (review requested from `hollesse`) with
 `published: false`, Joshua reviews and merges, then separately fills in
 `topic:` and flips `published: true` on the merged file.
 
@@ -238,10 +238,19 @@ from INNOQ markup) and `source` itself. `status` is computed from
 **Diff & PR shape:** one PR per sync run on
 `sync/innoq-talks/<YYYY-MM-DD>`, labelled `sync-innoq` (shared with the
 article workflows). PR body summarises the diff in three or four
-buckets — **New talks**, **Status transitions**, **Field updates**,
-optional **Ambiguous matches** for the first-sync composite-key
-fallback. Draft PR, same posture as the article syncs (the workflow
-proposes, Joshua decides).
+buckets — **New talks**, **Deleted talks**, **Restored talks**, **Status transitions**,
+**Field updates**, optional **Ambiguous matches** for the first-sync
+composite-key fallback. Regular (non-draft) PR with a review requested
+from `hollesse` — same as the article syncs (the workflow proposes,
+Joshua decides).
+
+**Soft delete** (ADR-0007 §3a): a `source: innoq` entry whose
+`source_url` is no longer in the scrape (e.g. a cancelled talk) gets
+`deleted: true` and is listed under **Deleted talks**. It stays in
+`_data/talks.yml`; `_plugins/soft_delete.rb` hides it on the site. If it
+reappears on INNOQ, the sync clears the flag (**Restored talks**). To
+bring a deleted talk back by hand, remove `deleted` and set
+`source: manual`. `source: manual` entries are never touched.
 
 **Close-prior-then-open-new dedup** (ADR-0007 §8): branch namespace
 `sync/innoq-talks/*` is scoped enough that we don't need GitHub's

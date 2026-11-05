@@ -212,7 +212,10 @@ launch (task website-010). To lift the block, remove that line from
   `source_url` is the canonical INNOQ detail URL and acts as the cross-run
   identity key. The layout (`_layouts/talks.html`) and card include
   (`_includes/talk-card.html`) do not render `source` or `source_url`; they
-  are pure sync metadata.
+  are pure sync metadata. Optional `deleted: true` is a soft delete: the entry
+  stays in the file but `_plugins/soft_delete.rb` drops it from `site.data.talks`
+  before rendering, so the homepage, `/talks/` and `talks.ics` never show it.
+  The INNOQ sync sets it on talks INNOQ no longer lists (ADR-0007 §3a).
 - **`_data/focus.yml`** — list of focus-area cards. Each entry: `key` (matches
   `post.topic`), `label`, `blurb`. The card's post count is computed at build time
   in `_layouts/home.html` (`site.posts | where: "topic", key | size`); it is not

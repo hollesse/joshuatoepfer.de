@@ -1,7 +1,7 @@
 name: Sync from INNOQ
 
 # Polls Joshua's INNOQ articles from the /de/feed.atom rolling window and
-# opens one draft PR per new article. See:
+# opens one PR per new article (review requested from @hollesse). See:
 # - ADR-0002 (canonical content sync strategy)
 # - ADR-0006 (sync architecture: dual workflow, full body, PR-history dedup, force-resync)
 # - .github/scripts/sync_innoq.py + innoq_common.py
@@ -94,6 +94,7 @@ jobs:
           title: ${{ matrix.item.title }}
           body: ${{ matrix.item.body }}
           labels: sync-innoq
+          reviewers: hollesse
           commit-message: |
             sync(innoq): ${{ matrix.item.title }}
 
