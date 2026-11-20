@@ -1,10 +1,8 @@
 name: Tests
 
-# Unit tests for the local Jekyll plugins in _plugins/ (currently the
-# iCalendar feed generator, _plugins/ical_feed.rb). All logic lives in
-# bin/test so the exact same run works locally (`bin/test`).
-#
-# Plus the unit tests for the INNOQ sync scripts in .github/scripts/.
+# Unit tests for the INNOQ sync scripts in .github/scripts/.
+# (The iCalendar feed plugin lives in its own repo, hollesse/jekyll-ical-feed,
+# and is tested there.)
 
 on:
   pull_request:
@@ -19,21 +17,6 @@ permissions:
   contents: read
 
 jobs:
-  test:
-    name: Plugin tests (minitest)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Run tests
-        run: bin/test
-
   sync-scripts:
     name: Sync script tests (unittest)
     runs-on: ubuntu-latest

@@ -9,6 +9,8 @@ group :jekyll_plugins do
   gem "jekyll-feed",    "~> 0.17"   # Atom/RSS feed for posts
   gem "jekyll-seo-tag", "~> 2.8"    # <meta> SEO tags
   gem "jekyll-sitemap", "~> 1.4"    # /sitemap.xml
+  gem "jekyll-ical-feed",           # iCalendar feeds (talks.ics)
+      git: "https://github.com/hollesse/jekyll-ical-feed", branch: "claude/extract-plugin"
 end
 
 # Windows/JRuby platform compatibility (safe to include everywhere)
@@ -22,8 +24,3 @@ gem "wdm", "~> 0.1", platforms: %i[mingw x64_mingw mswin]
 
 # Lock `http_parser.rb` gem to a specific version on JRuby builds
 gem "http_parser.rb", "~> 0.6.0", platforms: :jruby
-
-# Tests for local plugins (_plugins/), run with `bin/test`
-group :test do
-  gem "minitest", "~> 5.25"
-end
