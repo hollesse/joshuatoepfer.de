@@ -458,3 +458,32 @@
     In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kollegen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen — egal, ob als Betroffene oder als Kollegen.'
   source: innoq
   source_url: https://www.innoq.com/de/talks/2026/11/adhs-in-der-it-vom-chaos-zum-code-jug-da/
+- date: '2027-03-02'
+  what: Was siehst du, wenn du die Augen zumachst?
+  where: JavaLand 2027
+  city: Rust
+  status: upcoming
+  type: talk
+  duration: 40
+  abstract: 'Über Neurodivergenz, Toleranz und die Vielfalt unserer Gehirne
+
+
+    Wenn ich meine Augen schließe und mir einen Apfel vorstelle, sehe ich: Schwarz. Kein Bild. Einfach nur schwarz. Dann fragte ich meine Frau, was sie sieht: Einen Apfel, so real wie mit offenen Augen. Das war der Moment, in dem mir klar wurde: Ich gehe davon aus, dass andere so denken wie ich. Wir alle tun das. Wie viele andere Annahmen treffe ich täglich über Kollegen, über ihr Verhalten, über das, was hinter ihren Entscheidungen steckt? Gehirne ticken sehr unterschiedlich. Das wird nur sichtbar, wenn man anfängt zu reden – über das Geräusch, das jemanden im Open Space verrückt macht, über den Kollegen, der in der Stadt nicht zurückgegrüßt hat, über die Person, die immer zu spät kommt. Das Verhalten ist sichtbar. Was dahintersteckt, meist nicht. Vielleicht ist es ADHS, Autismus, Aphantasia, Prosopagnosie, Synästhesie oder etwas anderes. Ich spreche hier aus eigener Erfahrung: mit Diagnosen, mit Momenten, in denen plötzlich Dinge Sinn ergaben, und mit dem Wunsch, dass möglichst viele diesen
+    Moment des Staunens erleben – „Das gibt es? Leute denken so?"
+
+
+    Für alle, die täglich mit anderen Menschen zusammenarbeiten.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2027/03/was-siehst-du-wenn-du-die-augen-zumachst-java-land-2027/
+- date: '2027-02-26'
+  what: 'Zwischen Hyperfokus und Prokrastination: Leben und Coden mit ADHS'
+  where: BOB 2027
+  city: Berlin
+  status: upcoming
+  type: talk
+  abstract: 'ADHS ist mehr als nur das Bild des zappeligen Kindes — gerade in der IT-Branche sind viele Erwachsene betroffen, oft ohne es zu wissen. Doch ADHS kann sowohl Fluch als auch Segen sein: Die kreativen Höhenflüge und der tiefe Hyperfokus sind oft genauso präsent wie das chaotische Durcheinander und der ständige Kampf mit Prokrastination.
+
+
+    In diesem Vortrag klären wir über die typischen Symptome von ADHS auf und geben erste Anhaltspunkte, wie man bei sich selbst mögliche Anzeichen erkennen kann. Außerdem beleuchten wir, wie Teams am besten mit ADHS-betroffenen Kollegen umgehen können, um deren Potenziale voll auszuschöpfen. Abschließend teilen wir konkrete Strategien und Tipps für Softwareentwickler, wie sie mit den Herausforderungen von ADHS besser umgehen und ihre Stärken besser nutzen können. Dieser Vortrag richtet sich an alle, die in der IT arbeiten und mehr über ADHS erfahren wollen — egal, ob als Betroffene oder als Kollegen.'
+  source: innoq
+  source_url: https://www.innoq.com/de/talks/2027/02/zwischen-hyperfokus-und-prokrastination-leben-und-coden-mit-adhs-bob-2027/
